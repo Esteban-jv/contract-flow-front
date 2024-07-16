@@ -27,5 +27,4 @@ npm run dev
 ```sh
 npm run build
 ```
-"# contract-flow-front" 
 ## At start we install tailwindcss

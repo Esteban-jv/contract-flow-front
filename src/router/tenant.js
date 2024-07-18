@@ -25,7 +25,12 @@ const router = createRouter({
       path: '/client-view',
       name: 'client-view',
       component: () => import('../views/ClientView.vue')
-    }
+    },
+    {
+      path: '/languages',
+      name: 'languages',
+      component: () => import('../views/client/LanguagesView.vue')
+    },
   ]
 })
 

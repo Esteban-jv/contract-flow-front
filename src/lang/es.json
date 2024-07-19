@@ -1,0 +1,9 @@
+{
+    "intro_msg":"Esto se convertirá en un muy emocionante sitio web",
+    "login": {
+        "access":"Acceso",
+        "welcome_msg":"Bienvenido",
+        "username":"usuario",
+        "password":"contraseña"
+    }
+}

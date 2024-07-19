@@ -27,8 +27,8 @@
 </script>
 
 <template>
-    <h1 class="text-5xl font-extrabold text-center text-blue-950 dark:text-white mt-5">Access</h1>
-    <p class="text-2xl text-blue-950 dark:text-white text-center my-3">Welcome back</p>
+    <h1 class="text-5xl font-extrabold text-center text-blue-950 dark:text-white mt-5">{{ $t('login.access') }}</h1>
+    <p class="text-2xl text-blue-950 dark:text-white text-center my-3">{{ $t('login.welcome_msg') }}</p>
 
     <!-- Login Form Here -->
 </template>

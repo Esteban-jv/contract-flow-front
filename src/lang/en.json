@@ -1,0 +1,9 @@
+{
+    "intro_msg":"This is gonna become into a really exciting website",
+    "login": {
+        "access":"Access",
+        "welcome_msg":"Welcome back",
+        "username":"Username",
+        "password":"Password"
+    }
+}

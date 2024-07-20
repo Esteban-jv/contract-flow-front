@@ -1,5 +1,6 @@
-import { ref, onMounted, inject } from "vue";
+import { ref, onMounted } from "vue";
 import { defineStore } from "pinia";
+import { i18n } from '@/plugins/i18n';
 
 export const usePreferences = defineStore('preferences', () => {
     // Mounted
@@ -10,7 +11,6 @@ export const usePreferences = defineStore('preferences', () => {
 
     // Data
     const themeIcon = ref('')
-    const i18n = inject('i18n')
 
     const initColorTheme = () => {
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -40,7 +40,8 @@ export const usePreferences = defineStore('preferences', () => {
         localStorage.setItem('color-theme', themeIcon.value);
     }
     function setLocaleInStorage() {
-        localStorage.setItem('lang', i18n.global.locale || 'en');
+        // console.warn(i18n.global.locale.value)s
+        localStorage.setItem('lang', i18n.global.locale.value || 'en');
     }
 
     // Computed

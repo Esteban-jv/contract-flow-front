@@ -1,9 +1,15 @@
 {
     "intro_msg":"Esto se convertirá en un muy emocionante sitio web",
-    "login": {
+    "auth": {
         "access":"Acceso",
         "welcome_msg":"Bienvenido",
-        "username":"usuario",
-        "password":"contraseña"
-    }
+        "username":"Usuario",
+        "password":"Contraseña",
+        "login":"Iniciar sesión"
+    },
+    "forms": {
+        "enter_field":"Introduce {field}",
+        "field_is_required":"El campo {field} es requerido"
+    },
+    "client": "Cliente | Clientes"
 }

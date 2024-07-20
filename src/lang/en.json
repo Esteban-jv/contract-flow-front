@@ -1,9 +1,15 @@
 {
     "intro_msg":"This is gonna become into a really exciting website",
-    "login": {
+    "auth": {
         "access":"Access",
         "welcome_msg":"Welcome back",
         "username":"Username",
-        "password":"Password"
-    }
+        "password":"Password",
+        "login":"login"
+    },
+    "forms": {
+        "enter_field":"Enter {field} field",
+        "field_is_required":"The field {field} is required"
+    },
+    "client": "Client | Clients"
 }

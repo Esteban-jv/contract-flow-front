@@ -17,10 +17,9 @@
 </script>
 
 <template>
-    <div class="md:flex h-screen">
-        <div class="h-64 md:h-auto bg-cover bg-center md:w-1/3 body-bg"></div>
-        <div class="md:w-2/3 px-6 py-5 min-h-full overflow-y-scroll">
-            <div class="mx-auto lg:w-3/5">
+    <div class="md:h-screen md:flex md:items-center">
+        <div class="md:mx-auto md:w-1/3 lg:w-1/3 xs:w-2/3 w-100 px-2 md:py-20 py-3">
+            <div class="">
                 <RouterView />
 
                 <!-- <nav class="mt-10 flex flex-col items-center space-y-5 lg:flex-row lg:justify-between lg:space-y-0">

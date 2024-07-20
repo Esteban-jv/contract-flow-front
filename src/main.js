@@ -12,8 +12,8 @@ import domain from './utils/domain'
 import en from './lang/en.json'
 import es from './lang/es.json'
 
-const i18n = createI18n({
-    locale: 'en',
+const $i18n = createI18n({
+    locale: localStorage.getItem('lang') || 'en',
     fallbackLocale: 'en',
     messages: {
         en,
@@ -25,7 +25,8 @@ const app = createApp(App)
 // console.log("D O M A I N data ",domain.isAdmin(), domain.getSubdomain(), domain.getDomain())
 const router = domain.isAdmin() ? master : tenant
 
-app.use(i18n)
+app.provide('i18n',$i18n)
+app.use($i18n)
 app.use(createPinia())
 app.use(router)
 

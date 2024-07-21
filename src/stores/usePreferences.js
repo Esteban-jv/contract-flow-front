@@ -10,7 +10,7 @@ export const usePreferences = defineStore('preferences', () => {
     })
 
     // Data
-    const themeIcon = ref('')
+    const theme = ref('')
 
     const initColorTheme = () => {
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -20,24 +20,24 @@ export const usePreferences = defineStore('preferences', () => {
         }
     }
     const setLightTheme = () => {
-        themeIcon.value = 'light'
+        theme.value = 'light'
         document.documentElement.classList.remove('dark');
     }
     const setDarkTheme = () => {
-        themeIcon.value = 'dark'
-        document.documentElement.classList.add(themeIcon.value);
+        theme.value = 'dark'
+        document.documentElement.classList.add(theme.value);
     }
 
     // Methods
     function toggleMode() {
-        console.warn(themeIcon.value)
-        if(themeIcon.value === 'dark') {
+        console.warn(theme.value)
+        if(theme.value === 'dark') {
             setLightTheme()
         }
         else {
             setDarkTheme()
         }
-        localStorage.setItem('color-theme', themeIcon.value);
+        localStorage.setItem('color-theme', theme.value);
     }
     function setLocaleInStorage() {
         // console.warn(i18n.global.locale.value)s
@@ -47,7 +47,7 @@ export const usePreferences = defineStore('preferences', () => {
     // Computed
 
     return {
-        themeIcon,
+        theme,
         i18n,
         toggleMode,
         setLocaleInStorage

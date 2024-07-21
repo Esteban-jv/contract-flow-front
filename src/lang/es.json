@@ -5,7 +5,8 @@
         "welcome_msg":"Bienvenido",
         "username":"Usuario",
         "password":"Contraseña",
-        "login":"Iniciar sesión"
+        "login":"Iniciar sesión",
+        "logout":"Cerrar sesión"
     },
     "forms": {
         "enter_field":"Introduce {field}",

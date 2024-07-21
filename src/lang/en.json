@@ -5,7 +5,8 @@
         "welcome_msg":"Welcome back",
         "username":"Username",
         "password":"Password",
-        "login":"login"
+        "login":"login",
+        "logout":"logout"
     },
     "forms": {
         "enter_field":"Enter {field} field",

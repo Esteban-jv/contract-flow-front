@@ -3,13 +3,10 @@ import api from "@/lib/axios";
 export default {
     login(data) {
         return api.post('/login/', data)
-    }/*
-    verifyAccount(token) {
-        return api.get(`/auth/verify/${token}`)
     },
     auth() {
-        return api.get('/auth/user')
-    },
+        return api.get('/auth/user/')
+    },/*
     admin() {
         return api.get('/auth/admin')
     },

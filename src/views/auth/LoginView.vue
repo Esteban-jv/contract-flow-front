@@ -1,12 +1,18 @@
 <script setup>
-    import { ref, inject, onMounted } from 'vue';
-    // import { useRouter } from 'vue-router';
+    import { ref, inject, onBeforeMount } from 'vue';
+    import { useRouter } from 'vue-router';
     import { NButton, NInput, NFormItem, NForm, NRow, NCol } from 'naive-ui';
     import { i18n } from '@/plugins/i18n';
     import AuthApi from '@/api/AuthApi';
 
+    const router = useRouter()
+    onBeforeMount(() => {
+        if(localStorage.getItem('AUTH_TOKEN')) {
+            return router.push({name: 'master'})
+        }
+    })
+
     const toast = inject('toast')
-    // const router = useRouter()
     const loading = ref(false)
     const form = ref({
         username: '',
@@ -57,7 +63,7 @@
             const { data: { token } } = response
             localStorage.setItem('AUTH_TOKEN',token)
             loading.value = false
-            // router.push({name: ''})
+            router.push({name: 'master'})
         } catch (err) {
             toast.open({
                 message: err.response.data.msg,

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AuthApi from '@/api/AuthApi'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,9 +30,32 @@ const router = createRouter({
     {
       path: '/languages',
       name: 'languages',
+      meta: { requiresAuth: true },
       component: () => import('../views/client/LanguagesView.vue')
     },
   ]
+})
+
+router.beforeEach( async (to, from, next) => {
+  const requiresAuth = to.matched.some( url => url.meta.requiresAuth )
+  if(requiresAuth) {
+    try {
+      const { data } = await AuthApi.auth()
+      // console.log(data)
+      if(data.is_active && data.is_staff && data.is_superuser) { // Only admin pane
+        admin
+        next({name: 'admin'})
+      } else {
+        //citas
+        next({name: '403'})
+      }
+    } catch (err) {
+      console.error(err.response.data.msg)
+      // next({name: 'login'})
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

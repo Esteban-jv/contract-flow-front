@@ -1,10 +1,13 @@
 <script setup>
     import { ref, onMounted } from 'vue';
+    import { useRouter } from 'vue-router';
     import PartnerAPI from '@/api/client/PartnerAPI';
+    import ClientAuthApi from '@/api/client/ClientAuthApi';
 
     const languages = ref([])
     const nationalities = ref([])
     const oficialIds = ref([])
+    const router = useRouter()
 
     onMounted(async () => {
         try {
@@ -20,6 +23,12 @@
             console.error(err)
         }
     })
+
+    const logout = async () => {
+        await ClientAuthApi.logout()
+        localStorage.removeItem('AUTH_TOKEN')
+        router.push({ name: 'login' })
+    }
 </script>
 <template>
     <div>
@@ -36,4 +45,8 @@
             {{ i.name }}
         </p>
     </div>
+    <br>
+    <br>
+    <br>
+    <button @click="logout">{{ $t('auth.logout') }}</button>
 </template>

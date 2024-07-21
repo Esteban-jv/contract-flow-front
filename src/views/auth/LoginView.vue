@@ -4,11 +4,18 @@
     import { NButton, NInput, NFormItem, NForm, NRow, NCol } from 'naive-ui';
     import { i18n } from '@/plugins/i18n';
     import AuthApi from '@/api/AuthApi';
+    import domain from '@/utils/domain';
 
     const router = useRouter()
+    const isAdmin = ref(false)
+    const nextView = ref('')
     onBeforeMount(() => {
+        isAdmin.value = domain.isAdmin()
+        nextView.value = (isAdmin.value ? 'master' : 'languages')
         if(localStorage.getItem('AUTH_TOKEN')) {
-            return router.push({name: 'master'})
+            return router.push({
+                name: nextView.value
+            })
         }
     })
 
@@ -63,7 +70,9 @@
             const { data: { token } } = response
             localStorage.setItem('AUTH_TOKEN',token)
             loading.value = false
-            router.push({name: 'master'})
+            return router.push({
+                name: nextView.value
+            })
         } catch (err) {
             toast.open({
                 message: err.response.data.msg,
@@ -76,9 +85,18 @@
 
 <template>
     <div class="shadow-xl">
-        <div class="dark:bg-gray-900 bg-slate-300 rounded-ss-xl rounded-se-xl p-2">
-        <h1 class="text-5xl font-extrabold text-center text-blue-950 dark:text-white mt-5">{{ $t('auth.access') }}</h1>
-        <p class="text-2xl text-blue-950 dark:text-white text-center my-3">{{ $t('auth.welcome_msg') }}</p>
+        <div
+            class="bg-slate-300 rounded-ss-xl rounded-se-xl p-2"
+            :class="[isAdmin ? 'dark:bg-gray-900' : 'dark:bg-green-900']"
+        >
+            <h1
+                class="text-5xl font-extrabold text-center dark:text-white mt-5"
+                :class="[isAdmin ? 'text-blue-950' : 'text-green-950']"
+            >{{ $t('auth.access') }}</h1>
+        <p
+            class="text-2xl dark:text-white text-center my-3"
+            :class="[isAdmin ? 'text-blue-950' : 'text-green-950']"
+        >{{ $t('auth.welcome_msg') }}</p>
     </div>
 
     <NForm :model="form" :rules="formRules" class="p-4">

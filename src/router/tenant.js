@@ -11,16 +11,20 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/auth',
-      name: 'auth',
+      path: '/login',
       component: () => import('../views/auth/AuthLayout.vue'),
       children: [
         {
-          path: 'login',
+          path: '',
           name: 'login',
           component: () => import('../views/auth/LoginView.vue')
         },
       ]
+    },
+    {
+      path: '/403',
+      name: '403',
+      component: () => import('../views/403View.vue'),
     },
     {
       path: '/client-view',
@@ -42,9 +46,9 @@ router.beforeEach( async (to, from, next) => {
     try {
       const { data } = await AuthApi.auth()
       // console.log(data)
-      if(data.is_active && data.is_staff && data.is_superuser) { // Only admin pane
-        admin
-        next({name: 'admin'})
+      if(data.is_active && data.is_staff) { // Only admin pane
+        // admin
+        next()
       } else {
         //citas
         next({name: '403'})

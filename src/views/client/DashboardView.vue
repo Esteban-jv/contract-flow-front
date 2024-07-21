@@ -32,7 +32,7 @@
 </script>
 <template>
     <div>
-        <h1>Languages</h1>
+        <h1>Dashboard</h1>
         <p v-for="l in languages">
             {{ l.name }}
         </p>

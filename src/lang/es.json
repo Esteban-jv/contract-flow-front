@@ -12,5 +12,10 @@
         "enter_field":"Introduce {field}",
         "field_is_required":"El campo {field} es requerido"
     },
-    "client": "Cliente | Clientes"
+    "client": "Cliente | Clientes",
+    "dashboard":"Tablero",
+    "catalog":"Catálogo | Catalogos",
+    "language":"Idioma | Idiomas",
+    "nationality":"Nacionalidad | Nacionalidades",
+    "oficial_id":"Identificación oficial | Identificaciones oficiales"
 }

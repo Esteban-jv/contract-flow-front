@@ -12,5 +12,10 @@
         "enter_field":"Enter {field} field",
         "field_is_required":"The field {field} is required"
     },
-    "client": "Client | Clients"
+    "client": "Client | Clients",
+    "dashboard":"Dashboard",
+    "catalog":"Catalog | Catalogs",
+    "language":"Language | Languages",
+    "nationality":"Nationality | Nationalities",
+    "oficial_id":"Oficial ID | Oficial IDs"
 }

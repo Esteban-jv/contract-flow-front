@@ -32,10 +32,31 @@ const router = createRouter({
       component: () => import('../views/ClientView.vue')
     },
     {
-      path: '/languages',
-      name: 'languages',
+      path: '',
       meta: { requiresAuth: true },
-      component: () => import('../views/client/LanguagesView.vue')
+      component: () => import('../views/client/MenuContainerLayout.vue'),
+      children: [
+        {
+          path: '/dashboard',
+          name: 'dashboard',
+          component: () => import('../views/client/DashboardView.vue')
+        },
+        {
+          path: '/languages',
+          name: 'languages',
+          component: () => import('../views/client/catalogs/LanguagesView.vue')
+        },
+        {
+          path: '/oficial-identifiers',
+          name: 'oficial-ids',
+          component: () => import('../views/client/catalogs/IDsView.vue')
+        },
+        {
+          path: '/nationalities',
+          name: 'nationalities',
+          component: () => import('../views/client/catalogs/NationalitiesView.vue')
+        }
+      ]
     },
   ]
 })

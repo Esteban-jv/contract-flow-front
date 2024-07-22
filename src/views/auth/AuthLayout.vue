@@ -17,7 +17,7 @@
 </script>
 
 <template>
-    <div class="md:h-screen md:flex md:items-center">
+    <div class="md:h-screen md:flex md:items-center bg-white dark:bg-black">
         <div class="md:mx-auto md:w-1/3 lg:w-1/3 xs:w-2/3 w-100 px-2 md:py-20 py-3">
             <div class="">
                 <RouterView />

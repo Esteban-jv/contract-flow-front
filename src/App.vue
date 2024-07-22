@@ -9,10 +9,17 @@
   const theme = computed(() => {
     return (preferences.theme === 'dark') ? darkTheme : lightTheme
   })
+
+  const themeOverrides = {
+    common: {
+      clearColor: '#cfc'
+    },
+    // ...
+  }
 </script>
 
 <template>
-  <n-config-provider :theme="theme">
+  <n-config-provider :theme="theme" :theme-overrides="themeOverrides">
     <RouterView />
   </n-config-provider>
 </template>

@@ -1,4 +1,4 @@
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { defineStore } from "pinia";
 import { i18n } from '@/plugins/i18n';
 
@@ -30,7 +30,7 @@ export const usePreferences = defineStore('preferences', () => {
 
     // Methods
     function toggleMode() {
-        console.warn(theme.value)
+        // console.warn(theme.value)
         if(theme.value === 'dark') {
             setLightTheme()
         }
@@ -45,11 +45,23 @@ export const usePreferences = defineStore('preferences', () => {
     }
 
     // Computed
+    const switchTheme = computed({
+        get() {
+            return theme.value === 'dark'
+        },
+        set(n) {
+            if(n)   { theme.value = 'light '}
+            else    { theme.value = 'dark'  }
+            toggleMode()
+        }
+    })
+    
 
     return {
         theme,
         i18n,
         toggleMode,
-        setLocaleInStorage
+        setLocaleInStorage,
+        switchTheme
     }
 })

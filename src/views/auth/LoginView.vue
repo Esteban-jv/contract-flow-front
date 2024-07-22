@@ -63,12 +63,16 @@
 
     const handleSubmit = async (formData) => {
         loading.value = true
-        console.log(formData, form.value)
+        // console.log(formData, form.value)
         try {
             const response = await AuthApi.login(form.value)
             // console.log(response)
-            const { data: { token } } = response
+            const { data: { token, user } } = response
             localStorage.setItem('AUTH_TOKEN',token)
+            localStorage.setItem('USER',JSON.stringify({
+                first_name: user.first_name,
+                last_name: user.last_name
+            }))
             loading.value = false
             return router.push({
                 name: nextView.value
@@ -86,12 +90,12 @@
 <template>
     <div class="shadow-xl">
         <div
-            class="bg-slate-300 rounded-ss-xl rounded-se-xl p-2"
-            :class="[isAdmin ? 'dark:bg-gray-900' : 'dark:bg-green-900']"
+            class="bg-green-100 rounded-ss-xl rounded-se-xl p-2"
+            :class="[isAdmin ? 'dark:bg-zink-900' : 'dark:bg-green-900']"
         >
             <h1
                 class="text-5xl font-extrabold text-center dark:text-white mt-5"
-                :class="[isAdmin ? 'text-blue-950' : 'text-green-950']"
+                :class="[isAdmin ? 'text-blue-800' : 'text-green-800']"
             >{{ $t('auth.access') }}</h1>
         <p
             class="text-2xl dark:text-white text-center my-3"
@@ -99,7 +103,7 @@
         >{{ $t('auth.welcome_msg') }}</p>
     </div>
 
-    <NForm :model="form" :rules="formRules" class="p-4">
+    <NForm :model="form" :rules="formRules" class="p-4 bg-slate-50 dark:bg-zinc-900">
         <NFormItem path="username" :label="$t('auth.username')">
             <NInput v-model:value="form.username" @keydown.enter.prevent :placeholder="$t('forms.enter_field', { field: $t('auth.username').toLowerCase() })" />
         </NFormItem>

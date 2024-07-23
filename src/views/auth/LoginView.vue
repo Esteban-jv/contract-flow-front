@@ -95,15 +95,15 @@
         >
             <h1
                 class="text-5xl font-extrabold text-center dark:text-white mt-5"
-                :class="[isAdmin ? 'text-blue-800' : 'text-green-800']"
+                :class="[isAdmin ? 'text-blue-950' : 'text-green-950']"
             >{{ $t('auth.access') }}</h1>
         <p
-            class="text-2xl dark:text-white text-center my-3"
-            :class="[isAdmin ? 'text-blue-950' : 'text-green-950']"
+            class="text-xl dark:text-white text-center my-3"
+            :class="[isAdmin ? 'text-blue-800' : 'text-green-800']"
         >{{ $t('auth.welcome_msg') }}</p>
     </div>
 
-    <NForm :model="form" :rules="formRules" class="p-4 bg-slate-50 dark:bg-zinc-900">
+    <NForm :model="form" :rules="formRules" class="p-4 bg-white dark:bg-zinc-900">
         <NFormItem path="username" :label="$t('auth.username')">
             <NInput v-model:value="form.username" @keydown.enter.prevent :placeholder="$t('forms.enter_field', { field: $t('auth.username').toLowerCase() })" />
         </NFormItem>
@@ -114,10 +114,10 @@
             <NCol :span="24">
                 <div class="mt-5 button-container">
                     <NButton
+                        strong secondary type="primary"
                         :disabled="!form.username"
                         class="full-width-button"
                         size="large"
-                        type="primary"
                         @click="handleSubmit(form)">
                         {{ $t('auth.login') }}
                     </NButton>

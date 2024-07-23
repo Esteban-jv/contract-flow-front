@@ -128,6 +128,51 @@
         key: "logout",
       }
     ])
+   
+    // TODO Improve this part of header
+    /*const userOptions = ref([
+      {
+        label: () => h(
+          NAvatar, {
+            src: 'https://cdn4.iconfinder.com/data/icons/user-people-2/48/6-512.png'
+          }
+        ),
+        key: 'user',
+        children: [
+            {
+            label: userName,
+            key: "username",
+          },
+          {
+            label: () => h(
+              RouterLink,
+              {
+                to: {
+                  name: "dashboard",
+                  // params: {
+                    // lang: "en-US"
+                  // }
+                }
+              },
+              { default: () => i18n.global.t('dashboard') }
+            ),
+            key: "dashboard",
+          },
+          {
+            label: 'logout',
+            key: "logout",
+          }
+        ]
+      },
+      {
+        label: () => h(
+          NSwitch, {
+            "v-model:value": preferences.switchTheme
+          }
+        ),
+        key: 'theme'
+      }
+    ])*/
     const handleSelect = async key => {
       if(key === 'logout') {
         await logout()
@@ -158,6 +203,14 @@
         />
       </template>
       <template #2>
+        <!-- <NMenu
+          mode="horizontal"
+          :options="userOptions"
+          v-model:value="currentRoute"
+          responsive
+        >
+
+        </NMenu> -->
         <NFlex justify="space-between" class="px-2">
           <NDropdown :options="userOptions" @select="handleSelect">
             <NAvatar class="my-1">{{ userLetters }}</NAvatar>
@@ -174,7 +227,7 @@
       </template>
     </NSplit>
   </NLayoutHeader>
-  <NFlex vertical>
+  <NFlex vertical class="h-full">
       <NLayout has-sider>
           <NLayoutSider
               class="bg-slate-50  dark:bg-zinc-900"

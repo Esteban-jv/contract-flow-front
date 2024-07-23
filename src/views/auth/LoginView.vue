@@ -90,8 +90,8 @@
 <template>
     <div class="shadow-xl">
         <div
-            class="bg-green-100 rounded-ss-xl rounded-se-xl p-2"
-            :class="[isAdmin ? 'dark:bg-zink-900' : 'dark:bg-green-900']"
+            class="rounded-ss-xl rounded-se-xl p-2"
+            :class="[isAdmin ? 'bg-blue-100 dark:bg-zink-900' : 'bg-green-100 dark:bg-green-900']"
         >
             <h1
                 class="text-5xl font-extrabold text-center dark:text-white mt-5"
@@ -114,7 +114,7 @@
             <NCol :span="24">
                 <div class="mt-5 button-container">
                     <NButton
-                        strong secondary type="primary"
+                        strong secondary :type="isAdmin ? 'info' : 'primary'"
                         :disabled="!form.username"
                         class="full-width-button"
                         size="large"

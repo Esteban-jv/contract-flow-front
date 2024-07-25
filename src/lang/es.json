@@ -1,6 +1,10 @@
 {
     "intro_msg":"Esto se convertirá en un muy emocionante sitio web",
     "go_to_main":"Ir a inicio",
+    "contact": "Contacto",
+    "about": "Acerca de",
+    "help": "Ayuda",
+    "made_by": "Hecho por",
     "pages": {
         "403_title": "403 Acción no autorizada",
         "403_msg": "No tienes acceso para ver este recurso"

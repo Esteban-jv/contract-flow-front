@@ -1,6 +1,10 @@
 {
     "intro_msg":"This is gonna become into a really exciting website",
     "go_to_main":"Go to main",
+    "contact": "Contact",
+    "about": "About",
+    "help": "Help",
+    "made_by": "Made by",
     "pages": {
         "403_title": "403 Unautorized action",
         "403_msg": "You do not have permission to see this"

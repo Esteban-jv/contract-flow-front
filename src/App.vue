@@ -19,7 +19,7 @@
 </script>
 
 <template>
-  <n-config-provider :theme="theme" :theme-overrides="themeOverrides" class="full-body">
+  <n-config-provider :theme="theme" :theme-overrides="themeOverrides" class="full-body overflow-hidden">
     <RouterView />
   </n-config-provider>
 </template>

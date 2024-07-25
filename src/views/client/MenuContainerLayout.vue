@@ -3,12 +3,14 @@
     import { RouterLink, useRoute, useRouter } from 'vue-router';
     import {
         NFlex, NLayout, NLayoutSider, NMenu, NIcon, // Sidemenu
-        NSplit, NAvatar, NSwitch, NDropdown, NLayoutHeader // Header
+        NSplit, NAvatar, NSwitch, NDropdown, NLayoutHeader, // Header
+        NScrollbar
     } from 'naive-ui';
     import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock } from '@vicons/fa';
     import { i18n } from '@/plugins/i18n';
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
+    import Footer from '@/components/Footer.vue'
 
     // DATA
     const preferences = usePreferences()
@@ -192,8 +194,8 @@
     })
 </script>
 <template>
-  <NLayoutHeader bordered>
-    <NSplit :size="0.8" class="bg-white dark:bg-black">
+  <NLayoutHeader bordered style="height: var(--header-height);">
+    <NSplit :size="0.8" class="bg-white dark:bg-black items-center">
       <template #1>
         <NMenu
           mode="horizontal"
@@ -239,7 +241,9 @@
               show-trigger
               @collapse="collapsed = true"
               @expand="collapsed = false"
+              style="margin-bottom: 7px"
           >
+            <NScrollbar class="h-full">
               <NMenu
                   :collapsed="collapsed"
                   :collapsed-width="64"
@@ -249,12 +253,23 @@
               >
 
               </NMenu>
+            </NScrollbar>
           </NLayoutSider>
-          <NLayout>
-              <div>
-                  <RouterView />
-              </div>
+          <NLayout position="static">
+              <NScrollbar class="document-scroll-container h-full" content-style="min-height: calc(100vh - var(--header-height)); display: flex; flex-direction: column;">
+                <div class="doc p-5">
+                  <NFlex>
+                    <RouterView />
+                  </NFlex>
+                </div>
+                <Footer class="footer mt-auto" />
+              </NScrollbar>
           </NLayout>
       </NLayout>
   </NFlex>
 </template>
+<style>
+  aside {
+    height: calc(100vh - var(--header-height))!important;
+  }
+</style>

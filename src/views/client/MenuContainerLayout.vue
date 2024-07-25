@@ -255,8 +255,8 @@
               </NMenu>
             </NScrollbar>
           </NLayoutSider>
-          <NLayout position="static">
-              <NScrollbar class="document-scroll-container h-full" content-style="min-height: calc(100vh - var(--header-height)); display: flex; flex-direction: column;">
+          <NLayout position="static" style="height: calc(100vh - var(--header-height) + 7px);">
+              <NScrollbar class="document-scroll-container" content-style="min-height: calc(100vh - var(--header-height)); display: flex; flex-direction: column;">
                 <div class="doc p-5">
                   <NFlex>
                     <RouterView />

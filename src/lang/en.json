@@ -26,5 +26,16 @@
     "catalog":"Catalog | Catalogs",
     "language":"Language | Languages",
     "nationality":"Nationality | Nationalities",
-    "oficial_id":"Oficial ID | Oficial IDs"
+    "official_id":"Oficial ID | Oficial IDs",
+    "tables": {
+        "id": "Id",
+        "name": "Name",
+        "description": "Decription",
+        "status": "Status",
+        "actions": "Actions",
+        "add_new": "Add new {item}",
+        "edit": "Edit",
+        "delete": "Delete",
+        "restore": "Restore"
+    }
 }

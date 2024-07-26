@@ -86,7 +86,7 @@
                     name: "oficial-ids"
                   }
                 },
-                { default: () => i18n.global.t('oficial_id',2) }
+                { default: () => i18n.global.t('official_id',2) }
               ),
               key: "oficial-ids",
               icon: renderIcon(IdCard)
@@ -257,10 +257,10 @@
           </NLayoutSider>
           <NLayout position="static" style="height: calc(100vh - var(--header-height) + 7px);">
               <NScrollbar class="document-scroll-container" content-style="min-height: calc(100vh - var(--header-height)); display: flex; flex-direction: column;">
-                <div class="doc p-5">
-                  <NFlex>
+                <div class="p-5">
+                  <div class="w-full h-full">
                     <RouterView />
-                  </NFlex>
+                  </div>
                 </div>
                 <Footer class="footer mt-auto" />
               </NScrollbar>

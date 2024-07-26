@@ -26,5 +26,16 @@
     "catalog":"Catálogo | Catalogos",
     "language":"Idioma | Idiomas",
     "nationality":"Nacionalidad | Nacionalidades",
-    "oficial_id":"Identificación oficial | Identificaciones oficiales"
+    "official_id":"Identificación oficial | Identificaciones oficiales",
+    "tables": {
+        "id": "Id",
+        "name": "Nombre",
+        "description": "Descripción",
+        "status": "Estatus",
+        "actions": "Acciones",
+        "add_new": "Agregar {item}",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "restore": "Restaurar"
+    }
 }

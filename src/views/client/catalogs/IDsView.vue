@@ -3,56 +3,91 @@
     import { NDataTable, NIcon, NButton, NFlex,
         NModal, NCard,
         NForm, NGrid, NFormItemGi, NInput, NCheckbox } from 'naive-ui';
-    import { CheckCircle, TimesCircle, Times } from '@vicons/fa';
-    import { useRouter } from 'vue-router';
+    import { CheckCircle, TimesCircle, Times, Trash, Edit } from '@vicons/fa';
     import PartnerAPI from '@/api/client/PartnerAPI';
-    import { i18n } from '@/plugins/i18n';
+    import { useGlobalHelpers } from '@/stores/useGlobalHelpers';
 
-    // const router = useRouter()
     const showModal = ref(false)
+    const { $t, $toast } = useGlobalHelpers()
+    const renderIcon = (icon, props={}) => h(NIcon, null, { default: () => h(icon, props) });
 
     const columns = ref([
         {
-            title: i18n.global.t('tables.name'),
+            title: $t('tables.name'),
             key: 'name'
         },
         {
-            title: i18n.global.t('tables.description'),
+            title: $t('tables.description'),
             key: 'description'
         },
         {
-            title: i18n.global.t('tables.status'),
+            align: 'center',
+            title: $t('tables.status'),
             key: 'status',
-            render: (row) => h(NIcon, null, { default: () => h(
-                row.status ? CheckCircle : TimesCircle, { color: row.status ? "#0e7a0d" : "#D50049" }
-            ) })
+            render: (row) => row.status ? 
+                renderIcon(CheckCircle, { color: '#0e7a0d'}) : 
+                renderIcon(TimesCircle, { color: '#D50049'})
         },
         {
-            title: i18n.global.t('tables.actions'),
             key: 'actions',
-            render(row) {
-                return h(
-                NButton,
+            children: [
                 {
-                    size: "small",
-                    onClick: () => edit(row)
+                    align: 'center',
+                    title: $t('tables.edit'),
+                    render(row) {
+                        return h(
+                            NButton,
+                            {
+                                size: "small",
+                                secondary: true,
+                                type:"info",
+                                onClick: () => edit(row),
+                                renderIcon: () => renderIcon(Edit, { color: '--n-color'} )
+                            },
+                        );
+                    },
+                    key: "attack",
                 },
-                { default: () => i18n.global.t('tables.edit'), }
-                );
-            }
+                {
+                    align: 'center',
+                    title: $t('tables.delete'),
+                    render(row) {
+                        return h(
+                            NButton,
+                            {
+                                size: "small",
+                                type:"error",
+                                secondary: true,
+                                onClick: () => edit(row),
+                                renderIcon: () => renderIcon(Trash, { color: '--n-color'} )
+                            },
+                        );
+                    },
+                    key: "attack",
+                }
+            ]
         }
     ])
     const items = ref([])
     const pagination = ref(null)
-
     const hasPagination = computed(() => false)
 
-    const model = ref({
+    const formRef = ref(null);
+    const form = ref({
         id: null,
         name: "",
         description: "",
         status: true
-      })
+    })
+    const formRules = ref({
+        name: [
+            {
+                required: true,
+                message: $t('forms.field_is_required', { field: $t('tables.name') }),
+                trigger: ["input", "blur"]
+            }
+        ]
+    })
 
     onMounted(async () => {
         try {
@@ -65,12 +100,12 @@
 
     const edit = row => {
         showModal.value = true
-        model.value = row
+        form.value = row
     }
     const toggleModal = m => {
         showModal.value = m
         if(!m) {
-            model.value = {
+            form.value = {
                 id: null,
                 name: "",
                 description: "",
@@ -79,15 +114,30 @@
         }
     }
 
-    const saveChanges = () => console.log("Gonna save")
+    const saveChanges = () => {
+        formRef.value?.validate(
+            errors => {
+                if(!errors) {
+                    // console.log("heart shaped box")
+                } else {
+                    // console.log(errors)
+                    $toast.open({
+                        message: $t('forms.check_all_fields_msg'),
+                        type: 'error'
+                    })
+                }
+            }
+         )
+    }
 
     //todo improve
       const rules = ref({
-        name: {
-          required: true,
-          trigger: ["blur", "input"],
-          message: "Please input inputValue"
-        },
+        name: [
+            {
+            required: true,
+            message: "Password is required"
+            }
+        ],
         description: {
           required: false,
           trigger: ["blur", "input"]
@@ -117,7 +167,7 @@
         >
             <NCard
                 style="width: 600px; max-width: 90%;"
-                :title="(model.id ? $t('tables.edit') : $t('tables.add')) + ' ' + $t('official_id')"
+                :title="(form.id ? $t('tables.edit') : $t('tables.add')) + ' ' + $t('official_id')"
                 :bordered="false"
                 role="dialog"
                 aria-modal="true"
@@ -131,24 +181,24 @@
                         </NIcon>
                     </NButton>
                 </template>
-                <NForm :model="model" :rules="rules" size="medium" label-placement="top">
+                <NForm ref="formRef" :model="form" :rules="formRules" size="medium" label-placement="top">
                     <NGrid :span="24" :x-gap="24">
-                        <NFormItemGi :span="24" :label="$t('tables.name')" path="nameValue">
-                            <NInput v-model:value="model.name" :placeholder="$t('forms.enter_field', { field: $t('tables.name')})" />
+                        <NFormItemGi :span="24" :label="$t('tables.name')" path="name">
+                            <NInput v-model:value="form.name" :placeholder="$t('forms.enter_field', { field: $t('tables.name')})" />
                         </NFormItemGi>
-                        <NFormItemGi :span="24" :label="$t('tables.description')" path="descriptionValue">
-                            <NInput v-model:value="model.description" :placeholder="$t('forms.enter_field', { field: $t('tables.description')})" />
+                        <NFormItemGi :span="24" :label="$t('tables.description')" path="description">
+                            <NInput v-model:value="form.description" :placeholder="$t('forms.enter_field', { field: $t('tables.description')})" />
                         </NFormItemGi>
-                        <NFormItemGi :span="12" :label="$t('tables.currently_available')" path="statusValue">
-                                <NCheckbox v-model:checked="model.status">
-                                    {{ $t('tables.status') }}
-                                </NCheckbox>
+                        <NFormItemGi :span="12" :label="$t('tables.currently_available')" path="status">
+                            <NCheckbox v-model:checked="form.status">
+                                {{ $t('tables.status') }}
+                            </NCheckbox>
                         </NFormItemGi>
                     </NGrid>
                 </NForm>
                 <template #action>
                     <NFlex justify="end">
-                        <NButton type="primary" @click="saveChanges()">{{ $t('actions.save') }}</NButton>
+                        <NButton type="primary" @click="saveChanges(form)">{{ $t('actions.save') }}</NButton>
                         <NButton secondary @click="toggleModal(false)">{{ $t('actions.cancel') }}</NButton>
                     </NFlex>
                 </template>

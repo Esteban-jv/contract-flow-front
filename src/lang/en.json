@@ -19,7 +19,8 @@
     },
     "forms": {
         "enter_field":"Enter {field} field",
-        "field_is_required":"The field {field} is required"
+        "field_is_required":"The field {field} is required",
+        "check_all_fields_msg": "It could not send. Please check out all the fields"
     },
     "client": "Client | Clients",
     "dashboard":"Dashboard",

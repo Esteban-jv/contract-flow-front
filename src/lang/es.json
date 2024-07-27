@@ -19,7 +19,8 @@
     },
     "forms": {
         "enter_field":"Introduce {field}",
-        "field_is_required":"El campo {field} es requerido"
+        "field_is_required":"El campo {field} es requerido",
+        "check_all_fields_msg": "No se pudo enviar. Por favor revisa todos los campos"
     },
     "client": "Cliente | Clientes",
     "dashboard":"Tablero",

@@ -32,10 +32,16 @@
         "name": "Nombre",
         "description": "Descripción",
         "status": "Estatus",
+        "currently_available": "Actualmente disponible",
         "actions": "Acciones",
         "add_new": "Agregar {item}",
+        "add": "Agregar",
         "edit": "Editar",
         "delete": "Eliminar",
         "restore": "Restaurar"
+    },
+    "actions": {
+        "save": "Guardar",
+        "cancel": "Cancelar"
     }
 }

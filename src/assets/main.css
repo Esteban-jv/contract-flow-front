@@ -11,3 +11,6 @@
 body {
   --header-height: 56px
 }
+.p1, .n-card__action {
+  padding: 1rem!important;
+}

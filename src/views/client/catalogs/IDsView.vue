@@ -2,14 +2,17 @@
     import { ref, h, computed, onMounted } from 'vue';
     import { NDataTable, NIcon, NButton, NFlex,
         NModal, NCard,
-        NForm, NGrid, NFormItemGi, NInput, NCheckbox } from 'naive-ui';
+        NForm, NGrid, NFormItemGi, NInput, NCheckbox, NSkeleton, NSpace, NPopconfirm } from 'naive-ui';
     import { CheckCircle, TimesCircle, Times, Trash, Edit } from '@vicons/fa';
-    import PartnerAPI from '@/api/client/PartnerAPI';
     import { useGlobalHelpers } from '@/stores/useGlobalHelpers';
+    import api from "@/lib/axios";
+    import DeleteButton from "@/components/DeleteButton.vue"
 
-    const showModal = ref(false)
     const { $t, $toast } = useGlobalHelpers()
     const renderIcon = (icon, props={}) => h(NIcon, null, { default: () => h(icon, props) });
+    const showModal = ref(false)
+    const isLoading = ref(false)
+    const endpoing = ref('/id')
 
     const columns = ref([
         {
@@ -46,24 +49,22 @@
                             },
                         );
                     },
-                    key: "attack",
+                    key: "edit",
                 },
                 {
                     align: 'center',
                     title: $t('tables.delete'),
                     render(row) {
                         return h(
-                            NButton,
+                            DeleteButton,
                             {
-                                size: "small",
-                                type:"error",
-                                secondary: true,
-                                onClick: () => edit(row),
-                                renderIcon: () => renderIcon(Trash, { color: '--n-color'} )
-                            },
+                                delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t('official_id') }),
+                                delete_endpoint: `${endpoing.value}/${row.id}/` ,
+                                onObjectDeleted: () => getResource()
+                            }
                         );
                     },
-                    key: "attack",
+                    key: "delete",
                 }
             ]
         }
@@ -89,18 +90,12 @@
         ]
     })
 
-    onMounted(async () => {
-        try {
-            const { data } = await PartnerAPI.getOficialIds()
-            items.value = data
-        } catch (err) {
-            console.error(err)
-        }
-    })
-
-    const edit = row => {
+    const edit = async row => {
         showModal.value = true
-        form.value = row
+        isLoading.value = true
+        const { data } = await api.get(`${endpoing.value}/${row.id}/`)
+        form.value = data
+        isLoading.value = false
     }
     const toggleModal = m => {
         showModal.value = m
@@ -114,11 +109,54 @@
         }
     }
 
+    const processError = err => {
+        if(err.response)
+            if(err.response.data) {
+                const { data } = err.response
+                const arrErr = Object.entries(data)
+                arrErr.forEach( e => {
+                    $toast.open({
+                        message: `${$t('tables.'+e[0])}: ${e[1]}`,
+                        type: 'error'
+                    })
+                })
+                return
+            }
+        $toast.open({
+            message: $t('forms.check_all_fields_msg'),
+            type: 'error'
+        })
+    }
+    const getResource = async () => {
+        try {
+            const { data } = await api.get(`${endpoing.value}/`)
+            items.value = data
+        } catch (err) {
+            // console.error(err)
+            $toast.open({
+                message: $t('forms.something_went_wrong'),
+                type: 'error'
+            })
+        }
+    }
+    const createOrUpdateResource = async () => {
+        try {
+            if (form.value.id) {
+                const { data } = await api.put(`${endpoing.value}/${form.value.id}/`,form.value)
+            } else {
+                const { data } = await api.post(`${endpoing.value}/`,form.value)
+            }
+            await getResource()
+            toggleModal(false)
+        } catch (err) {
+            processError(err)
+        }
+    }
     const saveChanges = () => {
         formRef.value?.validate(
             errors => {
                 if(!errors) {
-                    // console.log("heart shaped box")
+                    createOrUpdateResource()
                 } else {
                     // console.log(errors)
                     $toast.open({
@@ -130,19 +168,9 @@
          )
     }
 
-    //todo improve
-      const rules = ref({
-        name: [
-            {
-            required: true,
-            message: "Password is required"
-            }
-        ],
-        description: {
-          required: false,
-          trigger: ["blur", "input"]
-        }
-      })
+    onMounted(async () => {
+        getResource()
+    })
     
 </script>
 <template>
@@ -181,7 +209,10 @@
                         </NIcon>
                     </NButton>
                 </template>
-                <NForm ref="formRef" :model="form" :rules="formRules" size="medium" label-placement="top">
+                <NSpace vertical v-if="isLoading">
+                    <NSkeleton height="40px" :repeat="3" style="margin-top: 24px;" :sharp="false" />
+                </NSpace>
+                <NForm v-else ref="formRef" :model="form" :rules="formRules" size="medium" label-placement="top">
                     <NGrid :span="24" :x-gap="24">
                         <NFormItemGi :span="24" :label="$t('tables.name')" path="name">
                             <NInput v-model:value="form.name" :placeholder="$t('forms.enter_field', { field: $t('tables.name')})" />
@@ -198,8 +229,8 @@
                 </NForm>
                 <template #action>
                     <NFlex justify="end">
-                        <NButton type="primary" @click="saveChanges(form)">{{ $t('actions.save') }}</NButton>
-                        <NButton secondary @click="toggleModal(false)">{{ $t('actions.cancel') }}</NButton>
+                        <NButton :disabled="isLoading" type="primary" @click="saveChanges(form)">{{ $t('actions.save') }}</NButton>
+                        <NButton :disabled="isLoading" secondary @click="toggleModal(false)">{{ $t('actions.cancel') }}</NButton>
                     </NFlex>
                 </template>
             </NCard>

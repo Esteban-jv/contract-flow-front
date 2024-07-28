@@ -21,7 +21,7 @@
         "enter_field":"Introduce {field}",
         "field_is_required":"El campo {field} es requerido",
         "check_all_fields_msg": "No se pudo enviar. Por favor revisa todos los campos",
-        "something_went_wrong": "Oops! Algo salió mal"
+        "something_went_wrong": "Ups! Algo salió mal"
     },
     "client": "Cliente | Clientes",
     "dashboard":"Tablero",

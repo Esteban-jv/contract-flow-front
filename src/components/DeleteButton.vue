@@ -1,8 +1,9 @@
 <script setup>
     import { ref } from 'vue';
-    import { NSpin, NIcon, NButton, NPopconfirm } from 'naive-ui';
+    import { NSpin, NIcon, NButton, NPopconfirm, useLoadingBar } from 'naive-ui';
     import { Trash } from '@vicons/fa';
     import api from "@/lib/axios";
+    import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
 
     const props = defineProps({
         delete_msg: {
@@ -16,13 +17,24 @@
     })
     const emit = defineEmits(['object-deleted'])
 
+    const { $toastError } = useGlobalHelpers()
+    const loadingBar = useLoadingBar()
     const isLoading = ref(false)
 
     const handlePositiveClick = async () =>  {
-        isLoading.value = true
-        await api.delete(props.delete_endpoint)
-        isLoading.value = false
-        emit('object-deleted')
+        try {
+            loadingBar.start()
+            isLoading.value = true
+            await api.delete(props.delete_endpoint)
+            emit('object-deleted')
+            loadingBar.end()
+        } catch (err) {
+            $toastError(err)
+            loadingBar.error()
+        } finally {
+            isLoading.value = false
+        }
+        
     }
     const handleNegativeClick = () => 0
 </script>

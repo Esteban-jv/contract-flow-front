@@ -23,7 +23,7 @@
     })
 
     // States and Composables
-    const { $t, $toast } = useGlobalHelpers()
+    const { $t, $toast, $toastError } = useGlobalHelpers()
     const loadingBar = useLoadingBar()
 
     // Data
@@ -35,24 +35,6 @@
     const updatePage = page => {
         pagination.page = page
         getResource()
-    }
-    const processError = err => {
-        if(err.response)
-            if(err.response.data) {
-                const { data } = err.response
-                const arrErr = Object.entries(data)
-                arrErr.forEach( e => {
-                    $toast.open({
-                        message: `${$t('tables.'+e[0])}: ${e[1]}`,
-                        type: 'error'
-                    })
-                })
-                return
-            }
-        $toast.open({
-            message: $t('forms.check_all_fields_msg'),
-            type: 'error'
-        })
     }
 
     // For table
@@ -97,7 +79,7 @@
             loadingBar.finish()
         } catch (err) {
             loadingBar.error()
-            processError(err)
+            $toastError(err)
         } finally {
             isLoading.value = false
         }
@@ -141,7 +123,7 @@
             loadingBar.finish()
         } catch (err) {
             loadingBar.error()
-            processError(err)
+            $toastError(err)
         } finally {
             isLoading.value = false
         }

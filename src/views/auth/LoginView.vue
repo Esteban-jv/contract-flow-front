@@ -1,25 +1,26 @@
 <script setup>
-    import { ref, inject, onBeforeMount } from 'vue';
+    import { ref, onBeforeMount } from 'vue';
     import { useRouter } from 'vue-router';
     import { NButton, NInput, NFormItem, NForm, NRow, NCol } from 'naive-ui';
-    import { i18n } from '@/plugins/i18n';
-    import AuthApi from '@/api/AuthApi';
+    import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
+    import { useAuth } from '@/stores/useAuth';
     import domain from '@/utils/domain';
 
+    const { $t } = useGlobalHelpers()
+    const { getToken, login } = useAuth()
     const router = useRouter()
-    const isAdmin = ref(false)
     const nextView = ref('')
+
+    const isAdmin = ref(false)
+
     onBeforeMount(() => {
         isAdmin.value = domain.isAdmin()
         nextView.value = (isAdmin.value ? 'master' : 'languages')
-        if(localStorage.getItem('AUTH_TOKEN')) {
-            return router.push({
-                name: nextView.value
-            })
+        if(getToken()) {
+            goNext()
         }
     })
 
-    const toast = inject('toast')
     const loading = ref(false)
     const form = ref({
         username: '',
@@ -32,12 +33,8 @@
                 required: true,
                 validator(rule, value) {
                     if (!value) {
-                        return new Error(i18n.global.t('forms.field_is_required', { field: i18n.global.t('auth.username')}));
-                    } /*else if (!/^\d*$/.test(value)) {
-                        return new Error("Age should be an integer");
-                    } else if (Number(value) < 18) {
-                        return new Error("Age should be above 18");
-                    }*/
+                        return new Error($t('forms.field_is_required', { field: $t('auth.username')}));
+                    }
                     return true;
                 },
                 trigger: ["input", "blur"]
@@ -48,12 +45,8 @@
                 required: true,
                 validator(rule, value) {
                     if (!value) {
-                        return new Error(i18n.global.t('forms.field_is_required', { field: i18n.global.t('auth.password')}));
-                    } /*else if (!/^\d*$/.test(value)) {
-                        return new Error("Age should be an integer");
-                    } else if (Number(value) < 18) {
-                        return new Error("Age should be above 18");
-                    }*/
+                        return new Error($t('forms.field_is_required', { field: $t('auth.password')}));
+                    }
                     return true;
                 },
                 trigger: ["input", "blur"]
@@ -62,26 +55,17 @@
     })
 
     const handleSubmit = async (formData) => {
-        loading.value = true
-        // console.log(formData, form.value)
         try {
-            const response = await AuthApi.login(form.value)
-            // console.log(response)
-            const { data: { token, user } } = response
-            localStorage.setItem('AUTH_TOKEN',token)
-            localStorage.setItem('USER',JSON.stringify({
-                first_name: user.first_name,
-                last_name: user.last_name
-            }))
+            loading.value = true
+            const r = await login(formData)
+            if(r === true) {
+                router.push({
+                    name: nextView.value
+                })
+            }
             loading.value = false
-            return router.push({
-                name: nextView.value
-            })
-        } catch (err) {
-            toast.open({
-                message: err.response.data.msg,
-                type: 'error'
-            })
+        } catch(err) {
+            console.log(err)
             loading.value = false
         }
     }
@@ -115,7 +99,7 @@
                 <div class="mt-5 button-container">
                     <NButton
                         strong secondary :type="isAdmin ? 'info' : 'primary'"
-                        :disabled="!form.username"
+                        :disabled="!form.username || loading"
                         class="full-width-button"
                         size="large"
                         @click="handleSubmit(form)">

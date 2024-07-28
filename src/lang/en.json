@@ -21,7 +21,7 @@
         "enter_field":"Enter {field} field",
         "field_is_required":"The field {field} is required",
         "check_all_fields_msg": "It could not send. Please check out all the fields",
-        "something_went_wrong": "Oops! Algo salió mal"
+        "something_went_wrong": "Oops! Something went wrong"
     },
     "client": "Client | Clients",
     "dashboard":"Dashboard",

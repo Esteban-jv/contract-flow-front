@@ -4,7 +4,7 @@
         NModal, NCard,
         NForm, NGrid, NFormItemGi, NInput, NCheckbox, NSkeleton, NSpace, NPagination, useLoadingBar } from 'naive-ui';
     import { CheckCircle, TimesCircle, Times, Trash, Edit } from '@vicons/fa';
-    import { useGlobalHelpers } from '@/stores/useGlobalHelpers';
+    import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import api from "@/lib/axios";
     import DeleteButton from "@/components/DeleteButton.vue"
 

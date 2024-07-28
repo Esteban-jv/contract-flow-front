@@ -12,6 +12,10 @@
             type: String,
             required: true
         },
+        permissionModel: {
+            type: String,
+            required: false
+        },
         endpoint: {
             type: String,
             required: true
@@ -22,8 +26,10 @@
         }
     })
 
+    const permission = computed(() => props.permissionModel ?? props.model)
+
     // States and Composables
-    const { $t, $toast, $toastError } = useGlobalHelpers()
+    const { $t, $toast, $toastError, $can } = useGlobalHelpers()
     const loadingBar = useLoadingBar()
 
     // Data
@@ -189,6 +195,7 @@
                         return h(
                             NButton,
                             {
+                                disabled: !$can('change',permission.value),
                                 size: "small",
                                 secondary: true,
                                 type:"info",
@@ -206,6 +213,7 @@
                         return h(
                             DeleteButton,
                             {
+                                disabled: !$can('delete',permission.value),
                                 delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) }),
                                 delete_endpoint: `${props.endpoint}/${row.id}/` ,
                                 onObjectDeleted: () => getResource()

@@ -13,6 +13,10 @@
         delete_endpoint: {
             Type: String,
             required: true
+        },
+        disabled: {
+            typ: String,
+            required: false
         }
     })
     const emit = defineEmits(['object-deleted'])
@@ -51,6 +55,7 @@
                     size="small"
                     secondary
                     type="error"
+                    :disabled="props.disabled"
                 >
                     <NIcon size="20" color="--n-color">
                         <Trash />

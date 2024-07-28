@@ -5,8 +5,13 @@ export function useGlobalHelpers() {
     const { t } = useI18n()
     const toast = inject('toast')
 
-    const can = (permission) => {
-        console.log("check for", permission)
+    const can = (action, model) => {
+        const permissions = JSON.parse(localStorage.getItem('P')) || []
+        for (let index = 0; index < permissions.length; index++) {
+            if(permissions[index].action === action && permissions[index].model === model)
+                return true //could be id too
+        }
+        return false
     }
 
     const toastError = err => {

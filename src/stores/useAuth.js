@@ -1,4 +1,4 @@
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, onScopeDispose } from "vue";
 import { defineStore } from "pinia";
 import { useLoadingBar } from "naive-ui";
 import AuthApi from '@/api/AuthApi';
@@ -10,6 +10,7 @@ export const useAuth = defineStore('useAuth', () => {
     const loadingBar = useLoadingBar()
 
     // Data
+    const permissions = ref([])
     // const nextView = ref('')
 
     // Methods
@@ -26,10 +27,13 @@ export const useAuth = defineStore('useAuth', () => {
             localStorage.setItem('AUTH_TOKEN',token)
             localStorage.setItem('USER',JSON.stringify({
                 first_name: user.first_name,
-                last_name: user.last_name,
-                roles: user.groups
+                last_name: user.last_name
             }))
-
+            console.log("asd", user.groups)
+            localStorage.setItem('P',JSON.stringify(
+                user.groups.map(g => g.permissions.map( p => p))[0]
+            ))
+            console.log("asd")
             loadingBar.finish()
             return true
         } catch (err) {
@@ -39,12 +43,33 @@ export const useAuth = defineStore('useAuth', () => {
         }
         
     }
+    function getUser() {
+        return JSON.parse(localStorage.getItem('USER'))
+    }
+    function getPermissions() {
+        const user = getUser()
+        permissions.value = []
+        if(user) {
+            const { roles } = user
+            roles.forEach(r => {
+                permissions.value.push(r.permissions)
+            })
+        }
+        return permissions.value
+    }
 
     // Computed
 
+    // onMounted
+    /*onScopeDispose(() => {
+        getPermissions()
+    })*/
+
     return {
         // nextView,
+        permissions,
         getToken,
-        login
+        login,
+        getPermissions
     }
 })

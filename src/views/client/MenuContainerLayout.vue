@@ -11,11 +11,15 @@
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
     import Footer from '@/components/Footer.vue'
+    import { useAuth } from '@/stores/useAuth';
+    import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
 
     // DATA
+    const { $can } = useGlobalHelpers()
     const preferences = usePreferences()
     const route = useRoute()
     const router = useRouter()
+    const auth = useAuth()
 
     const user = ref({})
     const collapsed = ref(false)
@@ -63,7 +67,8 @@
                 { default: () => i18n.global.t('language', 2) }
               ),
               key: "languages",
-              icon: renderIcon(Flag)
+              icon: renderIcon(Flag),
+              disabled: !$can('view','language')
             },
             {
               label: () => h(
@@ -76,7 +81,8 @@
                 { default: () => i18n.global.t('nationality',2) }
               ),
               key: "nationalities",
-              icon: renderIcon(GlobeAmericas)
+              icon: renderIcon(GlobeAmericas),
+              disabled: !$can('view','nationality')
             },
             {
               label: () => h(
@@ -89,7 +95,8 @@
                 { default: () => i18n.global.t('official_id',2) }
               ),
               key: "oficial-ids",
-              icon: renderIcon(IdCard)
+              icon: renderIcon(IdCard),
+              disabled: !$can('view','idtype')
             },
         ]
       },

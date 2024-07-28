@@ -36,5 +36,6 @@
         :endpoint="`/${model}`"
         :model="model"
         :fields="fields"
+        permission-model="language"
     />
 </template>

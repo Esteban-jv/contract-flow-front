@@ -1,8 +1,8 @@
 <script setup>
-    import { ref, h, computed, onMounted } from 'vue';
+    import { ref, h, onMounted, reactive } from 'vue';
     import { NDataTable, NIcon, NButton, NFlex,
         NModal, NCard,
-        NForm, NGrid, NFormItemGi, NInput, NCheckbox, NSkeleton, NSpace, NPopconfirm } from 'naive-ui';
+        NForm, NGrid, NFormItemGi, NInput, NCheckbox, NSkeleton, NSpace, NPagination, useLoadingBar } from 'naive-ui';
     import { CheckCircle, TimesCircle, Times, Trash, Edit } from '@vicons/fa';
     import { useGlobalHelpers } from '@/stores/useGlobalHelpers';
     import api from "@/lib/axios";
@@ -12,6 +12,7 @@
     const renderIcon = (icon, props={}) => h(NIcon, null, { default: () => h(icon, props) });
     const showModal = ref(false)
     const isLoading = ref(false)
+    const loadingBar = useLoadingBar()
     const endpoing = ref('/id')
 
     const columns = ref([
@@ -70,8 +71,24 @@
         }
     ])
     const items = ref([])
-    const pagination = ref(null)
-    const hasPagination = computed(() => false)
+    const updatePage = page => {
+        pagination.page = page
+        getResource()
+    }
+    const pagination = reactive({
+        pageSize:5,
+        page:1,
+        showSizePicker: false,
+        pageSizes: [5, 10, 20, 50],
+        /*updatePage: (page) => {
+            pagination.page = page
+            getResource()
+        },
+        onUpdatePageSize: (pageSize) => {
+            paginationReactive.pageSize = pageSize
+            paginationReactive.page = 1
+        }*/
+    })
 
     const formRef = ref(null);
     const form = ref({
@@ -91,11 +108,19 @@
     })
 
     const edit = async row => {
-        showModal.value = true
-        isLoading.value = true
-        const { data } = await api.get(`${endpoing.value}/${row.id}/`)
-        form.value = data
-        isLoading.value = false
+        try {
+            showModal.value = true
+            isLoading.value = true
+            loadingBar.start()
+            const { data } = await api.get(`${endpoing.value}/${row.id}/`)
+            form.value = data
+            loadingBar.finish()
+        } catch (err) {
+            loadingBar.error()
+            processError(err)
+        } finally {
+            isLoading.value = false
+        }
     }
     const toggleModal = m => {
         showModal.value = m
@@ -129,18 +154,31 @@
     }
     const getResource = async () => {
         try {
-            const { data } = await api.get(`${endpoing.value}/`)
-            items.value = data
+            isLoading.value = true
+            loadingBar.start()
+            const { data } = await api.get(`${endpoing.value}/`, {
+                params: {
+                    limit: pagination.pageSize,
+                    offset: (pagination.page - 1) * pagination.pageSize
+                }
+            })
+            items.value = data.results
+            pagination.itemCount = data.count
+            pagination.pageCount = parseInt(data.count / pagination.pageSize)
+            loadingBar.finish()
         } catch (err) {
             // console.error(err)
+            loadingBar.error()
             $toast.open({
                 message: $t('forms.something_went_wrong'),
                 type: 'error'
             })
-        }
+        } finally { isLoading.value = false }
     }
     const createOrUpdateResource = async () => {
         try {
+            isLoading.value = true
+            loadingBar.start()
             if (form.value.id) {
                 const { data } = await api.put(`${endpoing.value}/${form.value.id}/`,form.value)
             } else {
@@ -148,8 +186,12 @@
             }
             await getResource()
             toggleModal(false)
+            loadingBar.finish()
         } catch (err) {
+            loadingBar.error()
             processError(err)
+        } finally {
+            isLoading.value = false
         }
     }
     const saveChanges = () => {
@@ -187,8 +229,10 @@
             single-column
             :columns="columns"
             :data="items"
-            :pagination="hasPagination ? pagination : []"
         />
+        <NFlex justify="end" class="mt-3">
+            <NPagination v-model:page="pagination.page" :page-count="2" @update-page="updatePage(pagination.page)" />
+        </NFlex>
         <NModal
             v-model:show="showModal"
             :mask-closable="false"

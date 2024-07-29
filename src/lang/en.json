@@ -6,8 +6,8 @@
     "help": "Help",
     "made_by": "Made by",
     "pages": {
-        "403_title": "403 Unautorized action",
-        "403_msg": "You do not have permission to see this"
+        "403_title": "403 Unautorized action.",
+        "403_msg": "You do not have permission to see this."
     },
     "auth": {
         "access":"Access",
@@ -18,17 +18,17 @@
         "logout":"logout"
     },
     "forms": {
-        "enter_field":"Enter {field} field",
-        "field_is_required":"The field {field} is required",
-        "check_all_fields_msg": "It could not send. Please check out all the fields",
-        "something_went_wrong": "Oops! Something went wrong"
+        "enter_field":"Enter {field} field.",
+        "field_is_required":"The field {field} is required.",
+        "check_all_fields_msg": "It could not send. Please check out all the fields.",
+        "something_went_wrong": "Oops! Something went wrong."
     },
     "client": "Client | Clients",
     "dashboard":"Dashboard",
     "catalog":"Catalog | Catalogs",
     "language":"Language | Languages",
     "nationality":"Nationality | Nationalities",
-    "official_id":"Oficial ID | Oficial IDs",
+    "idtype":"Oficial ID | Oficial IDs",
     "tables": {
         "id": "Id",
         "name": "Name",
@@ -49,6 +49,10 @@
         "cancel": "Cancel"
     },
     "errors": {
-        "user_without_permissions": "User without any permission"
+        "user_without_permissions": "User without any permission."
+    },
+    "messages": {
+        "success": "It's done.",
+        "deleted_successfully": "{obj} deleted successfully."
     }
 }

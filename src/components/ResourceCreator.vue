@@ -114,6 +114,10 @@
             })
         } finally { isLoading.value = false }
     }
+    const resetResource = async () => {
+        pagination.page = 1
+        await getResource()
+    }
     // Create and Update
     const createOrUpdateResource = async () => {
         try {
@@ -216,8 +220,9 @@
                                 DeleteButton,
                                 {
                                     delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) }),
+                                    deleted_msg: $t('messages.deleted_successfully',{ obj: $t(props.model) }),
                                     delete_endpoint: `${props.endpoint}/${row.id}/` ,
-                                    onObjectDeleted: () => getResource()
+                                    onObjectDeleted: () => resetResource()
                                 }
                             );
                         },

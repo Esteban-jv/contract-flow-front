@@ -92,7 +92,7 @@
                     name: "oficial-ids"
                   }
                 },
-                { default: () => i18n.global.t('official_id',2) }
+                { default: () => i18n.global.t('idtype',2) }
               ),
               key: "oficial-ids",
               icon: renderIcon(IdCard),

@@ -5,8 +5,15 @@
     import api from "@/lib/axios";
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
 
+    const { $toastError, $toast, $t } = useGlobalHelpers()
+    const loadingBar = useLoadingBar()
+
     const props = defineProps({
         delete_msg: {
+            Type: String,
+            required: true
+        },
+        deleted_msg: {
             Type: String,
             required: true
         },
@@ -17,12 +24,10 @@
         disabled: {
             typ: String,
             required: false
-        }
+        },
     })
     const emit = defineEmits(['object-deleted'])
 
-    const { $toastError } = useGlobalHelpers()
-    const loadingBar = useLoadingBar()
     const isLoading = ref(false)
 
     const handlePositiveClick = async () =>  {
@@ -30,9 +35,14 @@
             loadingBar.start()
             isLoading.value = true
             await api.delete(props.delete_endpoint)
+            $toast.open({
+                message: props.deleted_msg,
+                type: 'success'
+            })
             emit('object-deleted')
-            loadingBar.end()
+            loadingBar.finish()
         } catch (err) {
+            console.log(err)
             $toastError(err)
             loadingBar.error()
         } finally {

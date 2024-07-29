@@ -6,8 +6,8 @@
     "help": "Ayuda",
     "made_by": "Hecho por",
     "pages": {
-        "403_title": "403 Acción no autorizada",
-        "403_msg": "No tienes acceso para ver este recurso"
+        "403_title": "403 Acción no autorizada.",
+        "403_msg": "No tienes acceso para ver este recurso."
     },
     "auth": {
         "access":"Acceso",
@@ -18,17 +18,17 @@
         "logout":"Cerrar sesión"
     },
     "forms": {
-        "enter_field":"Introduce {field}",
-        "field_is_required":"El campo {field} es requerido",
-        "check_all_fields_msg": "No se pudo enviar. Por favor revisa todos los campos",
-        "something_went_wrong": "Ups! Algo salió mal"
+        "enter_field":"Introduce {field}.",
+        "field_is_required":"El campo {field} es requerido.",
+        "check_all_fields_msg": "No se pudo enviar. Por favor revisa todos los campos.",
+        "something_went_wrong": "Ups! Algo salió mal."
     },
     "client": "Cliente | Clientes",
     "dashboard":"Tablero",
     "catalog":"Catálogo | Catalogos",
     "language":"Idioma | Idiomas",
     "nationality":"Nacionalidad | Nacionalidades",
-    "official_id":"Identificación oficial | Identificaciones oficiales",
+    "idtype":"Identificación oficial | Identificaciones oficiales",
     "tables": {
         "id": "Id",
         "name": "Nombre",
@@ -49,6 +49,10 @@
         "cancel": "Cancelar"
     },
     "errors": {
-        "user_without_permissions": "EL usuario no tienen permisos"
+        "user_without_permissions": "El usuario no tienen permisos."
+    },
+    "messages": {
+        "success": "Está hecho.",
+        "deleted_successfully": "se eliminó {obj} correctamente."
     }
 }

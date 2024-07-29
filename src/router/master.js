@@ -24,7 +24,7 @@ const router = createRouter({
     {
       path: '/403',
       name: '403',
-      component: () => import('../views/403View.vue'),
+      component: () => import('../views/ErrorView.vue'),
     },
     {
       path: '/master',

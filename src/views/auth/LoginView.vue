@@ -15,7 +15,7 @@
 
     onBeforeMount(() => {
         isAdmin.value = domain.isAdmin()
-        nextView.value = (isAdmin.value ? 'master' : 'languages')
+        nextView.value = (isAdmin.value ? 'master' : 'language')
         if(getToken()) {
             goNext()
         }

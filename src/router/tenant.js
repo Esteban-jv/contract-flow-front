@@ -24,7 +24,7 @@ const router = createRouter({
     {
       path: '/403',
       name: '403',
-      component: () => import('../views/403View.vue'),
+      component: () => import('../views/ErrorView.vue'),
     },
     {
       path: '/client-view',
@@ -43,17 +43,17 @@ const router = createRouter({
         },
         {
           path: '/languages',
-          name: 'languages',
+          name: 'language',
           component: () => import('../views/client/catalogs/LanguagesView.vue')
         },
         {
           path: '/oficial-identifiers',
-          name: 'oficial-ids',
+          name: 'idtype',
           component: () => import('../views/client/catalogs/IDsView.vue')
         },
         {
           path: '/nationalities',
-          name: 'nationalities',
+          name: 'nationality',
           component: () => import('../views/client/catalogs/NationalitiesView.vue')
         }
       ]

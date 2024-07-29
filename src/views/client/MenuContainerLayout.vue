@@ -7,7 +7,6 @@
         NScrollbar
     } from 'naive-ui';
     import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock } from '@vicons/fa';
-    import { i18n } from '@/plugins/i18n';
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
     import Footer from '@/components/Footer.vue'
@@ -15,7 +14,7 @@
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
 
     // DATA
-    const { $can } = useGlobalHelpers()
+    const { $can, $t } = useGlobalHelpers()
     const preferences = usePreferences()
     const route = useRoute()
     const router = useRouter()
@@ -34,79 +33,7 @@
     })
 
     // Menu Data
-    const menuOptions = ref([
-      {
-        label: () => h(
-          RouterLink,
-          {
-            to: {
-              name: "dashboard",
-              // params: {
-                // lang: "en-US"
-              // }
-            }
-          },
-          { default: () => i18n.global.t('dashboard') }
-        ),
-        key: "dashboard",
-        icon: renderIcon(Home),
-      },
-      {
-        label: i18n.global.t('catalog',2),
-        key: "catalogs",
-        icon: renderIcon(ListAltRegular),
-        children: [
-            {
-              label: () => h(
-                RouterLink,
-                {
-                  to: {
-                    name: "languages"
-                  }
-                },
-                { default: () => i18n.global.t('language', 2) }
-              ),
-              key: "languages",
-              icon: renderIcon(Flag),
-              disabled: !$can('view','language')
-            },
-            {
-              label: () => h(
-                RouterLink,
-                {
-                  to: {
-                    name: "nationalities"
-                  }
-                },
-                { default: () => i18n.global.t('nationality',2) }
-              ),
-              key: "nationalities",
-              icon: renderIcon(GlobeAmericas),
-              disabled: !$can('view','nationality')
-            },
-            {
-              label: () => h(
-                RouterLink,
-                {
-                  to: {
-                    name: "oficial-ids"
-                  }
-                },
-                { default: () => i18n.global.t('idtype',2) }
-              ),
-              key: "oficial-ids",
-              icon: renderIcon(IdCard),
-              disabled: !$can('view','idtype')
-            },
-        ]
-      },
-      {
-          label: "Disabled link",
-          key: "403",
-          disabled: true,
-          icon: renderIcon(UserLock),
-      },
-    ])
+    const menuOptions = ref([])
     const logout = async () => {
         await ClientAuthApi.logout()
         localStorage.removeItem('AUTH_TOKEN')
@@ -128,7 +55,7 @@
               // }
             }
           },
-          { default: () => i18n.global.t('dashboard') }
+          { default: () => $t('dashboard') }
         ),
         key: "dashboard",
       },
@@ -136,6 +63,24 @@
         label: 'logout',
         key: "logout",
       }
+    ])
+
+    const headerOptions = ref([
+      {
+        label: () => h(
+          RouterLink,
+          {
+            to: {
+              name: "dashboard",
+              // params: {
+                // lang: "en-US"
+              // }
+            }
+          },
+          { default: () => $t('dashboard') }
+        ),
+        key: "dashboard",
+      },
     ])
    
     // TODO Improve this part of header
@@ -163,7 +108,7 @@
                   // }
                 }
               },
-              { default: () => i18n.global.t('dashboard') }
+              { default: () => $t('dashboard') }
             ),
             key: "dashboard",
           },
@@ -190,6 +135,120 @@
     function renderIcon(icon) {
       return () => h(NIcon, null, { default: () => h(icon) });
     }
+    function buildMenu() {
+      menuOptions.value = []
+      menuOptions.value.push({
+        label: () => h(
+          RouterLink,
+          { to: { name: "dashboard" } },
+          { default: () => $t('dashboard') }
+        ),
+        key: "dashboard",
+        icon: renderIcon(Home),
+      })
+      const catalog_permissions = [
+        { model: 'idtype', icon: Flag, path:'', allow: false},
+        { model: 'language', icon: GlobeAmericas, path:'languages', allow: false},
+        { model: 'nationality', icon: IdCard, path:'', allow: false}
+      ]
+      catalog_permissions.forEach(cp => {
+        cp.allow = $can('view',cp.model)
+      });
+      // console.log(catalog_permissions.some( cp => cp.allow === true), catalog_permissions)
+      if(catalog_permissions.some( cp => cp.allow === true)) {
+        let cat_children = []
+        catalog_permissions.forEach( cp => {
+          if(cp.allow) {
+            cat_children.push({
+              label: () => h(
+                RouterLink,
+                {
+                  to: {
+                    name: cp.model
+                  }
+                },
+                { default: () => $t(cp.model, 2) }
+              ),
+              key: cp.model,
+              icon: renderIcon(cp.icon)
+            })
+          }
+        })
+        console.warn(cat_children)
+        menuOptions.value.push({
+          label: $t('catalog',2),
+          key: "catalogs",
+          icon: renderIcon(ListAltRegular),
+          children: cat_children
+        })
+      }
+
+      menuOptions.value.push({
+            label: "Disabled link",
+            key: "404",
+            disabled: true,
+            icon: renderIcon(UserLock),
+        },
+      )
+
+      /*
+      {
+        label: $t('catalog',2),
+        key: "catalogs",
+        icon: renderIcon(ListAltRegular),
+        children: [
+            {
+              label: () => h(
+                RouterLink,
+                {
+                  to: {
+                    name: "languages"
+                  }
+                },
+                { default: () => $t('language', 2) }
+              ),
+              key: "languages",
+              icon: renderIcon(Flag),
+              disabled: !$can('view','language')
+            },
+            {
+              label: () => h(
+                RouterLink,
+                {
+                  to: {
+                    name: "nationalities"
+                  }
+                },
+                { default: () => $t('nationality',2) }
+              ),
+              key: "nationalities",
+              icon: renderIcon(GlobeAmericas),
+              disabled: !$can('view','nationality')
+            },
+            {
+              label: () => h(
+                RouterLink,
+                {
+                  to: {
+                    name: "oficial-ids"
+                  }
+                },
+                { default: () => $t('idtype',2) }
+              ),
+              key: "oficial-ids",
+              icon: renderIcon(IdCard),
+              disabled: !$can('view','idtype')
+            },
+        ]
+      },
+      {
+          label: "Disabled link",
+          key: "404",
+          disabled: true,
+          icon: renderIcon(UserLock),
+      },
+      */
+    }
 
     // Before Mounted
     onBeforeMount(() => {
@@ -198,6 +257,7 @@
 
         user.value = JSON.parse(localStorage.getItem('USER'))
         // console.log(user.value)
+        buildMenu()
     })
 </script>
 <template>
@@ -206,7 +266,7 @@
       <template #1>
         <NMenu
           mode="horizontal"
-          :options="menuOptions"
+          :options="headerOptions"
           v-model:value="currentRoute"
           responsive
         />

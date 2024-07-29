@@ -5,13 +5,28 @@ export function useGlobalHelpers() {
     const { t } = useI18n()
     const toast = inject('toast')
 
+    const getPermissions = () => JSON.parse(localStorage.getItem('P')) || []
     const can = (action, model) => {
-        const permissions = JSON.parse(localStorage.getItem('P')) || []
+        const permissions = getPermissions()
         for (let index = 0; index < permissions.length; index++) {
             if(permissions[index].action === action && permissions[index].model === model)
                 return true //could be id too
         }
         return false
+    }
+    const canAny = (action, models) => {
+        for (let i = 0; i < models.length; i++) {
+            if(can(action, models[i]))
+                return true
+        }
+        return false
+    }
+    const canAll = (action, models) => {
+        for (let i = 0; i < models.length; i++) {
+            if(!can(action, models[i]))
+                return false
+        }
+        return true
     }
 
     const toastError = err => {
@@ -52,6 +67,8 @@ export function useGlobalHelpers() {
 
     return {
         $can: can,
+        $canAny: canAny,
+        $canAll: canAll,
         $t: t,
         $toast: toast,
         $toastError: toastError

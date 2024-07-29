@@ -7,7 +7,9 @@
     "made_by": "Made by",
     "pages": {
         "403_title": "403 Unautorized action.",
-        "403_msg": "You do not have permission to see this."
+        "403_msg": "You do not have permission to see this.",
+        "404_title": "404 Not found.",
+        "404_msg": "Page not found."
     },
     "auth": {
         "access":"Access",

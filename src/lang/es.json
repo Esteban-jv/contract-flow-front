@@ -7,7 +7,9 @@
     "made_by": "Hecho por",
     "pages": {
         "403_title": "403 Acción no autorizada.",
-        "403_msg": "No tienes acceso para ver este recurso."
+        "403_msg": "No tienes acceso para ver este recurso.",
+        "404_title": "404 No encontrado.",
+        "404_msg": "No se econtró el recurso."
     },
     "auth": {
         "access":"Acceso",

@@ -185,10 +185,49 @@
         })
 
         // Add actions column to a table
-        columns.value.push({
-            key: 'actions',
-            children: [
-                {
+        const can_edit = $can('change',permission.value)
+        const can_delete = $can('delete',permission.value)
+        if(can_edit && can_delete) {
+            columns.value.push({
+                key: 'actions',
+                children: [
+                    {
+                        align: 'center',
+                        title: $t('tables.edit'),
+                        render(row) {
+                            return h(
+                                NButton,
+                                {
+                                    size: "small",
+                                    secondary: true,
+                                    type:"info",
+                                    onClick: () => edit(row),
+                                    renderIcon: () => renderIcon(Edit, { color: '--n-color'} )
+                                },
+                            );
+                        },
+                        key: "edit",
+                    },
+                    {
+                        align: 'center',
+                        title: $t('tables.delete'),
+                        render(row) {
+                            return h(
+                                DeleteButton,
+                                {
+                                    delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) }),
+                                    delete_endpoint: `${props.endpoint}/${row.id}/` ,
+                                    onObjectDeleted: () => getResource()
+                                }
+                            );
+                        },
+                        key: "delete",
+                    }
+                ]
+            })
+        } else {
+            if(can_edit) {
+                columns.value.push({
                     align: 'center',
                     title: $t('tables.edit'),
                     render(row) {
@@ -205,8 +244,10 @@
                         );
                     },
                     key: "edit",
-                },
-                {
+                })
+            }
+            if(can_delete) {
+                columns.value.push({
                     align: 'center',
                     title: $t('tables.delete'),
                     render(row) {
@@ -221,9 +262,9 @@
                         );
                     },
                     key: "delete",
-                }
-            ]
-        })
+                })
+            }
+        }
     })
 </script>
 <template>

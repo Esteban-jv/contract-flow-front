@@ -21,19 +21,32 @@ export const useAuth = defineStore('useAuth', () => {
         try {
             loadingBar.start()
 
+            permissions.value = []
             const response = await AuthApi.login(payload)
             const { data: { token, user } } = response
+            const { groups, user_permissions } = user
+
+            console.warn(groups, user_permissions, user, permissions.value)
+            /*if(!groups.length && !user_permissions.length) {
+                $toastError({
+                    response: { data: { detail: $t('errors.user_without_permissions') } }
+                })
+                loadingBar.error()
+                return false
+            }*/
 
             localStorage.setItem('AUTH_TOKEN',token)
             localStorage.setItem('USER',JSON.stringify({
                 first_name: user.first_name,
                 last_name: user.last_name
             }))
-            console.log("asd", user.groups)
-            localStorage.setItem('P',JSON.stringify(
-                user.groups.map(g => g.permissions.map( p => p))[0]
-            ))
-            console.log("asd")
+
+            groups.forEach(g => {
+                g.permissions.forEach( p => permissions.value.push(p))
+            })
+            user_permissions.forEach(up => permissions.value.push(up))
+            localStorage.setItem('P',JSON.stringify(permissions.value))
+
             loadingBar.finish()
             return true
         } catch (err) {

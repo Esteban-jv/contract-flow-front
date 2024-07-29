@@ -47,5 +47,8 @@
         "confirm": "Confirm",
         "confirm_msg": "Are you sure of {verb} this {obj}?",
         "cancel": "Cancel"
+    },
+    "errors": {
+        "user_without_permissions": "User without any permission"
     }
 }

@@ -42,11 +42,16 @@
         pagination.page = page
         getResource()
     }
+    const updatePageSize = size => {
+        pagination.pageSize = size
+        resetResource()
+    }
 
     // For table
     const columns = ref([])
     const items = ref([])
     // For pagination
+    const pageSizes = ref([5, 10, 20, 50])
     const pagination = reactive({
         pageSize:5,
         page:1
@@ -287,7 +292,15 @@
             :data="items"
         />
         <NFlex justify="end" class="mt-3">
-            <NPagination v-model:page="pagination.page" :page-count="pagination.pageCount" @update-page="updatePage(pagination.page)" />
+            <NPagination
+                v-model:page="pagination.page"
+                :page-count="pagination.pageCount"
+                :page-size="pagination.pageSize"
+                :show-size-picker="true"
+                :page-sizes="pageSizes"
+                @update-page="updatePage(pagination.page)"
+                @update-page-size="updatePageSize($event)"
+            />
         </NFlex>
         <NModal
             v-model:show="showModal"
@@ -327,18 +340,6 @@
                                 :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                             />
                         </NFormItemGi>
-
-                        <!-- <NFormItemGi :span="24" :label="$t('tables.name')" path="name">
-                            <NInput v-model:value="form.name" :placeholder="$t('forms.enter_field', { field: $t('tables.name')})" />
-                        </NFormItemGi>
-                        <NFormItemGi :span="24" :label="$t('tables.description')" path="description">
-                            <NInput v-model:value="form.description" :placeholder="$t('forms.enter_field', { field: $t('tables.description')})" />
-                        </NFormItemGi>
-                        <NFormItemGi :span="12" :label="$t('tables.currently_available')" path="status">
-                            <NCheckbox v-model:checked="form.status">
-                                {{ $t('tables.status') }}
-                            </NCheckbox>
-                        </NFormItemGi> -->
                     </NGrid>
                 </NForm>
                 <template #action>

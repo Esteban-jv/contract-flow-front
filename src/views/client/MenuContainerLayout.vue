@@ -6,7 +6,7 @@
         NSplit, NAvatar, NSwitch, NDropdown, NLayoutHeader, // Header
         NScrollbar
     } from 'naive-ui';
-    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock } from '@vicons/fa';
+    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
     import Footer from '@/components/Footer.vue'
@@ -146,6 +146,7 @@
         key: "dashboard",
         icon: renderIcon(Home),
       })
+      /* CATALOGS */
       const catalog_permissions = [
         { model: 'idtype', icon: Flag, path:'', allow: false},
         { model: 'language', icon: GlobeAmericas, path:'languages', allow: false},
@@ -174,7 +175,6 @@
             })
           }
         })
-        console.warn(cat_children)
         menuOptions.value.push({
           label: $t('catalog',2),
           key: "catalogs",
@@ -182,6 +182,22 @@
           children: cat_children
         })
       }
+
+      /* PARTNER */
+      const partner_permission = { model: 'partner', icon: UserFriends, path:'', allow: false }
+      menuOptions.value.push({
+        label: () => h(
+          RouterLink,
+          {
+            to: {
+              name: partner_permission.model
+            }
+          },
+          { default: () => $t(partner_permission.model, 2) }
+        ),
+        key: partner_permission.model,
+        icon: renderIcon(partner_permission.icon)
+      })
 
       menuOptions.value.push({
             label: "Disabled link",

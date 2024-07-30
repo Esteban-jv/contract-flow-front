@@ -55,7 +55,17 @@ const router = createRouter({
           path: '/nationalities',
           name: 'nationality',
           component: () => import('../views/client/catalogs/NationalitiesView.vue')
-        }
+        },
+        {
+          path: '/partner',
+          name: 'partner',
+          component: () => import('../views/client/partner/PartnerView.vue')
+        },
+        {
+          path: '/add-partner',
+          name: 'add-partner',
+          component: () => import('../views/client/partner/AddPartnerView.vue')
+        },
       ]
     },
   ]

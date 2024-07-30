@@ -31,6 +31,7 @@
     "language":"Language | Languages",
     "nationality":"Nationality | Nationalities",
     "idtype":"Oficial ID | Oficial IDs",
+    "partner":"Socio | Socios",
     "tables": {
         "id": "Id",
         "name": "Name",
@@ -42,7 +43,11 @@
         "add": "Add",
         "edit": "Edit",
         "delete": "Delete",
-        "restore": "Restore"
+        "restore": "Restore",
+        "last_name": "Last name",
+        "marital_status": "Marital status",
+        "main_phone": "Main phone",
+        "main_email": "Main Email"
     },
     "actions": {
         "save": "Save",

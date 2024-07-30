@@ -31,6 +31,7 @@
     "language":"Idioma | Idiomas",
     "nationality":"Nacionalidad | Nacionalidades",
     "idtype":"Identificación oficial | Identificaciones oficiales",
+    "partner":"Socio | Socios",
     "tables": {
         "id": "Id",
         "name": "Nombre",
@@ -42,7 +43,11 @@
         "add": "Agregar",
         "edit": "Editar",
         "delete": "Eliminar",
-        "restore": "Restaurar"
+        "restore": "Restaurar",
+        "last_name": "Apellido | Apellidos",
+        "marital_status": "Estado civil",
+        "main_phone": "Teléfono",
+        "main_email": "Correo electrónico"
     },
     "actions": {
         "save": "Guardar",

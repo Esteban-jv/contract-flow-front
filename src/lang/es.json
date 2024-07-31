@@ -49,11 +49,19 @@
         "main_phone": "Teléfono",
         "main_email": "Correo electrónico"
     },
+    "marital_status": {
+        "single":"Soltero",
+        "married":"Casado",
+        "divorced":"Divorciado",
+        "widowed":"Viudo",
+        "other":"Otro"
+    },
     "actions": {
         "save": "Guardar",
         "confirm": "Confirmar",
         "confirm_msg": "¿Estás seguro de {verb} {obj}?",
-        "cancel": "Cancelar"
+        "cancel": "Cancelar",
+        "go_back": "Regresar"
     },
     "errors": {
         "user_without_permissions": "El usuario no tienen permisos."

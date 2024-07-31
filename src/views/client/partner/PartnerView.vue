@@ -1,6 +1,5 @@
 <script setup>
     import { ref } from 'vue';
-    import ResourceCreator from '@/components/ResourceCreator.vue'
     import ResourceViewer from '@/components/ResourceViewer.vue';
 
     const model = ref('partner')

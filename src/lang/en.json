@@ -49,11 +49,19 @@
         "main_phone": "Main phone",
         "main_email": "Main Email"
     },
+    "marital_status": {
+        "single":"single",
+        "married":"married",
+        "divorced":"Divorced",
+        "widowed":"Widowed",
+        "other":"other"
+    },
     "actions": {
         "save": "Save",
         "confirm": "Confirm",
         "confirm_msg": "Are you sure of {verb} this {obj}?",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "go_back": "Go back"
     },
     "errors": {
         "user_without_permissions": "User without any permission."

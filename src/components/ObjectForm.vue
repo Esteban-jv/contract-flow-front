@@ -7,11 +7,12 @@
     import api from "@/lib/axios";
 
     const router = useRouter()
-    const { $t, $can, $toastError } = useGlobalHelpers()
+    const { $t, $can, $toast, $toastError } = useGlobalHelpers()
     const loadingBar = useLoadingBar()
 
     const isLoading = ref(false)
     const MAX_OPTION_ITEMS = 50
+    const formRef = ref(null);
     const form = ref({})
 
     const props = defineProps({
@@ -42,6 +43,7 @@
     const formRules = ref([])
 
     // Methods
+    const onlyAllowNumber = (value) => !value || /^\d+$/.test(value)
     const calculatedSpan = span => {
         if (span)
             return `24 s:12 m:${(span ?? 24)}`
@@ -75,14 +77,29 @@
             form.value[name] = f.rules.default
 
             // Set validation rules
-            formRules.value[name] = [
-                {
-                    required: f.rules.required
-                }
-            ]
-            if(f.rules.required) {
-                formRules.value[name][0].message = $t('forms.field_is_required', { field: $t(translated) }),
+            const { regex } = f.rules
+            const { required } = f.rules
+            if(regex) {
+                formRules.value[name] = [
+                    {
+                        validator(rule, value) {
+                            if(required && !value) {
+                                return new Error($t('forms.field_is_required', { field: $t(translated) }));
+                            }
+                            if (!value.match(regex)) {
+                                return new Error($t('forms.enter_valid_field', { field: $t(translated)}));
+                            }
+                            return true;
+                        },
+                    }
+                ]
                 formRules.value[name][0].trigger = ["input", "blur"]
+            } else {
+                formRules.value[name] = [ { required: required } ]
+                if(required) {
+                    formRules.value[name][0].message = $t('forms.field_is_required', { field: $t(translated) })
+                    // formRules.value[name][0].trigger = ["input", "blur"]
+                }
             }
 
             if(f.rules.optionsEndpoint) {
@@ -94,8 +111,26 @@
         const can_edit = $can('change',permission.value)
         const can_delete = $can('delete',permission.value)
         console.log(can_edit, can_delete)
+        console.log(formRules.value)
     })
 
+    // Submit method
+    const saveChanges = () => {
+        console.log(formRef.value, form.value)
+        formRef.value?.validate(
+            errors => {
+                if(!errors) {
+                    createOrUpdateResource()
+                } else {
+                    // console.log(errors)
+                    $toast.open({
+                        message: $t('forms.check_all_fields_msg'),
+                        type: 'error'
+                    })
+                }
+            }
+         )
+    }
     // REST Methods
     const createOrUpdateResource = async () => {
         try {
@@ -147,7 +182,8 @@
                     />
                     <NInput
                         v-if="field.rules.type === Number && !field.rules.options"
-                        v-model:value="form[field.field]" type="number"
+                        :allow-input="onlyAllowNumber"
+                        v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                     />
                     <NSelect
@@ -161,7 +197,7 @@
         </NForm>
         <template #action>
             <NFlex justify="end">
-                <NButton :disabled="isLoading" type="primary" @click="createOrUpdateResource()">{{ $t('actions.save') }}</NButton>
+                <NButton :disabled="isLoading" type="primary" @click="saveChanges()">{{ $t('actions.save') }}</NButton>
                 <NButton :disabled="isLoading" secondary @click="goBack()">{{ $t('actions.go_back') }}</NButton>
             </NFlex>
         </template>

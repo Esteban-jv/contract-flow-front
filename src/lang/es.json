@@ -23,7 +23,8 @@
         "enter_field":"Introduce {field}.",
         "field_is_required":"El campo {field} es requerido.",
         "check_all_fields_msg": "No se pudo enviar. Por favor revisa todos los campos.",
-        "something_went_wrong": "Ups! Algo salió mal."
+        "something_went_wrong": "Ups! Algo salió mal.",
+        "enter_valid_field":"Introduce un {field} válido."
     },
     "client": "Cliente | Clientes",
     "dashboard":"Tablero",
@@ -35,6 +36,7 @@
     "tables": {
         "id": "Id",
         "name": "Nombre",
+        "email":"Correo electrónico",
         "description": "Descripción",
         "status": "Estatus",
         "currently_available": "Actualmente disponible",

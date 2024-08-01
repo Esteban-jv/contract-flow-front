@@ -23,7 +23,8 @@
         "enter_field":"Enter {field} field.",
         "field_is_required":"The field {field} is required.",
         "check_all_fields_msg": "It could not send. Please check out all the fields.",
-        "something_went_wrong": "Oops! Something went wrong."
+        "something_went_wrong": "Oops! Something went wrong.",
+        "enter_valid_field":"Enter valid {field}."
     },
     "client": "Client | Clients",
     "dashboard":"Dashboard",

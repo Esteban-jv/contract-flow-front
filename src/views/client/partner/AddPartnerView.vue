@@ -52,7 +52,7 @@
             translated: "tables.main_phone",
             span: 8,
             rules: {
-                type: String,
+                type: Number,
                 required: true,
                 default: null
             }
@@ -64,7 +64,8 @@
             rules: {
                 type: String,
                 required: true,
-                default: null
+                regex: /^\S+@\S+\.\S+$/,
+                default: ""
             }
         },
         {

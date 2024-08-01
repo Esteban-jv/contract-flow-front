@@ -47,7 +47,11 @@
         "last_name": "Apellido | Apellidos",
         "marital_status": "Estado civil",
         "main_phone": "Teléfono",
-        "main_email": "Correo electrónico"
+        "main_email": "Correo electrónico",
+        "language":"Idioma | Idiomas",
+        "nationality":"Nacionalidad | Nacionalidades",
+        "id_type":"Identificación oficial | Identificaciones oficiales",
+        "partner":"Socio | Socios"
     },
     "marital_status": {
         "single":"Soltero",

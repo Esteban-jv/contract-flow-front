@@ -3,7 +3,7 @@
     import { useRouter } from 'vue-router';
     import { NDataTable, NIcon, NButton, NFlex,
         NPagination, useLoadingBar } from 'naive-ui';
-    import { CheckCircle, TimesCircle, Times, Edit } from '@vicons/fa';
+    import { CheckCircle, TimesCircle, Times, Edit, Info } from '@vicons/fa';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import api from "@/lib/axios";
 
@@ -93,29 +93,29 @@
         await getResource()
     }
 
-    onMounted(async () => {
-        getResource()
-        props.fields.forEach((f, i) => {
+    const computedColumns = computed( () => {
+        const cols = props.fields.map((f) => {
             // Get field
             const name = f.field
             const translated = f.translated
 
             // Set Table Columns
-            columns.value[i] = {
+            var current = {
                 align: f.table.align,
                 title: $t(translated),
                 key: name
             }
-            if(f.type === Boolean) {
-                columns.value[i].render = ((row) => row.status ? 
+            if(f.rules.type === Boolean) {
+                current.render = ((row) => row.status ? 
                     renderIcon(CheckCircle, { color: '#0e7a0d'}) : 
                     renderIcon(TimesCircle, { color: '#D50049'}))
             }
+            return current
         })
 
         // Add actions column to a table
         if($can('change',permission.value)) {
-            columns.value.push({
+            cols.push({
                 align: 'center',
                 title: $t('tables.edit'),
                 render(row) {
@@ -127,13 +127,19 @@
                             secondary: true,
                             type:"info",
                             onClick: () => edit(row),
-                            renderIcon: () => renderIcon(Edit, { color: '--n-color'} )
+                            renderIcon: () => renderIcon(Info, { color: '--n-color'} )
                         },
                     );
                 },
                 key: "edit",
             })
         }
+
+        return cols
+    })
+
+    onMounted(async () => {
+        getResource()
     })
 </script>
 <template>
@@ -147,7 +153,7 @@
             :bordered="false"
             :single-line="false"
             single-column
-            :columns="columns"
+            :columns="computedColumns"
             :data="items"
         />
         <NFlex justify="end" class="mt-3">

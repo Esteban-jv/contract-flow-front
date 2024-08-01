@@ -5,24 +5,11 @@
     const model = ref('partner')
     const fields = ref([
         {
-            field: "name",
+            field: "full_name",
             translated: "tables.name",
             rules: {
                 type: String,
-                required: true,
-                default: null
-            },
-            table: {
-                align: 'left'
-            }
-        },
-        {
-            field: "last_name",
-            translated: "tables.last_name",
-            rules: {
-                type: String,
-                required: true,
-                default: null
+                required: true
             },
             table: {
                 align: 'left'
@@ -33,8 +20,6 @@
             translated: "tables.marital_status",
             rules: {
                 type: Number,
-                required: true,
-                default: 0
             },
             table: {
                 align: 'left'
@@ -45,8 +30,6 @@
             translated: "tables.main_phone",
             rules: {
                 type: String,
-                required: true,
-                default: null
             },
             table: {
                 align: 'left'
@@ -57,8 +40,6 @@
             translated: "tables.main_email",
             rules: {
                 type: String,
-                required: true,
-                default: null
             },
             table: {
                 align: 'left'
@@ -69,8 +50,6 @@
             translated: "tables.status",
             rules: {
                 type: Boolean,
-                required: false,
-                default: true
             },
             table: {
                 align: 'center'

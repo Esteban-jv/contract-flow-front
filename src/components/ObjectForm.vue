@@ -61,8 +61,8 @@
             throw err
         }
     }
-    const saveChanges = form => {
-        console.log(form)
+    const goBack = form => {
+        router.push({ name: props.model })
     }
 
     onMounted(async () => {

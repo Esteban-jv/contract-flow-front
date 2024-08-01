@@ -31,7 +31,7 @@
     "language":"Language | Languages",
     "nationality":"Nationality | Nationalities",
     "idtype":"Oficial ID | Oficial IDs",
-    "partner":"Socio | Socios",
+    "partner":"Partner | Partners",
     "tables": {
         "id": "Id",
         "name": "Name",
@@ -47,7 +47,11 @@
         "last_name": "Last name",
         "marital_status": "Marital status",
         "main_phone": "Main phone",
-        "main_email": "Main Email"
+        "main_email": "Main Email",
+        "language":"Language | Languages",
+        "nationality":"Nationality | Nationalities",
+        "id_type":"Oficial ID | Oficial IDs",
+        "partner":"Partner | Partners"
     },
     "marital_status": {
         "single":"single",

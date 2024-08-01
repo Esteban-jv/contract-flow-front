@@ -34,7 +34,7 @@ export function useGlobalHelpers() {
         {
             if(err.response.data) {
                 const { data } = err.response
-                if(data.length) {
+                if(typeof(data) === 'object') {
                     const arrErr = Object.entries(data)
                     arrErr.forEach( e => {
                         toast.open({

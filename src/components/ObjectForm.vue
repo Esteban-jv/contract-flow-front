@@ -1,12 +1,13 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue';
-    import { useRouter } from 'vue-router';
+    import { useRouter, useRoute } from 'vue-router';
     import { NButton, NFlex, NCard, NForm, NGrid, NSelect, NAutoComplete,
         NFormItemGi, NInput, NCheckbox, NSkeleton, NSpace, useLoadingBar } from 'naive-ui';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import api from "@/lib/axios";
 
     const router = useRouter()
+    const route = useRoute()
     const { $t, $can, $toast, $toastError } = useGlobalHelpers()
     const loadingBar = useLoadingBar()
 
@@ -63,11 +64,29 @@
             throw err
         }
     }
+    const getResource = async id => {
+        try {
+            isLoading.value = true
+            loadingBar.start()
+            const { data } = await api.get(`${props.endpoint}/${id}/`)
+            form.value = data
+            loadingBar.finish()
+        } catch (err) {
+            loadingBar.error()
+            $toastError(err)
+        } finally {
+            isLoading.value = false
+        }
+    }
     const goBack = form => {
         router.push({ name: props.model })
     }
 
     onMounted(async () => {
+        const { id } = route.params
+        if(id) {
+            getResource(id)
+        }
         // getResource()
         props.fields.forEach(async (f, i) => {
             // Get field
@@ -98,7 +117,7 @@
                 formRules.value[name] = [ { required: required } ]
                 if(required) {
                     formRules.value[name][0].message = $t('forms.field_is_required', { field: $t(translated) })
-                    // formRules.value[name][0].trigger = ["input", "blur"]
+                    // formRules.value[name][0].trigger = ["input", "blur"] // It doesn't work on selects
                 }
             }
 

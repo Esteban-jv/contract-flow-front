@@ -58,10 +58,9 @@
     })
 
     const edit = async row => {
-        console.log("Go to edit",row)
+        router.push({ name: `edit-${props.model}`, params: { id: row.id }})
     }
     const GoToDetails = async () => {
-        console.log("Go to create")
         router.push({ name: `add-${props.model}`})
     }
     // Get All

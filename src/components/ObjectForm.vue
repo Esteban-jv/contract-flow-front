@@ -5,6 +5,7 @@
         NFormItemGi, NInput, NCheckbox, NSkeleton, NSpace, useLoadingBar } from 'naive-ui';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import api from "@/lib/axios";
+import DeleteButton from './DeleteButton.vue';
 
     const router = useRouter()
     const route = useRoute()
@@ -39,8 +40,11 @@
         }
     })
 
+    const id = computed(() => route.params.id ?? null )
     const permission = computed(() => props.permissionModel ?? props.model)
     const prevPage = computed(() => props.prevPage ?? props.model)
+    const disableEdit = computed(() => id.value && !$can('change',permission.value) )
+    const disableDelete = computed(() => id.value && !$can('delete',permission.value) )
     const formRules = ref([])
 
     // Methods
@@ -175,7 +179,7 @@
 </script>
 <template>
     <NCard
-        :title="(form.id ? $t('tables.edit') : $t('tables.add')) + ' ' + $t(model)"
+        :title="(form.id ? '' : ($t('tables.add')) + ' ') + $t(model)"
         :bordered="false"
         role="dialog"
         aria-modal="true"
@@ -183,7 +187,7 @@
         header-class="p1"
     >
         <NSpace vertical v-if="isLoading">
-            <NSkeleton height="40px" :repeat="3" style="margin-top: 24px;" :sharp="false" />
+            <NSkeleton height="40px" :repeat="4" style="margin-top: 24px;" :sharp="false" />
         </NSpace>
         <NForm v-else ref="formRef" :model="form" :rules="formRules" size="medium" label-placement="top">
             <NGrid :span="24" :x-gap="11" item-responsive responsive="screen">
@@ -191,6 +195,7 @@
                     <NCheckbox
                         v-if="field.rules.type === Boolean"
                         v-model:checked="form[field.field]"
+                        :disabled="disableEdit"
                     >
                         {{ $t(field.translated) }}
                     </NCheckbox>
@@ -198,26 +203,43 @@
                         v-if="field.rules.type === String"
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                        :disabled="disableEdit"
                     />
                     <NInput
                         v-if="field.rules.type === Number && !field.rules.options"
                         :allow-input="onlyAllowNumber"
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                        :disabled="disableEdit"
                     />
                     <NSelect
                         v-if="field.rules.type === Number && field.rules.options"
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                         :options="field.rules.options"
+                        :disabled="disableEdit"
                     />
                 </NFormItemGi>
             </NGrid>
         </NForm>
         <template #action>
-            <NFlex justify="end">
-                <NButton :disabled="isLoading" type="primary" @click="saveChanges()">{{ $t('actions.save') }}</NButton>
-                <NButton :disabled="isLoading" secondary @click="goBack()">{{ $t('actions.go_back') }}</NButton>
+            <NFlex justify="space-between">
+                <DeleteButton
+                    v-if="!disableEdit"
+                    :delete_msg="$t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) })"
+                    :deleted_msg="$t('messages.deleted_successfully',{ obj: $t(props.model) })"
+                    :delete_endpoint="`${props.endpoint}/${id}/`"
+                    :onObjectDeleted="() => goBack()"
+                />
+                <NFlex justify="end">
+                    <NButton
+                        v-if="!disableEdit"
+                        :disabled="isLoading"
+                        type="primary"
+                        @click="saveChanges()"
+                    >{{ (form.id ? $t('tables.edit') : $t('tables.add')) }}</NButton>
+                    <NButton :disabled="isLoading" secondary @click="goBack()">{{ $t('actions.go_back') }}</NButton>
+                </NFlex>
             </NFlex>
         </template>
     </NCard>

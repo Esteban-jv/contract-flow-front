@@ -57,6 +57,17 @@ const router = createRouter({
           component: () => import('../views/client/catalogs/NationalitiesView.vue')
         },
         {
+          path: '/currency',
+          name: 'currency',
+          component: () => import('../views/client/currency/CurrencyView.vue')
+        },
+        {
+          path: '/currency-conversion',
+          name: 'currency-conversion',
+          component: () => import('../views/client/currency/CurrencyConversion.vue')
+        },
+        // partner
+        {
           path: '/partner',
           name: 'partner',
           component: () => import('../views/client/partner/PartnerView.vue')

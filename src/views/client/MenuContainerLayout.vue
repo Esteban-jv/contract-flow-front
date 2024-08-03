@@ -6,7 +6,9 @@
         NSplit, NAvatar, NSwitch, NDropdown, NLayoutHeader, // Header
         NScrollbar
     } from 'naive-ui';
-    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends } from '@vicons/fa';
+    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends,
+      MoneyBill, MoneyBillWave, ExchangeAlt
+     } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
     import Footer from '@/components/Footer.vue'
@@ -179,6 +181,40 @@
           label: $t('catalog',2),
           key: "catalogs",
           icon: renderIcon(ListAltRegular),
+          children: cat_children
+        })
+      }
+      /* CURRENCY */
+      const currency_permissions = [
+        { model: 'currency', icon: MoneyBillWave, path:'currency', allow: false},
+        { model: 'conversion', icon: ExchangeAlt, path:'currency-conversion', allow: false}
+      ]
+      currency_permissions.forEach(cp => {
+        cp.allow = $can('view',cp.model)
+      });
+      if(currency_permissions.some( cp => cp.allow === true)) {
+        let cat_children = []
+        currency_permissions.forEach( cp => {
+          if(cp.allow) {
+            cat_children.push({
+              label: () => h(
+                RouterLink,
+                {
+                  to: {
+                    name: cp.path
+                  }
+                },
+                { default: () => $t(cp.model, 2) }
+              ),
+              key: cp.path,
+              icon: renderIcon(cp.icon)
+            })
+          }
+        })
+        menuOptions.value.push({
+          label: $t('currency',2),
+          key: "currencies",
+          icon: renderIcon(MoneyBill),
           children: cat_children
         })
       }

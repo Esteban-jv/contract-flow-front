@@ -33,6 +33,8 @@
     "nationality":"Nationality | Nationalities",
     "idtype":"Oficial ID | Oficial IDs",
     "partner":"Partner | Partners",
+    "currency":"Currency | Currencies",
+    "conversion":"Conversion | Conversions",
     "tables": {
         "id": "Id",
         "name": "Name",
@@ -52,7 +54,12 @@
         "language":"Language | Languages",
         "nationality":"Nationality | Nationalities",
         "id_type":"Oficial ID | Oficial IDs",
-        "partner":"Partner | Partners"
+        "partner":"Partner | Partners",
+        "code": "Code",
+        "currency":"Currency | Currencies",
+        "operator":"Operator",
+        "reversible":"Reversible",
+        "value":"Value"
     },
     "marital_status": {
         "single":"single",

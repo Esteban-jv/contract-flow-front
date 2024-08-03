@@ -1,7 +1,7 @@
 <script setup>
     import { ref, h, onMounted, reactive, computed } from 'vue';
-    import { NDataTable, NIcon, NButton, NFlex, NModal, NCard, NForm, NGrid,
-        NFormItemGi, NInput, NCheckbox, NSkeleton, NSpace, NPagination, useLoadingBar } from 'naive-ui';
+    import { NDataTable, NIcon, NButton, NFlex, NModal, NCard, NForm, NGrid, NSelect,
+        NFormItemGi, NInput, NInputNumber, NCheckbox, NSkeleton, NSpace, NPagination, useLoadingBar } from 'naive-ui';
     import { CheckCircle, TimesCircle, Times, Edit } from '@vicons/fa';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import api from "@/lib/axios";
@@ -27,10 +27,28 @@
     })
 
     const permission = computed(() => props.permissionModel ?? props.model)
+    const onlyAllowNumber = (value) => !value || /^\d+$/.test(value)
+    const formatCurrency = (value) => {
+        if (value === null)
+          return "";
+        return `$ ${value.toLocaleString("es-MX")}`;
+      }
+    const parseCurrency = (input) => {
+        const nums = input.replace(/(,|\$|\s)/g, "").trim();
+        if (/^\d+(\.(\d+)?)?$/.test(nums))
+          return Number(nums);
+        return nums === "" ? null : Number.NaN;
+      }
+    const calculatedSpan = span => {
+        if (span)
+            return `24 s:12 m:${(span ?? 24)}`
+        return 24
+    }
 
     // States and Composables
     const { $t, $toast, $toastError, $can } = useGlobalHelpers()
     const loadingBar = useLoadingBar()
+    const MAX_OPTION_ITEMS = 50
 
     // Data
     const showModal = ref(false)
@@ -79,6 +97,21 @@
     }
 
     // CRUD Methods
+    // Get catalogs
+    const getFromApi = async endpoint => {
+        try {
+            const { data } = await api.get(`${endpoint}/`, {
+                params: {
+                    limit: MAX_OPTION_ITEMS,
+                    offset: 0
+                }
+            })
+            return data.results.map( d => { return { label: d.name, value: d.id} })
+        } catch (err){
+            $toastError(err)
+            throw err
+        }
+    }
     // Show Edit modal
     const edit = async row => {
         try {
@@ -162,7 +195,7 @@
 
     onMounted(async () => {
         getResource()
-        props.fields.forEach((f, i) => {
+        props.fields.forEach(async (f, i) => {
             // Get field
             const name = f.field
             const translated = f.translated
@@ -176,8 +209,8 @@
                 }
             ]
             if(f.rules.required) {
-                formRules.value[name][0].message = $t('forms.field_is_required', { field: $t(translated) }),
-                formRules.value[name][0].trigger = ["input", "blur"]
+                formRules.value[name][0].message = $t('forms.field_is_required', { field: $t(translated) })
+                // formRules.value[name][0].trigger = ["input", "blur"]
             }
 
             // Set Table Columns
@@ -187,9 +220,12 @@
                 key: name
             }
             if(f.rules.type === Boolean) {
-                columns.value[i].render = ((row) => row.status ? 
+                columns.value[i].render = ((row) => row[name] ? 
                     renderIcon(CheckCircle, { color: '#0e7a0d'}) : 
                     renderIcon(TimesCircle, { color: '#D50049'}))
+            }
+            if(f.rules.optionsEndpoint) {
+                f.rules.options = await getFromApi(f.rules.optionsEndpoint)
             }
         })
 
@@ -326,8 +362,8 @@
                     <NSkeleton height="40px" :repeat="3" style="margin-top: 24px;" :sharp="false" />
                 </NSpace>
                 <NForm v-else ref="formRef" :model="form" :rules="formRules" size="medium" label-placement="top">
-                    <NGrid :span="24" :x-gap="24">
-                        <NFormItemGi v-for="field in props.fields" :span="24" :label="$t(field.translated)" :path="field.field">
+                    <NGrid :span="24" :x-gap="11" item-responsive responsive="screen">
+                        <NFormItemGi v-for="field in fields" :span="calculatedSpan(field.span)" :label="$t(field.translated)" :path="field.field">
                             <NCheckbox
                                 v-if="field.rules.type === Boolean"
                                 v-model:checked="form[field.field]"
@@ -338,6 +374,26 @@
                                 v-if="field.rules.type === String"
                                 v-model:value="form[field.field]"
                                 :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                            />
+                            <NInputNumber
+                                class="w-full"
+                                v-if="field.rules.type === 'Currency'"
+                                :parse="parseCurrency"
+                                :format="formatCurrency"
+                                v-model:value="form[field.field]"
+                                :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                            />
+                            <NInput
+                                v-if="field.rules.type === Number"
+                                :allow-input="onlyAllowNumber"
+                                v-model:value="form[field.field]"
+                                :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                            />
+                            <NSelect
+                                v-if="field.rules.type === 'Select'"
+                                v-model:value="form[field.field]"
+                                :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                                :options="field.rules.options"
                             />
                         </NFormItemGi>
                     </NGrid>

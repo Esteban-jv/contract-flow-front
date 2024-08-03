@@ -33,6 +33,8 @@
     "nationality":"Nacionalidad | Nacionalidades",
     "idtype":"Identificación oficial | Identificaciones oficiales",
     "partner":"Socio | Socios",
+    "currency":"Divisa | Divisas",
+    "conversion":"Conversión | Conversiones",
     "tables": {
         "id": "Id",
         "name": "Nombre",
@@ -53,7 +55,12 @@
         "language":"Idioma | Idiomas",
         "nationality":"Nacionalidad | Nacionalidades",
         "id_type":"Identificación oficial | Identificaciones oficiales",
-        "partner":"Socio | Socios"
+        "partner":"Socio | Socios",
+        "code": "Código",
+        "currency":"Divisa | Divisas",
+        "operator":"Operador",
+        "reversible":"Reversible",
+        "value":"Valor"
     },
     "marital_status": {
         "single":"Soltero",

@@ -60,7 +60,9 @@
         "currency":"Divisa | Divisas",
         "operator":"Operador",
         "reversible":"Reversible",
-        "value":"Valor"
+        "value":"Valor",
+        "country": "Pais | Paises",
+        "state": "Estado | Estados"
     },
     "marital_status": {
         "single":"Soltero",

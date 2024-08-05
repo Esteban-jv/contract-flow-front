@@ -59,7 +59,9 @@
         "currency":"Currency | Currencies",
         "operator":"Operator",
         "reversible":"Reversible",
-        "value":"Value"
+        "value":"Value",
+        "country": "Country | Countries",
+        "state": "State | States"
     },
     "marital_status": {
         "single":"single",

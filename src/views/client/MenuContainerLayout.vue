@@ -6,7 +6,7 @@
         NSplit, NAvatar, NSwitch, NDropdown, NLayoutHeader, // Header
         NScrollbar
     } from 'naive-ui';
-    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends,
+    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends, UserTag,
       MoneyBill, MoneyBillWave, ExchangeAlt
      } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
@@ -218,6 +218,22 @@
           children: cat_children
         })
       }
+
+      /* CLIENT */
+      const client_permission = { model: 'client', icon: UserTag, path:'', allow: false }
+      menuOptions.value.push({
+        label: () => h(
+          RouterLink,
+          {
+            to: {
+              name: client_permission.model
+            }
+          },
+          { default: () => $t(client_permission.model, 2) }
+        ),
+        key: client_permission.model,
+        icon: renderIcon(client_permission.icon)
+      })
 
       /* PARTNER */
       const partner_permission = { model: 'partner', icon: UserFriends, path:'', allow: false }

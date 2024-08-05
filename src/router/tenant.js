@@ -66,7 +66,7 @@ const router = createRouter({
           name: 'currency-conversion',
           component: () => import('../views/client/currency/CurrencyConversion.vue')
         },
-        // partner
+        // TODO: partner
         {
           path: '/partner',
           name: 'partner',
@@ -82,11 +82,17 @@ const router = createRouter({
           name: 'edit-partner',
           component: () => import('../views/client/partner/AddPartnerView.vue')
         },
+        {
+          path: '/clients',
+          name: 'client',
+          component: () => import('../views/client/client/ClientsView.vue')
+        },
       ]
     },
   ]
 })
 
+/* TODO: Verificar si hay otra forma de preguntar por la sesión sin hacer una consulta */
 router.beforeEach( async (to, from, next) => {
   const requiresAuth = to.matched.some( url => url.meta.requiresAuth )
   if(requiresAuth) {

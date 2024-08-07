@@ -1,6 +1,7 @@
 <script setup>
-    import { ref, computed, onMounted } from 'vue';
-    import { NDataTable } from 'naive-ui';
+    import { ref, computed, onMounted, h } from 'vue';
+    import { NDataTable, NButton } from 'naive-ui';
+    import { Info } from '@vicons/fa';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import { useResource } from '@/composables/useResource';
 
@@ -40,7 +41,7 @@
             translated: "tables.marital_status",
             span: 8,
             rules: {
-                type: Number,
+                type: 'Select',
                 required: false,
                 default: null,
                 options: [
@@ -114,7 +115,7 @@
             translated: "language",
             span: 8,
             rules: {
-                type: Number,
+                type: 'Select',
                 required: true,
                 default: null,
                 options: [],
@@ -138,45 +139,59 @@
         }
     ])
 
-    const items = ref([])
+    const items = ref([
+        {
+            id: null,
+            key: 1,
+            name: '',
+            last_name: '',
+            marital_status: null,
+            email: '@xd',
+            phone: null,
+            country: '',
+            state: '',
+            language: null,
+            status: true
+        }
+    ])
 
     const computedColumns = computed( () => {
-        const cols = resources.mapColumns(fields.value)
+        const cols = resources.mapEditableColumns(fields.value, items.value)
 
         // Add actions column to a table
-        if($can('change',permission.value)) {
-            cols.push({
-                align: 'center',
-                title: $t('tables.edit'),
-                render(row) {
-                    return h(
-                        NButton,
-                        {
-                            disabled: !$can('change',permission.value),
-                            size: "small",
-                            secondary: true,
-                            type:"info",
-                            // onClick: () => edit(row),
-                            renderIcon: () => renderIcon(Info, { color: '--n-color'} )
-                        },
-                    );
-                },
-                key: "edit",
-            })
-        }
+        // if($can('change',permission.value)) {
+        //     cols.push({
+        //         align: 'center',
+        //         title: $t('tables.edit'),
+        //         render(row) {
+        //             return h(
+        //                 NButton,
+        //                 {
+        //                     disabled: !$can('change',permission.value),
+        //                     size: "small",
+        //                     secondary: true,
+        //                     type:"info",
+        //                     // onClick: () => edit(row),
+        //                     renderIcon: () => resources.renderIcon(Info, { color: '--n-color'} )
+        //                 },
+        //             );
+        //         },
+        //         key: "edit",
+        //     })
+        // }
 
         return cols
     })
 
     onMounted(() => {
-        resources.getResource(model.value)
-        items.value = resources.items
+        // resources.getResource(model.value)
+        // items.value = resources.items
     })
 </script>
 <template>
     <h1 class="text-2xl pb-4">{{ $t('client',2) }}</h1>
     <NDataTable
         :columns="computedColumns"
-        :items="items"
+        :data="items"
     />
 </template>

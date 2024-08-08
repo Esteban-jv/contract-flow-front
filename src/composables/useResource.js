@@ -18,6 +18,20 @@ export function useResource() {
     })
     const items = ref([])
     // Methos
+    const getFromApi = async endpoint => {
+        try {
+            const { data } = await api.get(`${endpoint}/`, {
+                params: {
+                    limit: MAX_OPTION_ITEMS,
+                    offset: 0
+                }
+            })
+            return data.results.map( d => { return { label: d.name, value: d.id} })
+        } catch (err){
+            $toastError(err)
+            throw err
+        }
+    }
     const renderIcon = (icon, props={}) => h(NIcon, null, { default: () => h(icon, props) });
     const inputText = (row, index, name, items) => {
         return h(NInput, {
@@ -37,11 +51,16 @@ export function useResource() {
         });
     }
     // TODO: handle options
-    const select = (row, index, name) => {
+    const select = (row, index, field) => {
+        const name = field.field
+
+        const options = field.rules.options
+        console.warn(field.rules.options)
         return h(NSelect, {
             value: row[name],
+            options,
             onUpdateValue(v) {
-                data.value[index][name] = v;
+                items[index][name] = v;
             }
         });
     }
@@ -54,7 +73,7 @@ export function useResource() {
             case Boolean:
                 return checkBox(row, index, f.field, items)
             case 'Select':
-                return select(row, index, f.field, items)
+                return select(row, index, f, items)
             default:
                 return inputText(row, index, f.field, items)
         }
@@ -133,6 +152,7 @@ export function useResource() {
         items,
         MAX_OPTION_ITEMS,
         renderIcon,
+        getFromApi,
         getResource,
         mapColumns,
         mapEditableColumns

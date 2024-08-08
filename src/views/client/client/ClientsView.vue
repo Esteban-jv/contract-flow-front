@@ -125,18 +125,18 @@
                 align: 'left'
             }
         },
-        {
-            field: "status",
-            translated: "tables.status",
-            rules: {
-                type: Boolean,
-                required: false,
-                default: true
-            },
-            table: {
-                align: 'center'
-            }
-        }
+        // {
+        //     field: "status",
+        //     translated: "tables.status",
+        //     rules: {
+        //         type: Boolean,
+        //         required: false,
+        //         default: true
+        //     },
+        //     table: {
+        //         align: 'center'
+        //     }
+        // }
     ])
 
     const items = ref([
@@ -157,6 +157,8 @@
 
     const computedColumns = computed( () => {
         const cols = resources.mapEditableColumns(fields.value, items.value)
+        // const cols = []
+        console.log("colz", cols)
 
         // Add actions column to a table
         // if($can('change',permission.value)) {
@@ -184,8 +186,11 @@
     })
 
     onMounted(() => {
-        // resources.getResource(model.value)
-        // items.value = resources.items
+        fields.value.forEach(async (f, i) => {
+            if(f.rules.optionsEndpoint) {
+                fields.value[i].rules.options = await resources.getFromApi(f.rules.optionsEndpoint)
+            }
+        })
     })
 </script>
 <template>

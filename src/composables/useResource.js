@@ -5,7 +5,7 @@ import api from "@/lib/axios";
 
 export function useResource() {
     // Helpers
-    const { $t, $toast } = useGlobalHelpers()
+    const { $t, $toast, $toastError } = useGlobalHelpers()
     const loadingBar = useLoadingBar()
     // Data
     const isLoading = ref(false)
@@ -22,7 +22,7 @@ export function useResource() {
         try {
             const { data } = await api.get(`${endpoint}/`, {
                 params: {
-                    limit: MAX_OPTION_ITEMS,
+                    limit: MAX_OPTION_ITEMS.value,
                     offset: 0
                 }
             })
@@ -50,12 +50,10 @@ export function useResource() {
             }
         });
     }
-    // TODO: handle options
     const select = (row, index, field) => {
         const name = field.field
 
         const options = field.rules.options
-        console.warn(field.rules.options)
         return h(NSelect, {
             value: row[name],
             options,
@@ -122,7 +120,6 @@ export function useResource() {
         })
     }
     const mapEditableColumns = (fields, items) => {
-        // console.warn("Editable", fields)
         const fieldColumns = fields.map((f) => {
             // Get field
             const name = f.field
@@ -133,6 +130,25 @@ export function useResource() {
                 title: $t(translated),
                 key: name,
                 render: (row, index) => renderInput(row, index, f, items)
+            }
+            return current
+        })
+        return fieldColumns
+    }
+    const mapGroupedEditableColumns = (fields, items) => {
+        // console.warn("Editable", fields)
+        const fieldColumns = fields.map((f) => {
+            // Get field
+            const name = f.field
+            const translated = f.translated
+
+            // Set Table Columns
+            var current = {
+                title: $t(translated),
+                key: name,
+                render: (row, index) => { return [renderInput(row, index, f, items), renderInput(row, index, f, items)] },
+                // colSpan: () => 2,
+                // rowSpan: () => 2,
             }
             // if(f.rules.type === Boolean) {
                 // current.render = ((row) => row.status ? 
@@ -155,6 +171,7 @@ export function useResource() {
         getFromApi,
         getResource,
         mapColumns,
-        mapEditableColumns
+        mapEditableColumns,
+        mapGroupedEditableColumns
     }
 }

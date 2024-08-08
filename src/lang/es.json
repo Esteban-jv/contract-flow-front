@@ -21,6 +21,9 @@
     },
     "forms": {
         "enter_field":"Introduce {field}.",
+        "select_field":"Selecciona {field}.",
+        "enter_default_field":"Introduce {field} por defecto.",
+        "select_default_field":"Selecciona {field} por defecto.",
         "field_is_required":"El campo {field} es requerido.",
         "check_all_fields_msg": "No se pudo enviar. Por favor revisa todos los campos.",
         "something_went_wrong": "Ups! Algo salió mal.",
@@ -62,7 +65,10 @@
         "reversible":"Reversible",
         "value":"Valor",
         "country": "Pais | Paises",
-        "state": "Estado | Estados"
+        "state": "Estado | Estados",
+        "location": "Ubicación",
+        "contact": "Contacto",
+        "personal": "Personal"
     },
     "marital_status": {
         "single":"Soltero",

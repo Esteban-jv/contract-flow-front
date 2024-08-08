@@ -21,6 +21,9 @@
     },
     "forms": {
         "enter_field":"Enter {field} field.",
+        "select_field":"Select {field}.",
+        "enter_default_field":"Enter default {field} field.",
+        "select_default_field":"Select default {field}.",
         "field_is_required":"The field {field} is required.",
         "check_all_fields_msg": "It could not send. Please check out all the fields.",
         "something_went_wrong": "Oops! Something went wrong.",
@@ -37,7 +40,7 @@
     "conversion":"Conversion | Conversions",
     "tables": {
         "id": "Id",
-        "name": "Name",
+        "name": "Name | Names",
         "description": "Decription",
         "status": "Status",
         "currently_available": "Currently available",
@@ -61,7 +64,10 @@
         "reversible":"Reversible",
         "value":"Value",
         "country": "Country | Countries",
-        "state": "State | States"
+        "state": "State | States",
+        "location": "Location",
+        "contact": "Contact",
+        "personal": "Personal"
     },
     "marital_status": {
         "single":"single",

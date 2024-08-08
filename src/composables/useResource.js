@@ -33,11 +33,14 @@ export function useResource() {
         }
     }
     const renderIcon = (icon, props={}) => h(NIcon, null, { default: () => h(icon, props) });
-    const inputText = (row, index, name, items) => {
+    const inputText = (row, index, f, items) => {
+        const { field, translated } = f
         return h(NInput, {
-            value: row[name],
+            value: row[field],
+            placeholder: $t('forms.enter_field', { field: translated ? $t(translated) : '?' }),
+            class: "my-1",
             onUpdateValue(v) {
-                items[index][name] = v;
+                items[index][field] = v;
             }
         });
     }
@@ -45,35 +48,34 @@ export function useResource() {
         return h(NCheckbox, {
             defaultChecked: row[name],
             onUpdateChecked(v) {
-                console.warn(v)
                 items[index][name] = v;
             }
         });
     }
-    const select = (row, index, field) => {
-        const name = field.field
-
-        const options = field.rules.options
+    const select = (row, index, f, items) => {
+        const { field, translated, rules } = f
+        const options = rules.options
         return h(NSelect, {
-            value: row[name],
+            value: row[field],
+            placeholder: $t('forms.select_field', { field: translated ? $t(translated) : '' }),
+            class: "my-1",
             options,
             onUpdateValue(v) {
-                items[index][name] = v;
+                items[index][field] = v;
             }
         });
     }
     const renderInput = (row, index, f, items) => {
-        console.log(row, index, f, items)
         const { rules } = f
         switch (rules.type) {
             case String:
-                return inputText(row, index, f.field, items)
+                return inputText(row, index, f, items)
             case Boolean:
                 return checkBox(row, index, f.field, items)
             case 'Select':
                 return select(row, index, f, items)
             default:
-                return inputText(row, index, f.field, items)
+                return inputText(row, index, f, items)
         }
     }
     const getResource = async endpoint => {
@@ -139,14 +141,19 @@ export function useResource() {
         // console.warn("Editable", fields)
         const fieldColumns = fields.map((f) => {
             // Get field
-            const name = f.field
-            const translated = f.translated
+            const name = f.title
+            const translated = f.title
 
             // Set Table Columns
             var current = {
+                align: f.table.align,
                 title: $t(translated),
                 key: name,
-                render: (row, index) => { return [renderInput(row, index, f, items), renderInput(row, index, f, items)] },
+                render: (row, index) => {
+                    return f.fields.map( currentField => renderInput(row, index, currentField, items) )
+                },
+                width: f.table.width,
+                // className: "p-0 m-0"
                 // colSpan: () => 2,
                 // rowSpan: () => 2,
             }

@@ -4,8 +4,9 @@
     import { Trash } from '@vicons/fa';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import { useResource } from '@/composables/useResource';
+    import api from '@/lib/axios';
 
-    const { $t, $can } = useGlobalHelpers()
+    const { $t, $toastError } = useGlobalHelpers()
     const resources = useResource()
 
     const model = ref('client')
@@ -173,8 +174,15 @@
     const deleteRow = row => {
         items.value = items.value.filter( i => i.key !== row.key )
     }
-    const triggerSend = () => {
-        console.log(items.value)
+    const triggerSend = async () => {
+        try {
+            // const response = await api.post('massive-clients/', { clients: items.value })
+            const response = await api.post('client/', items.value)
+            console.warn(response)
+        } catch (error) {
+            console.error(error)
+            $toastError(error)
+        }
     }
 
     // Computed

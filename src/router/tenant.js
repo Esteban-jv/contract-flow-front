@@ -84,8 +84,23 @@ const router = createRouter({
         },
         {
           path: '/clients',
-          name: 'client',
+          name: 'clients',
           component: () => import('../views/client/client/ClientsView.vue')
+        },
+        {
+          path: '/add-client',
+          name: 'add-client',
+          component: () => import('../views/client/client/AddClientView.vue')
+        },
+        {
+          path: '/edit-client/:id',
+          name: 'edit-client',
+          component: () => import('../views/client/client/AddClientView.vue')
+        },
+        {
+          path: '/clients-massive',
+          name: 'clients-massive',
+          component: () => import('../views/client/client/MassiveClientsView.vue')
         },
       ]
     },

@@ -83,7 +83,7 @@ import DeleteButton from './DeleteButton.vue';
         }
     }
     const goBack = form => {
-        router.push({ name: props.model })
+        router.push({ name: prevPage.value })
     }
 
     onMounted(async () => {
@@ -165,8 +165,6 @@ import DeleteButton from './DeleteButton.vue';
                 const { data } = await api.post(`${props.endpoint}/`,form.value)
             }
             loadingBar.finish()
-            console.warn(prevPage)
-            console.warn(prevPage.value)
             router.push({ name: prevPage.value })
         } catch (err) {
             console.warn(err)
@@ -206,14 +204,14 @@ import DeleteButton from './DeleteButton.vue';
                         :disabled="disableEdit"
                     />
                     <NInput
-                        v-if="field.rules.type === Number && !field.rules.options"
+                        v-if="field.rules.type === Number"
                         :allow-input="onlyAllowNumber"
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                         :disabled="disableEdit"
                     />
                     <NSelect
-                        v-if="field.rules.type === Number && field.rules.options"
+                        v-if="field.rules.type === 'Select'"
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                         :options="field.rules.options"

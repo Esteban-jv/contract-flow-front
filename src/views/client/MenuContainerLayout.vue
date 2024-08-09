@@ -6,7 +6,7 @@
         NSplit, NAvatar, NSwitch, NDropdown, NLayoutHeader, // Header
         NScrollbar
     } from 'naive-ui';
-    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends, UserTag,
+    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends, UserTag, UsersCog,
       MoneyBill, MoneyBillWave, ExchangeAlt
      } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
@@ -220,20 +220,53 @@
       }
 
       /* CLIENT */
-      const client_permission = { model: 'client', icon: UserTag, path:'', allow: false }
-      menuOptions.value.push({
-        label: () => h(
-          RouterLink,
-          {
-            to: {
-              name: client_permission.model
-            }
-          },
-          { default: () => $t(client_permission.model, 2) }
-        ),
-        key: client_permission.model,
-        icon: renderIcon(client_permission.icon)
-      })
+      const client_permission = [
+        { model: 'client', name:'clients', icon: UserTag, path:'clients', allow: false },
+        { model: 'client', name:'add_client', icon: UserTag, path:'add-client', allow: false},
+        { model: 'client', name:'add_massive_client', icon: UserFriends, path:'clients-massive', allow: false},
+      ]
+      client_permission.forEach(cp => {
+        cp.allow = $can('view',cp.model)
+      });
+      if(client_permission.some( cp => cp.allow === true)) {
+        let cli_children = []
+        client_permission.forEach( cp => {
+          if(cp.allow) {
+            cli_children.push({
+              label: () => h(
+                RouterLink,
+                {
+                  to: {
+                    name: cp.path
+                  }
+                },
+                { default: () => $t(cp.name, 2) }
+              ),
+              key: cp.path,
+              icon: renderIcon(cp.icon)
+            })
+          }
+        })
+        menuOptions.value.push({
+          label: $t('client',2),
+          key: "clients",
+          icon: renderIcon(UsersCog),
+          children: cli_children
+        })
+      }
+      // menuOptions.value.push({
+      //   label: () => h(
+      //     RouterLink,
+      //     {
+      //       to: {
+      //         name: client_permission.model
+      //       }
+      //     },
+      //     { default: () => $t(client_permission.model, 2) }
+      //   ),
+      //   key: client_permission.model,
+      //   icon: renderIcon(client_permission.icon)
+      // })
 
       /* PARTNER */
       const partner_permission = { model: 'partner', icon: UserFriends, path:'', allow: false }

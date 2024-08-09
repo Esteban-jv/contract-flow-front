@@ -30,6 +30,8 @@
         "enter_valid_field":"Enter valid {field}."
     },
     "client": "Client | Clients",
+    "add_client": "Add client | Add clients",
+    "add_massive_client": "Add many clients",
     "dashboard":"Dashboard",
     "catalog":"Catalog | Catalogs",
     "language":"Language | Languages",
@@ -70,11 +72,11 @@
         "personal": "Personal"
     },
     "marital_status": {
-        "single":"single",
-        "married":"married",
+        "single":"Single",
+        "married":"Married",
         "divorced":"Divorced",
         "widowed":"Widowed",
-        "other":"other"
+        "other":"Other"
     },
     "actions": {
         "save": "Save",

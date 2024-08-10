@@ -15,7 +15,7 @@
 
     const isLoading = ref(false)
     const model = ref('client')
-    const prevPage = ref('clients')
+    const prevPage = computed(() => model.value) // ref('client')
 
     const LanguageOptions = ref([])
     const MaritalStatusOptions = [

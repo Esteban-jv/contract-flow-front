@@ -137,6 +137,44 @@
     function renderIcon(icon) {
       return () => h(NIcon, null, { default: () => h(icon) });
     }
+    const buildModule = module => {
+      // substract vars
+      const { icon, singular, plural, permissions } = module
+
+     // Check all permissions array
+      permissions.forEach(cp => {
+        cp.allow = $can('view',cp.model)
+      });
+      // Check if at least one permission in granted
+      if(permissions.some( cp => cp.allow === true)) {
+        let cat_children = []
+        // Add just RouterLink granted
+        permissions.forEach( cp => {
+          if(cp.allow) {
+            cat_children.push({
+              label: () => h(
+                RouterLink,
+                {
+                  to: {
+                    name: cp.path
+                  }
+                },
+                { default: () => $t(cp.name, 2) }
+              ),
+              key: cp.name,
+              icon: renderIcon(cp.icon)
+            })
+          }
+        })
+        // Reder all RouterLinks in the actual Menu Object
+        menuOptions.value.push({
+          label: $t(singular,2),
+          key: plural,
+          icon: renderIcon(icon),
+          children: cat_children
+        })
+      }
+    }
     function buildMenu() {
       menuOptions.value = []
       menuOptions.value.push({
@@ -149,124 +187,38 @@
         icon: renderIcon(Home),
       })
       /* CATALOGS */
-      const catalog_permissions = [
-        { model: 'idtype', icon: Flag, path:'', allow: false},
-        { model: 'language', icon: GlobeAmericas, path:'languages', allow: false},
-        { model: 'nationality', icon: IdCard, path:'', allow: false}
-      ]
-      catalog_permissions.forEach(cp => {
-        cp.allow = $can('view',cp.model)
-      });
-      // console.log(catalog_permissions.some( cp => cp.allow === true), catalog_permissions)
-      if(catalog_permissions.some( cp => cp.allow === true)) {
-        let cat_children = []
-        catalog_permissions.forEach( cp => {
-          if(cp.allow) {
-            cat_children.push({
-              label: () => h(
-                RouterLink,
-                {
-                  to: {
-                    name: cp.model
-                  }
-                },
-                { default: () => $t(cp.model, 2) }
-              ),
-              key: cp.model,
-              icon: renderIcon(cp.icon)
-            })
-          }
-        })
-        menuOptions.value.push({
-          label: $t('catalog',2),
-          key: "catalogs",
-          icon: renderIcon(ListAltRegular),
-          children: cat_children
-        })
-      }
+      buildModule({
+        icon: ListAltRegular,
+        permissions: [
+          { name: 'idtype', model: 'idtype', icon: Flag, path:'idtype', allow: false},
+          { name: 'language', model: 'language', icon: GlobeAmericas, path:'language', allow: false},
+          { name: 'nationality', model: 'nationality', icon: IdCard, path:'nationality', allow: false}
+        ],
+        singular: 'catalog',
+        plural: 'catalogs',
+      })
       /* CURRENCY */
-      const currency_permissions = [
-        { model: 'currency', icon: MoneyBillWave, path:'currency', allow: false},
-        { model: 'conversion', icon: ExchangeAlt, path:'currency-conversion', allow: false}
-      ]
-      currency_permissions.forEach(cp => {
-        cp.allow = $can('view',cp.model)
-      });
-      if(currency_permissions.some( cp => cp.allow === true)) {
-        let cat_children = []
-        currency_permissions.forEach( cp => {
-          if(cp.allow) {
-            cat_children.push({
-              label: () => h(
-                RouterLink,
-                {
-                  to: {
-                    name: cp.path
-                  }
-                },
-                { default: () => $t(cp.model, 2) }
-              ),
-              key: cp.path,
-              icon: renderIcon(cp.icon)
-            })
-          }
-        })
-        menuOptions.value.push({
-          label: $t('currency',2),
-          key: "currencies",
-          icon: renderIcon(MoneyBill),
-          children: cat_children
-        })
-      }
+      buildModule({
+        icon: MoneyBill,
+        permissions: [
+          { name: 'currency', model: 'currency', icon: MoneyBillWave, path:'currency', allow: false},
+          { name: 'conversion', model: 'conversion', icon: ExchangeAlt, path:'currency-conversion', allow: false}
+        ],
+        singular: 'currency',
+        plural: 'currencies',
+      })
 
-      /* CLIENT */
-      const client_permission = [
-        { model: 'client', name:'clients', icon: UserTag, path:'clients', allow: false },
-        { model: 'client', name:'add_client', icon: UserTag, path:'add-client', allow: false},
-        { model: 'client', name:'add_massive_client', icon: UserFriends, path:'clients-massive', allow: false},
-      ]
-      client_permission.forEach(cp => {
-        cp.allow = $can('view',cp.model)
-      });
-      if(client_permission.some( cp => cp.allow === true)) {
-        let cli_children = []
-        client_permission.forEach( cp => {
-          if(cp.allow) {
-            cli_children.push({
-              label: () => h(
-                RouterLink,
-                {
-                  to: {
-                    name: cp.path
-                  }
-                },
-                { default: () => $t(cp.name, 2) }
-              ),
-              key: cp.path,
-              icon: renderIcon(cp.icon)
-            })
-          }
-        })
-        menuOptions.value.push({
-          label: $t('client',2),
-          key: "clients",
-          icon: renderIcon(UsersCog),
-          children: cli_children
-        })
-      }
-      // menuOptions.value.push({
-      //   label: () => h(
-      //     RouterLink,
-      //     {
-      //       to: {
-      //         name: client_permission.model
-      //       }
-      //     },
-      //     { default: () => $t(client_permission.model, 2) }
-      //   ),
-      //   key: client_permission.model,
-      //   icon: renderIcon(client_permission.icon)
-      // })
+      /* CLIENTS */
+      buildModule({
+        icon: UsersCog,
+        permissions: [
+          { model: 'client', name:'client', icon: UserTag, path:'clients', allow: false },
+          { model: 'client', name:'add_client', icon: UserTag, path:'add-client', allow: false},
+          { model: 'client', name:'add_massive_client', icon: UserFriends, path:'clients-massive', allow: false},
+        ],
+        singular: 'client',
+        plural: 'clients',
+      })
 
       /* PARTNER */
       const partner_permission = { model: 'partner', icon: UserFriends, path:'', allow: false }
@@ -291,64 +243,6 @@
             icon: renderIcon(UserLock),
         },
       )
-
-      /*
-      {
-        label: $t('catalog',2),
-        key: "catalogs",
-        icon: renderIcon(ListAltRegular),
-        children: [
-            {
-              label: () => h(
-                RouterLink,
-                {
-                  to: {
-                    name: "languages"
-                  }
-                },
-                { default: () => $t('language', 2) }
-              ),
-              key: "languages",
-              icon: renderIcon(Flag),
-              disabled: !$can('view','language')
-            },
-            {
-              label: () => h(
-                RouterLink,
-                {
-                  to: {
-                    name: "nationalities"
-                  }
-                },
-                { default: () => $t('nationality',2) }
-              ),
-              key: "nationalities",
-              icon: renderIcon(GlobeAmericas),
-              disabled: !$can('view','nationality')
-            },
-            {
-              label: () => h(
-                RouterLink,
-                {
-                  to: {
-                    name: "oficial-ids"
-                  }
-                },
-                { default: () => $t('idtype',2) }
-              ),
-              key: "oficial-ids",
-              icon: renderIcon(IdCard),
-              disabled: !$can('view','idtype')
-            },
-        ]
-      },
-      {
-          label: "Disabled link",
-          key: "404",
-          disabled: true,
-          icon: renderIcon(UserLock),
-      },
-      */
     }
 
     // Before Mounted

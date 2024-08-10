@@ -7,7 +7,7 @@
         NScrollbar
     } from 'naive-ui';
     import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends, UserTag, UsersCog,
-      MoneyBill, MoneyBillWave, ExchangeAlt
+      MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell
      } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
@@ -161,7 +161,7 @@
                 },
                 { default: () => $t(cp.name, 2) }
               ),
-              key: cp.name,
+              key: cp.path,
               icon: renderIcon(cp.icon)
             })
           }
@@ -185,6 +185,15 @@
         ),
         key: "dashboard",
         icon: renderIcon(Home),
+      })
+      /* SALES */
+      buildModule({
+        icon: MoneyBillWave,
+        permissions: [
+          { name: 'sale_room', model: 'salesroom', icon: ConciergeBell, path:'sales-room', allow: false},
+        ],
+        singular: 'sale',
+        plural: 'sales',
       })
       /* CATALOGS */
       buildModule({

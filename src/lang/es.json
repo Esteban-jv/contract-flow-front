@@ -40,6 +40,8 @@
     "partner":"Socio | Socios",
     "currency":"Divisa | Divisas",
     "conversion":"Conversión | Conversiones",
+    "sale":"Venta | Ventas",
+    "sale_room":"Sala de venta | Salas de venta",
     "tables": {
         "id": "Id",
         "folio": "Folio",
@@ -72,7 +74,8 @@
         "state": "Estado | Estados",
         "location": "Ubicación",
         "contact": "Contacto",
-        "personal": "Personal"
+        "personal": "Personal",
+        "meeting_date":"Fecha Reunión"
     },
     "marital_status": {
         "single":"Soltero",

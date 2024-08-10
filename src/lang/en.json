@@ -40,6 +40,8 @@
     "partner":"Partner | Partners",
     "currency":"Currency | Currencies",
     "conversion":"Conversion | Conversions",
+    "sale_room":"Sale room | Sales rooms",
+    "sale":"Sale | Sales",
     "tables": {
         "id": "Id",
         "folio": "Folio",
@@ -71,7 +73,8 @@
         "state": "State | States",
         "location": "Location",
         "contact": "Contact",
-        "personal": "Personal"
+        "personal": "Personal",
+        "meeting_date":"Meeting date"
     },
     "marital_status": {
         "single":"Single",

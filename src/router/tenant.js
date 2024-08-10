@@ -82,6 +82,7 @@ const router = createRouter({
           name: 'edit-partner',
           component: () => import('../views/client/partner/AddPartnerView.vue')
         },
+        /* CLIENTS */
         {
           path: '/clients',
           name: 'clients',
@@ -102,6 +103,12 @@ const router = createRouter({
           name: 'clients-massive',
           component: () => import('../views/client/client/MassiveClientsView.vue')
         },
+        /* SALES */
+        {
+          path: '/sales-room',
+          name: 'sales-room',
+          component: () => import('../views/client/sales/SalesRoomView.vue')
+        }
       ]
     },
   ]

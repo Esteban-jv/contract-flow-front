@@ -4,6 +4,7 @@
         NFormItemGi, NInput, NInputNumber, NCheckbox, NSkeleton, NSpace, NPagination, useLoadingBar } from 'naive-ui';
     import { CheckCircle, TimesCircle, Times, Edit } from '@vicons/fa';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
+    import { useResource } from '@/composables/useResource';
     import api from "@/lib/axios";
     import DeleteButton from "@/components/DeleteButton.vue"
 
@@ -16,6 +17,10 @@
             type: String,
             required: false
         },
+        translated: {
+            Type: String,
+            required: false
+        },
         endpoint: {
             type: String,
             required: true
@@ -26,54 +31,110 @@
         }
     })
 
-    const permission = computed(() => props.permissionModel ?? props.model)
-    const onlyAllowNumber = (value) => !value || /^\d+$/.test(value)
-    const formatCurrency = (value) => {
-        if (value === null)
-          return "";
-        return `$ ${value.toLocaleString("es-MX")}`;
-      }
-    const parseCurrency = (input) => {
-        const nums = input.replace(/(,|\$|\s)/g, "").trim();
-        if (/^\d+(\.(\d+)?)?$/.test(nums))
-          return Number(nums);
-        return nums === "" ? null : Number.NaN;
-      }
-    const calculatedSpan = span => {
-        if (span)
-            return `24 s:12 m:${(span ?? 24)}`
-        return 24
-    }
-
     // States and Composables
     const { $t, $toast, $toastError, $can } = useGlobalHelpers()
+    const resource = useResource()
     const loadingBar = useLoadingBar()
     const MAX_OPTION_ITEMS = 50
+
+    const translated = computed(() => props.translated ?? props.model)
+    const permission = computed(() => props.permissionModel ?? props.model)
 
     // Data
     const showModal = ref(false)
     const isLoading = ref(false)
 
     // Aux Methods
-    const renderIcon = (icon, props={}) => h(NIcon, null, { default: () => h(icon, props) });
-    const updatePage = page => {
-        pagination.page = page
-        getResource()
-    }
+    const updatePage = page => resource.updatePage(page, props.end)
     const updatePageSize = size => {
         pagination.pageSize = size
-        resetResource()
+        resetResource(props.endpoint)
     }
 
     // For table
-    const columns = ref([])
+    // const columns = ref([])
+    const columns = computed(() => {
+        const cols = resource.mapColumns(props.fields)
+        // Now add Editable columns
+        const can_edit = $can('change',permission.value)
+        const can_delete = $can('delete',permission.value)
+        if(can_edit && can_delete) {
+            cols.push({
+                key: 'actions',
+                align: 'center',
+                title: $t('tables.actions'),
+                className: "flex justify-around",
+                width: '25%',
+                render(row) {
+                    return [
+                        h(
+                            NButton,
+                            {
+                                size: "small",
+                                secondary: true,
+                                type:"info",
+                                onClick: () => edit(row),
+                                renderIcon: () => resource.renderIcon(Edit, { color: '--n-color'} )
+                            },
+                        ),
+                        h(
+                            DeleteButton,
+                            {
+                                delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) }),
+                                deleted_msg: $t('messages.deleted_successfully',{ obj: $t(props.model) }),
+                                delete_endpoint: `${props.endpoint}/${row.id}/` ,
+                                onObjectDeleted: () => resetResource()
+                            }
+                        )
+                    ]
+                }
+            })
+        } else {
+            if(can_edit) {
+                cols.value.push({
+                    align: 'center',
+                    title: $t('tables.edit'),
+                    render(row) {
+                        return h(
+                            NButton,
+                            {
+                                disabled: !$can('change',permission.value),
+                                size: "small",
+                                secondary: true,
+                                type:"info",
+                                onClick: () => edit(row),
+                                renderIcon: () => resource.renderIcon(Edit, { color: '--n-color'} )
+                            },
+                        );
+                    },
+                    key: "edit",
+                })
+            }
+            if(can_delete) {
+                cols.value.push({
+                    align: 'center',
+                    title: $t('tables.delete'),
+                    render(row) {
+                        return h(
+                            DeleteButton,
+                            {
+                                disabled: !$can('delete',permission.value),
+                                delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) }),
+                                delete_endpoint: `${props.endpoint}/${row.id}/` ,
+                                onObjectDeleted: () => getResource()
+                            }
+                        );
+                    },
+                    key: "delete",
+                })
+            }
+        }
+        return cols
+    })
     const items = ref([])
     // For pagination
-    const pageSizes = ref([5, 10, 20, 50])
-    const pagination = reactive({
-        pageSize:5,
-        page:1
-    })
+    const pageSizes = resource.pageSizes
+    const pagination = resource.pagination
     const formRef = ref(null);
     const form = ref({
         id: null
@@ -195,128 +256,12 @@
 
     onMounted(async () => {
         getResource()
-        props.fields.forEach(async (f, i) => {
-            // Get field
-            const name = f.field
-            const translated = f.translated
-            // Set ref of form
-            form.value[name] = f.rules.default
-
-            // Set validation rules
-            formRules.value[name] = [
-                {
-                    required: f.rules.required
-                }
-            ]
-            if(f.rules.required) {
-                formRules.value[name][0].message = $t('forms.field_is_required', { field: $t(translated) })
-                // formRules.value[name][0].trigger = ["input", "blur"]
-            }
-
-            // Set Table Columns
-            columns.value[i] = {
-                align: f.table.align,
-                title: $t(translated),
-                key: name
-            }
-            if(f.rules.type === Boolean) {
-                columns.value[i].render = ((row) => row[name] ? 
-                    renderIcon(CheckCircle, { color: '#0e7a0d'}) : 
-                    renderIcon(TimesCircle, { color: '#D50049'}))
-            }
-            if(f.rules.optionsEndpoint) {
-                f.rules.options = await getFromApi(f.rules.optionsEndpoint)
-            }
-        })
-
-        // Add actions column to a table
-        const can_edit = $can('change',permission.value)
-        const can_delete = $can('delete',permission.value)
-        if(can_edit && can_delete) {
-            columns.value.push({
-                key: 'actions',
-                children: [
-                    {
-                        align: 'center',
-                        title: $t('tables.edit'),
-                        render(row) {
-                            return h(
-                                NButton,
-                                {
-                                    size: "small",
-                                    secondary: true,
-                                    type:"info",
-                                    onClick: () => edit(row),
-                                    renderIcon: () => renderIcon(Edit, { color: '--n-color'} )
-                                },
-                            );
-                        },
-                        key: "edit",
-                    },
-                    {
-                        align: 'center',
-                        title: $t('tables.delete'),
-                        render(row) {
-                            return h(
-                                DeleteButton,
-                                {
-                                    delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) }),
-                                    deleted_msg: $t('messages.deleted_successfully',{ obj: $t(props.model) }),
-                                    delete_endpoint: `${props.endpoint}/${row.id}/` ,
-                                    onObjectDeleted: () => resetResource()
-                                }
-                            );
-                        },
-                        key: "delete",
-                    }
-                ]
-            })
-        } else {
-            if(can_edit) {
-                columns.value.push({
-                    align: 'center',
-                    title: $t('tables.edit'),
-                    render(row) {
-                        return h(
-                            NButton,
-                            {
-                                disabled: !$can('change',permission.value),
-                                size: "small",
-                                secondary: true,
-                                type:"info",
-                                onClick: () => edit(row),
-                                renderIcon: () => renderIcon(Edit, { color: '--n-color'} )
-                            },
-                        );
-                    },
-                    key: "edit",
-                })
-            }
-            if(can_delete) {
-                columns.value.push({
-                    align: 'center',
-                    title: $t('tables.delete'),
-                    render(row) {
-                        return h(
-                            DeleteButton,
-                            {
-                                disabled: !$can('delete',permission.value),
-                                delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) }),
-                                delete_endpoint: `${props.endpoint}/${row.id}/` ,
-                                onObjectDeleted: () => getResource()
-                            }
-                        );
-                    },
-                    key: "delete",
-                })
-            }
-        }
     })
 </script>
 <template>
     <NFlex justify="end" class="py-3">
         <NButton @click="toggleModal(true)">
-            {{ $t('tables.add_new', { item: $t(props.model)}) }}
+            {{ $t('tables.add_new', { item: $t(translated)}) }}
         </NButton>
     </NFlex>
     <div class="w-full">
@@ -344,7 +289,7 @@
         >
             <NCard
                 style="width: 600px; max-width: 90%;"
-                :title="(form.id ? $t('tables.edit') : $t('tables.add')) + ' ' + $t(props.model)"
+                :title="(form.id ? $t('tables.edit') : $t('tables.add')) + ' ' + $t(translated)"
                 :bordered="false"
                 role="dialog"
                 aria-modal="true"
@@ -363,7 +308,7 @@
                 </NSpace>
                 <NForm v-else ref="formRef" :model="form" :rules="formRules" size="medium" label-placement="top">
                     <NGrid :span="24" :x-gap="11" item-responsive responsive="screen">
-                        <NFormItemGi v-for="field in fields" :span="calculatedSpan(field.span)" :label="$t(field.translated)" :path="field.field">
+                        <NFormItemGi v-for="field in fields" :span="resource.calculatedSpan(field.span)" :label="$t(field.translated)" :path="field.field">
                             <NCheckbox
                                 v-if="field.rules.type === Boolean"
                                 v-model:checked="form[field.field]"
@@ -378,14 +323,14 @@
                             <NInputNumber
                                 class="w-full"
                                 v-if="field.rules.type === 'Currency'"
-                                :parse="parseCurrency"
-                                :format="formatCurrency"
+                                :parse="resource.parseCurrency"
+                                :format="resource.formatCurrency"
                                 v-model:value="form[field.field]"
                                 :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                             />
                             <NInput
                                 v-if="field.rules.type === Number"
-                                :allow-input="onlyAllowNumber"
+                                :allow-input="resource.onlyAllowNumber"
                                 v-model:value="form[field.field]"
                                 :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                             />

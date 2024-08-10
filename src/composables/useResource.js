@@ -1,6 +1,7 @@
 import { ref, computed, reactive, h } from "vue";
 import { useGlobalHelpers } from "./useGlobalHelpers";
 import { useLoadingBar, NInput, NIcon, NCheckbox, NSelect } from "naive-ui";
+import { CheckCircle, TimesCircle, Times, Edit } from '@vicons/fa';
 import api from "@/lib/axios";
 
 export function useResource() {
@@ -32,6 +33,29 @@ export function useResource() {
             throw err
         }
     }
+    const onlyAllowNumber = (value) => !value || /^\d+$/.test(value)
+    const formatCurrency = (value) => {
+        if (value === null)
+          return "";
+        return `$ ${value.toLocaleString("es-MX")}`;
+      }
+    const parseCurrency = (input) => {
+        const nums = input.replace(/(,|\$|\s)/g, "").trim();
+        if (/^\d+(\.(\d+)?)?$/.test(nums))
+          return Number(nums);
+        return nums === "" ? null : Number.NaN;
+      }
+    const calculatedSpan = span => {
+        if (span)
+            return `24 s:12 m:${(span ?? 24)}`
+        return 24
+    }
+
+    const updatePage = (page, endpoint) => {
+        pagination.page = page
+        getResource(endpoint)
+    }
+
     const renderIcon = (icon, props={}) => h(NIcon, null, { default: () => h(icon, props) });
     const inputText = (row, index, f, items) => {
         const { field, translated } = f
@@ -89,6 +113,7 @@ export function useResource() {
                 }
             })
             items.value = data.results
+            console.log(items.value)
             pagination.itemCount = data.count
             pagination.pageCount = Math.ceil(data.count / pagination.pageSize)
             loadingBar.finish()
@@ -111,7 +136,8 @@ export function useResource() {
             var current = {
                 align: f.table.align,
                 title: $t(translated),
-                key: name
+                key: name,
+                width: f.table.width || '15%',
             }
             if(f.rules.type === Boolean) {
                 current.render = ((row) => row.status ? 
@@ -173,7 +199,17 @@ export function useResource() {
         loadingBar,
         isLoading,
         items,
+        pagination,
+        pageSizes,
         MAX_OPTION_ITEMS,
+
+        onlyAllowNumber,
+        formatCurrency,
+        parseCurrency,
+        calculatedSpan,
+
+        updatePage,
+
         renderIcon,
         getFromApi,
         getResource,

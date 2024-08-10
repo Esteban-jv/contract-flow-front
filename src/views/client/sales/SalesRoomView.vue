@@ -1,9 +1,13 @@
 <script setup>
     import { ref } from 'vue';
+    import useLocationMap from '@/composables/useLocationMap';
     import ResourceCreator from '@/components/ResourceCreator.vue'
 
     const model = ref('sales-room')
     const translated = ref('sale_room')
+
+    const { center } = useLocationMap()
+
     const fields = ref([
         {
             field: "name",
@@ -35,7 +39,7 @@
             rules: {
                 type: Date,
                 required: false,
-                default: true
+                default: null
             },
             table: {
                 align: 'center'
@@ -45,9 +49,9 @@
             field: "location",
             translated: "tables.location",
             rules: {
-                type: Location,
+                type: 'Location',
                 required: false,
-                default: true
+                default: [20.50956, -87.2299585]
             },
             table: {
                 align: 'center'

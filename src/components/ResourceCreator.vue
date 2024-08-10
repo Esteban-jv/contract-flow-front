@@ -1,10 +1,13 @@
 <script setup>
     import { ref, h, onMounted, reactive, computed } from 'vue';
     import { NDataTable, NIcon, NButton, NFlex, NModal, NCard, NForm, NGrid, NSelect,
-        NFormItemGi, NInput, NInputNumber, NCheckbox, NSkeleton, NSpace, NPagination, useLoadingBar } from 'naive-ui';
+        NFormItemGi, NInput, NInputNumber, NCheckbox, NSkeleton, NSpace, NPagination, useLoadingBar, NDatePicker } from 'naive-ui';
     import { CheckCircle, TimesCircle, Times, Edit } from '@vicons/fa';
+    import "leaflet/dist/leaflet.css";
+    import { LMap, LMarker, LTileLayer } from '@vue-leaflet/vue-leaflet';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import { useResource } from '@/composables/useResource';
+    import useLocationMap from '@/composables/useLocationMap';
     import api from "@/lib/axios";
     import DeleteButton from "@/components/DeleteButton.vue"
 
@@ -33,6 +36,7 @@
 
     // States and Composables
     const { $t, $toast, $toastError, $can } = useGlobalHelpers()
+    const { zoom, center, pin } = useLocationMap()
     const resource = useResource()
     const loadingBar = useLoadingBar()
     const MAX_OPTION_ITEMS = 50
@@ -45,7 +49,10 @@
     const isLoading = ref(false)
 
     // Aux Methods
-    const updatePage = page => resource.updatePage(page, props.end)
+    const updatePage = page => {
+        pagination.page = page
+        getResource()
+    }
     const updatePageSize = size => {
         pagination.pageSize = size
         resetResource(props.endpoint)
@@ -132,6 +139,10 @@
         return cols
     })
     const items = ref([])
+    // For map
+    const localPin = ($event, field) => {
+        form.value[field] = pin($event)
+    }
     // For pagination
     const pageSizes = resource.pageSizes
     const pagination = resource.pagination
@@ -144,16 +155,19 @@
     // For Display
     const toggleModal = m => {
         showModal.value = m
-        if(!m) {
-            form.value = {
-                id: null
-            }
+        if(m && !form.value.id) {
             props.fields.forEach((f, i) => {
                 // Get field
                 const name = f.field
                 // Set ref of form
                 form.value[name] = f.rules.default
+                console.log(form.value[name])
             })
+        }
+        if(!m) {
+            form.value = {
+                id: null
+            }
         }
     }
 
@@ -219,6 +233,8 @@
     }
     // Create and Update
     const createOrUpdateResource = async () => {
+        // console.warn(form.value)
+        // return
         try {
             isLoading.value = true
             loadingBar.start()
@@ -337,9 +353,28 @@
                             <NSelect
                                 v-if="field.rules.type === 'Select'"
                                 v-model:value="form[field.field]"
-                                :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                                :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
                                 :options="field.rules.options"
                             />
+                            <NDatePicker
+                                v-if="field.rules.type === Date"
+                                v-model:value="form[field.field]"
+                                :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
+                                class="w-full"
+                                type="datetime"
+                            />
+                            <div v-if="field.rules.type === 'Location'" class="h-[300px] w-full">
+                                <LMap ref="map" v-model:zoom="zoom" :center="form[field.field]" :use-global-leaflet="false">
+                                    <LMarker
+                                        :lat-lng="form[field.field]"
+                                        draggable
+                                        @moveend="localPin($event, field.field)"
+                                    />
+                                    <LTileLayer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    ></LTileLayer>
+                                </LMap>
+                            </div>
                         </NFormItemGi>
                     </NGrid>
                 </NForm>

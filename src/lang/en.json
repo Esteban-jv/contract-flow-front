@@ -42,6 +42,8 @@
     "conversion":"Conversion | Conversions",
     "tables": {
         "id": "Id",
+        "folio": "Folio",
+        "lead": "Lead",
         "name": "Name | Names",
         "description": "Decription",
         "status": "Status",

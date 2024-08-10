@@ -17,8 +17,8 @@
             }
         },
         {
-            field: "marital_status",
-            translated: "tables.marital_status",
+            field: "folio",
+            translated: "tables.lead",
             rules: {
                 type: Number,
             },
@@ -54,6 +54,16 @@
             },
             table: {
                 align: 'center'
+            }
+        },
+        {
+            field: "marital_status",
+            translated: "tables.marital_status",
+            rules: {
+                type: Number,
+            },
+            table: {
+                align: 'left'
             }
         }
     ])

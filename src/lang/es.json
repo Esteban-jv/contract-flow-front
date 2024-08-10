@@ -42,6 +42,8 @@
     "conversion":"Conversión | Conversiones",
     "tables": {
         "id": "Id",
+        "folio": "Folio",
+        "lead": "Lead",
         "name": "Nombre",
         "email":"Correo electrónico",
         "description": "Descripción",

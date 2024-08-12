@@ -1,7 +1,9 @@
 <script setup>
     import { ref, h, onMounted, reactive, computed } from 'vue';
+    import { format as formatDate } from 'date-fns'
     import { NDataTable, NIcon, NButton, NFlex, NModal, NCard, NForm, NGrid, NSelect,
-        NFormItemGi, NInput, NInputNumber, NCheckbox, NSkeleton, NSpace, NPagination, useLoadingBar, NDatePicker } from 'naive-ui';
+        NFormItemGi, NInput, NInputNumber, NCheckbox, NSkeleton, NSpace, NPagination,
+        useLoadingBar, NDatePicker, NTransfer } from 'naive-ui';
     import { CheckCircle, TimesCircle, Times, Edit } from '@vicons/fa';
     import "leaflet/dist/leaflet.css";
     import { LMap, LMarker, LTileLayer } from '@vue-leaflet/vue-leaflet';
@@ -34,9 +36,18 @@
         }
     })
 
+    const format= ref("yyyy/MM/dd - HH:mm")
+    const handleDateUpdate = (value, field) => {
+        console.log(value, field, form.value)
+        if (value) {
+            const formattedDate = formatDate(new Date(value), format.value)
+            console.warn(formattedDate)
+            form.value[field] = formattedDate
+        }
+    }
     // States and Composables
     const { $t, $toast, $toastError, $can } = useGlobalHelpers()
-    const { zoom, center, pin } = useLocationMap()
+    const { zoom, pin } = useLocationMap()
     const resource = useResource()
     const loadingBar = useLoadingBar()
     const MAX_OPTION_ITEMS = 50
@@ -272,7 +283,18 @@
 
     onMounted(async () => {
         getResource()
+        const rules = await resource.makeRules(props.fields)
+        formRules.value = rules
+        // console.log(rules)
+        console.log(formRules.value['hostesses'])
     })
+
+    const generalOptions = ref(["groode", "veli good", "emazing", "lidiculous"].map(
+        (v) => ({
+          label: v,
+          value: v
+        })
+      ))
 </script>
 <template>
     <NFlex justify="end" class="py-3">
@@ -363,7 +385,14 @@
                                 class="w-full"
                                 type="datetime"
                             />
-                            <div v-if="field.rules.type === 'Location'" class="h-[300px] w-full">
+                            <NTransfer
+                                v-if="field.rules.type === 'Transfer'"
+                                v-model:value="form[field.field]"
+                                :options="field.rules.options"
+                                :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
+                                class="w-full"
+                            />
+                            <div v-if="field.rules.type === 'Location' && form[field.field]" class="h-[250px] w-full">
                                 <LMap ref="map" v-model:zoom="zoom" :center="form[field.field]" :use-global-leaflet="false">
                                     <LMarker
                                         :lat-lng="form[field.field]"

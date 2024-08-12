@@ -74,7 +74,8 @@
         "location": "Location",
         "contact": "Contact",
         "personal": "Personal",
-        "meeting_date":"Meeting date"
+        "meeting_date":"Meeting date",
+        "hostesses": "Hostesses"
     },
     "marital_status": {
         "single":"Single",

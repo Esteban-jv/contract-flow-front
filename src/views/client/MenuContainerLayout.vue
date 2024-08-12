@@ -242,16 +242,9 @@
           { default: () => $t(partner_permission.model, 2) }
         ),
         key: partner_permission.model,
-        icon: renderIcon(partner_permission.icon)
+        icon: renderIcon(partner_permission.icon),
+        disabled: true
       })
-
-      menuOptions.value.push({
-            label: "Disabled link",
-            key: "404",
-            disabled: true,
-            icon: renderIcon(UserLock),
-        },
-      )
     }
 
     // Before Mounted

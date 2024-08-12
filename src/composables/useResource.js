@@ -50,6 +50,47 @@ export function useResource() {
             return `24 s:12 m:${(span ?? 24)}`
         return 24
     }
+    const makeRules = async fields => {
+        const rules = []
+        fields.forEach(async f => {
+            // Get field
+            const name = f.field
+            const translated = f.translated
+            // Set ref of form
+            // form.value[name] = f.rules.default
+
+            // Set validation rules
+            const { regex } = f.rules
+            const { required } = f.rules
+            if(regex) {
+                rules[name] = [
+                    {
+                        validator(rule, value) {
+                            if(required && !value) {
+                                return new Error($t('forms.field_is_required', { field: $t(translated) }));
+                            }
+                            if (!value.match(regex)) {
+                                return new Error($t('forms.enter_valid_field', { field: $t(translated)}));
+                            }
+                            return true;
+                        },
+                    }
+                ]
+                rules[name][0].trigger = ["input", "blur"]
+            } else {
+                rules[name] = [ { required: required } ]
+                if(required) {
+                    rules[name][0].message = $t('forms.field_is_required', { field: $t(translated) })
+                    // formRules.value[name][0].trigger = ["input", "blur"] // It doesn't work on selects
+                }
+            }
+
+            if(f.rules.optionsEndpoint) {
+                f.rules.options = await getFromApi(f.rules.optionsEndpoint)
+            }
+        })
+        return rules
+    }
 
     const updatePage = (page, endpoint) => {
         pagination.page = page
@@ -215,6 +256,8 @@ export function useResource() {
         getResource,
         mapColumns,
         mapEditableColumns,
-        mapGroupedEditableColumns
+        mapGroupedEditableColumns,
+
+        makeRules
     }
 }

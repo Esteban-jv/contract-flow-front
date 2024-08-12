@@ -75,7 +75,8 @@
         "location": "Ubicación",
         "contact": "Contacto",
         "personal": "Personal",
-        "meeting_date":"Fecha Reunión"
+        "meeting_date":"Fecha Reunión",
+        "hostesses": "Anfritiones"
     },
     "marital_status": {
         "single":"Soltero",

@@ -130,7 +130,7 @@ router.beforeEach( async (to, from, next) => {
       }
     } catch (err) {
       console.error(err.response.data.msg)
-      // next({name: 'login'})
+      next({name: 'login'})
     }
   } else {
     next()

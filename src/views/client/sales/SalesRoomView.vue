@@ -46,6 +46,20 @@
             }
         },
         {
+            field: "hostesses",
+            translated: "tables.hostesses",
+            rules: {
+                type: 'Transfer',
+                required: false,
+                default: null,
+                options: [],
+                optionsEndpoint : "hostess"
+            },
+            table: {
+                align: 'center'
+            }
+        },
+        /*{ // TODO: Pending fix in backend
             field: "location",
             translated: "tables.location",
             rules: {
@@ -56,7 +70,7 @@
             table: {
                 align: 'center'
             }
-        }
+        }*/
     ])
 </script>
 <template>

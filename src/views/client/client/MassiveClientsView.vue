@@ -15,7 +15,7 @@
 
     const isLoading = ref(false)
     const model = ref('client')
-    const prevPage = computed(() => model.value) // ref('client')
+    const prevPage = ref('clients')
 
     const LanguageOptions = ref([])
     const SalesRoomeOptions = ref([])
@@ -174,7 +174,7 @@
                 country: defaultData.value.country,
                 state: defaultData.value.state,
                 language: defaultData.value.language,
-                salesRoom: selectedSaleRoom.value
+                sales_room: selectedSaleRoom.value
             })
             defaultData.value.key ++;
         }
@@ -186,6 +186,7 @@
         try {
             isLoading.value = true
             loadingBar.start()
+            items.value.map( i => i.sales_room = selectedSaleRoom.value)
             const { data } = await api.post('client/', items.value)
             loadingBar.finish()
             router.push({ name: prevPage.value })

@@ -73,6 +73,7 @@
     // const columns = ref([])
     const columns = computed(() => {
         const cols = resource.mapColumns(props.fields)
+        console.log(permission.value)
         // Now add Editable columns
         const can_edit = $can('change',permission.value)
         const can_delete = $can('delete',permission.value)
@@ -98,8 +99,8 @@
                         h(
                             DeleteButton,
                             {
-                                delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) }),
-                                deleted_msg: $t('messages.deleted_successfully',{ obj: $t(props.model) }),
+                                delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(translated.value) }),
+                                deleted_msg: $t('messages.deleted_successfully',{ obj: $t(translated.value) }),
                                 delete_endpoint: `${props.endpoint}/${row.id}/` ,
                                 onObjectDeleted: () => resetResource()
                             }

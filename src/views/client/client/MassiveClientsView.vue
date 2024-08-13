@@ -18,6 +18,8 @@
     const prevPage = computed(() => model.value) // ref('client')
 
     const LanguageOptions = ref([])
+    const SalesRoomeOptions = ref([])
+    const selectedSaleRoom = ref(null)
     const MaritalStatusOptions = [
         { label: $t("marital_status.single"), value: 2 },
         { label: $t("marital_status.married"), value: 3 },
@@ -171,7 +173,8 @@
                 phone: null,
                 country: defaultData.value.country,
                 state: defaultData.value.state,
-                language: defaultData.value.language
+                language: defaultData.value.language,
+                salesRoom: selectedSaleRoom.value
             })
             defaultData.value.key ++;
         }
@@ -226,6 +229,7 @@
 
     onMounted(async () => {
         LanguageOptions.value = await resources.getFromApi("language")
+        SalesRoomeOptions.value = await resources.getFromApi("hostess-sales-room")
     })
 </script>
 <template>
@@ -264,8 +268,11 @@
         <NFlex justify="space-between" class="py-3">
         </NFlex>
         <template #action>
-            <NFlex justify="end">
-                <NButton :disabled="isLoading" @click="triggerSend()" type="primary">
+            <NFlex justify="space-between" class="">
+                <NFormItem :label="$t('sale_room')" class="md:w-[50%] w-full">
+                    <NSelect :disabled="isLoading" v-model:value="selectedSaleRoom" :options="SalesRoomeOptions" :placeholder="$t('forms.select_field', { field: $t('sale_room') })" />
+                </NFormItem>
+                <NButton :disabled="isLoading" @click="triggerSend()" type="primary" class="self-center">
                     {{ $t('tables.add_new', { item: $t(model, 2)}) }}
                 </NButton>
             </NFlex>

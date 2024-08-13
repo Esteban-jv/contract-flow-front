@@ -5,6 +5,7 @@
 
     const model = ref('sales-room')
     const translated = ref('sale_room')
+    const permission = ref('salesroom')
 
     const { center } = useLocationMap()
 
@@ -39,7 +40,7 @@
             rules: {
                 type: Date,
                 required: false,
-                default: null
+                default: 1183135260000
             },
             table: {
                 align: 'center'
@@ -79,6 +80,7 @@
         :endpoint="`/${model}`"
         :translated="translated"
         :model="model"
+        :permission-model="permission"
         :fields="fields"
     />
 </template>

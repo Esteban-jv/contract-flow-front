@@ -57,7 +57,8 @@
                 optionsEndpoint : "hostess"
             },
             table: {
-                align: 'center'
+                align: 'center',
+                tagsName: 'username' // When you fix this it will go back to be 'name'
             }
         },
         /*{ // TODO: Pending fix in backend

@@ -54,6 +54,8 @@
 
     const translated = computed(() => props.translated ?? props.model)
     const permission = computed(() => props.permissionModel ?? props.model)
+    const objectFields = computed(() => props.fields.filter(f => !!f.table.text))
+    const tagsFields = computed(() => props.fields.filter(f => !!f.table.tagsName))
 
     // Data
     const showModal = ref(false)
@@ -215,6 +217,12 @@
             isLoading.value = false
         }
     }
+    const handleItems = results => {
+        var items = results
+        var items = objectFields.value.length ? items.map( r => resource.itemData(r, objectFields.value) ) : items
+        var items = tagsFields.value.length ? items.map( r => resource.itemTagsData(r, tagsFields.value) ) : items
+        return items
+    }
     // Get All
     const getResource = async () => {
         try {
@@ -226,7 +234,7 @@
                     offset: (pagination.page - 1) * pagination.pageSize
                 }
             })
-            items.value = data.results
+            items.value = handleItems(data.results)
             pagination.itemCount = data.count
             pagination.pageCount = Math.ceil(data.count / pagination.pageSize)
             loadingBar.finish()

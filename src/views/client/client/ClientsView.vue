@@ -5,6 +5,18 @@
 
     const model = ref('client')
     const fields = ref([
+    {
+            field: "sales_room",
+            translated: "sale_room",
+            rules: {
+                type: String,
+                required: true
+            },
+            table: {
+                align: 'left',
+                text: 'sales_room.name'
+            }
+        },
         {
             field: "full_name",
             translated: "tables.name",

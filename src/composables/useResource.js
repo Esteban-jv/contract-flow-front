@@ -97,7 +97,36 @@ export function useResource() {
         getResource(endpoint)
     }
 
+    // Render Item Functions
     const renderIcon = (icon, props={}) => h(NIcon, null, { default: () => h(icon, props) });
+    const itemData = (current, fields) => {
+        fields.forEach(f => {
+            const { field, table } = f
+            if(current[field]) {
+                // we need to get the value from the object by table.text which contains the field name like 'sales_room.name'
+                const fieldz = table.text.split('.')
+                current[field] = fieldz.reduce((acc, val) => acc[val], current)
+            }
+        })
+        return current
+    }
+    const itemTagsData = (current, fields) => {
+        fields.forEach(f => {
+            const { field, table } = f
+            if(current[field]) {
+                // console.log(current, field, table)
+                const field_name = table.tagsName
+                current[field] = current[field].map( f => {
+                    // console.log(f)
+                    const field_contain = f[field_name]
+                    // console.log(field_contain)
+                    return field_contain
+                }).join(', ')
+            }
+        })
+        return current
+    }
+    // Render Input Functions
     const inputText = (row, index, f, items) => {
         const { field, translated } = f
         return h(NInput, {
@@ -167,6 +196,7 @@ export function useResource() {
             })
         } finally { isLoading.value = false }
     }
+    // Render Columns Functions
     const mapColumns = fields => {
         return fields.map((f) => {
             // Get field
@@ -252,6 +282,8 @@ export function useResource() {
         updatePage,
 
         renderIcon,
+        itemData,
+        itemTagsData,
         getFromApi,
         getResource,
         mapColumns,

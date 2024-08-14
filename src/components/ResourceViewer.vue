@@ -27,6 +27,7 @@
     })
 
     const permission = computed(() => props.permissionModel ?? props.model)
+    const objectFields = computed(() => props.fields.filter(f => !!f.table.text))
 
     // States and Composables
     const router = useRouter()
@@ -63,6 +64,17 @@
     const GoToDetails = async () => {
         router.push({ name: `add-${props.model}`})
     }
+    const itemData = (current, fields) => {
+        fields.forEach(f => {
+            const { field, table } = f
+            if(current[field]) {
+                // we need to get the value from the object by table.text which contains the field name like 'sales_room.name'
+                const fieldz = table.text.split('.')
+                current[field] = fieldz.reduce((acc, val) => acc[val], current)
+            }
+        })
+        return current
+    }
     // Get All
     const getResource = async () => {
         try {
@@ -74,7 +86,7 @@
                     offset: (pagination.page - 1) * pagination.pageSize
                 }
             })
-            items.value = data.results
+            items.value = objectFields.value.length ? data.results.map( r => itemData(r, objectFields.value) ) : data.results
             pagination.itemCount = data.count
             pagination.pageCount = Math.ceil(data.count / pagination.pageSize)
             loadingBar.finish()

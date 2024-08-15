@@ -42,6 +42,8 @@
     "conversion":"Conversión | Conversiones",
     "sale":"Venta | Ventas",
     "sale_room":"Sala de venta | Salas de venta",
+    "search":"Buscar",
+    "search_by":"Buscar por",
     "tables": {
         "id": "Id",
         "folio": "Folio",

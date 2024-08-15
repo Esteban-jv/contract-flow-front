@@ -2,8 +2,9 @@
     import { ref, h, onMounted, reactive, computed } from 'vue';
     import { useRouter } from 'vue-router';
     import { NDataTable, NIcon, NButton, NFlex,
-        NPagination, useLoadingBar } from 'naive-ui';
-    import { CheckCircle, TimesCircle, Times, Edit, Info } from '@vicons/fa';
+        NPagination, useLoadingBar,
+        NCard, NInput, NSpace } from 'naive-ui';
+    import { CheckCircle, TimesCircle, Times, Edit, Info, Search } from '@vicons/fa';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import api from "@/lib/axios";
 
@@ -23,6 +24,11 @@
         fields: {
             type: Array,
             required: true
+        },
+        filters: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     })
 
@@ -36,6 +42,7 @@
 
     // Data
     const isLoading = ref(false)
+    const search = ref('')
 
     // Aux Methods
     const renderIcon = (icon, props={}) => h(NIcon, null, { default: () => h(icon, props) });
@@ -46,6 +53,9 @@
     const updatePageSize = size => {
         pagination.pageSize = size
         resetResource()
+    }
+    const handleKeyUp = (e) => {
+        if (e.key === 'Enter') getResource()
     }
 
     // For table
@@ -80,10 +90,12 @@
         try {
             isLoading.value = true
             loadingBar.start()
+            console.log(search.value)
             const { data } = await api.get(`${props.endpoint}/`, {
                 params: {
                     limit: pagination.pageSize,
-                    offset: (pagination.page - 1) * pagination.pageSize
+                    offset: (pagination.page - 1) * pagination.pageSize,
+                    search: search.value
                 }
             })
             items.value = objectFields.value.length ? data.results.map( r => itemData(r, objectFields.value) ) : data.results
@@ -154,6 +166,22 @@
     })
 </script>
 <template>
+    <NCard class="my-2" v-if="props.filters">
+        <NSpace justify="space-between">
+            <NInput
+                v-model:value="search"
+                :placeholder="$t('search')"
+                size="large"
+                class="w-full"
+                :passively-activated="true"
+                :loading="isLoading"
+                @keyup="handleKeyUp"
+            />
+            <NButton @click="getResource()">
+                {{ $t('search') }}
+            </NButton>
+        </NSpace>
+    </NCard>
     <NFlex justify="end" class="py-3">
         <NButton @click="GoToDetails(true)">
             {{ $t('tables.add_new', { item: $t(props.model)}) }}

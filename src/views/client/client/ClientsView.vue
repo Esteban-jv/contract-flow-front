@@ -1,6 +1,5 @@
 <script setup>
     import { ref } from 'vue';
-    import { NCard } from 'naive-ui';
     import ResourceViewer from '@/components/ResourceViewer.vue';
 
     const model = ref('client')
@@ -82,12 +81,10 @@
 </script>
 <template>
     <h1 class="text-2xl pb-4">{{ $t('client',2) }}</h1>
-    <NCard class="my-2">
-        
-    </NCard>
     <ResourceViewer
         :endpoint="`/${model}`"
         :model="model"
         :fields="fields"
+        :filters="true"
     />
 </template>

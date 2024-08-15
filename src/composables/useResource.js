@@ -1,6 +1,6 @@
 import { ref, computed, reactive, h } from "vue";
 import { useGlobalHelpers } from "./useGlobalHelpers";
-import { useLoadingBar, NInput, NIcon, NCheckbox, NSelect } from "naive-ui";
+import { useLoadingBar, NFormItem, NInput, NIcon, NCheckbox, NSelect } from "naive-ui";
 import { CheckCircle, TimesCircle, Times, Edit } from '@vicons/fa';
 import api from "@/lib/axios";
 
@@ -136,40 +136,86 @@ export function useResource() {
         })
         return current
     }
+    const getRule = (field, translated, rules, row) => {
+        const rule = {
+            trigger: ['blur','change'],
+            field,
+            validator(rule, value, callback) {
+                // console.log(rule, value, row[field])
+                // return row[field] === 'test';
+                const { regex } = rules
+                const { required } = rules
+                if(regex) {
+                    if(required && !row[field]) {
+                        return new Error($t('forms.field_is_required', { field: $t(translated) }));
+                    }
+                    else if (!row[field].match(regex)) {
+                        return new Error($t('forms.enter_valid_field', { field: $t(translated)}));
+                    }
+                    return true;
+                } else {
+                    if(required) {
+                        if(!row[field]) {
+                            return new Error($t('forms.field_is_required', { field: $t(translated) }));
+                        }
+                    } else {
+                        return true
+                    }
+                }
+            },
+            message: $t('forms.field_is_required', { field: $t(translated) }),
+        }
+        return rule
+    }
     // Render Input Functions
     const inputText = (row, index, f, items, allowAny=true) => {
-        const { field, translated } = f
-        // TODO: Wrapp NInput in a NForm in order to add validations
-        return h(NInput, {
-            value: row[field],
-            placeholder: $t('forms.enter_field', { field: translated ? $t(translated) : '?' }),
-            allowInput: allowAny ? () => true : onlyAllowNumber,
-            class: "my-1",
-            onUpdateValue(v) {
-                items[index][field] = v;
-            }
-        });
+        const { field, translated, rules } = f
+        console.warn(rules, f)
+        const rule = getRule(field, translated, rules, row)
+        return h(NFormItem, {
+            rule,
+            validateTrigger: ['blur', 'change'],
+            showLabel: false
+        }, {
+            default: () => h(NInput, {
+                value: row[field],
+                placeholder: $t('forms.enter_field', { field: translated ? $t(translated) : '?' }),
+                allowInput: allowAny ? () => true : onlyAllowNumber,
+                class: "my-1",
+                onUpdateValue(v) {
+                    items[index][field] = v;
+                }
+            })
+        })
     }
     const checkBox = (row, index, name, items) => {
-        return h(NCheckbox, {
-            defaultChecked: row[name],
-            onUpdateChecked(v) {
-                items[index][name] = v;
-            }
-        });
+        return h(NFormItem, {
+                showLabel: false
+            }, {
+                default: () => h(NCheckbox, {
+                    defaultChecked: row[name],
+                    onUpdateChecked(v) {
+                        items[index][name] = v;
+                    }
+                })
+            })
     }
     const select = (row, index, f, items) => {
         const { field, translated, rules } = f
         const options = rules.options
-        return h(NSelect, {
-            value: row[field],
-            placeholder: $t('forms.select_field', { field: translated ? $t(translated) : '' }),
-            class: "my-1",
-            options,
-            onUpdateValue(v) {
-                items[index][field] = v;
-            }
-        });
+        return h(NFormItem, {
+                    showLabel: false
+                }, {
+                    default: () => h(NSelect, {
+                        value: row[field],
+                        placeholder: $t('forms.select_field', { field: translated ? $t(translated) : '' }),
+                        class: "my-1",
+                        options,
+                        onUpdateValue(v) {
+                            items[index][field] = v;
+                        }
+                    })
+                })
     }
     const renderInput = (row, index, f, items) => {
         const { rules } = f

@@ -108,6 +108,11 @@ const router = createRouter({
           path: '/sales-room',
           name: 'sales-room',
           component: () => import('../views/client/sales/SalesRoomView.vue')
+        },
+        {
+          path: '/system-activity',
+          name: 'system-activity',
+          component: () => import('../views/client/system/SystemActivityView.vue')
         }
       ]
     },

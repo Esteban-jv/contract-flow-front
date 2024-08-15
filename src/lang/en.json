@@ -6,6 +6,7 @@
     "help": "Help",
     "made_by": "Made by",
     "theme": "Theme",
+    "history": "History",
     "pages": {
         "403_title": "403 Unautorized action.",
         "403_msg": "You do not have permission to see this.",
@@ -45,6 +46,7 @@
     "sale":"Sale | Sales",
     "search":"Search",
     "search_by":"Search by",
+    "historical_record":"Historical record | Historical records",
     "tables": {
         "id": "Id",
         "folio": "Folio",

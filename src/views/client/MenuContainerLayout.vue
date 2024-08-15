@@ -7,7 +7,7 @@
         NScrollbar,
         NSelect
     } from 'naive-ui';
-    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends, UserTag, UsersCog,
+    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserClock, UserFriends, UserTag, UsersCog,
       MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell
      } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
@@ -273,7 +273,8 @@
           RouterLink,
           {
             to: {
-              name: partner_permission.model
+              // name: partner_permission.model
+              name: '403'
             }
           },
           { default: () => $t(partner_permission.model, 2) }
@@ -282,6 +283,18 @@
         icon: renderIcon(partner_permission.icon),
         disabled: true
       })
+
+      /* SYSTEM Activity */
+      /* CLIENTS */
+      buildModule({
+        icon: UserClock,
+        permissions: [
+          { model: 'historicaluser', name:'client', icon: UserTag, path:'system-activity', allow: false },
+        ],
+        singular: 'historical_record',
+        plural: 'historical-records',
+      })
+
     }
 
     // Before Mounted

@@ -20,7 +20,7 @@
     const router = useRouter()
 
     const goToMain = () => {
-        router.push({ name: 'login' }) // This will return to another page if user is logged in
+        router.push({ name: 'dashboard' }) // This will return to another page if user is logged in
     }
 </script>
 <template>

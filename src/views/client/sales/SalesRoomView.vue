@@ -1,5 +1,6 @@
 <script setup>
     import { ref } from 'vue';
+    import { format, startOfHour, addHours } from 'date-fns';
     import useLocationMap from '@/composables/useLocationMap';
     import ResourceCreator from '@/components/ResourceCreator.vue'
 
@@ -40,7 +41,7 @@
             rules: {
                 type: Date,
                 required: false,
-                default: 1183135260000
+                default: format(addHours(startOfHour(new Date()), 1), 'dd/MM/yyyy - HH:mm') //start of next hour
             },
             table: {
                 align: 'center'

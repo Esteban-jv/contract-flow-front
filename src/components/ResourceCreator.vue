@@ -36,15 +36,7 @@
         }
     })
 
-    const format= ref("yyyy/MM/dd - HH:mm")
-    const handleDateUpdate = (value, field) => {
-        console.log(value, field, form.value)
-        if (value) {
-            const formattedDate = formatDate(new Date(value), format.value)
-            console.warn(formattedDate)
-            form.value[field] = formattedDate
-        }
-    }
+    
     // States and Composables
     const { $t, $toast, $toastError, $can } = useGlobalHelpers()
     const { zoom, pin } = useLocationMap()
@@ -389,10 +381,13 @@
                             />
                             <NDatePicker
                                 v-if="field.rules.type === Date"
-                                v-model:value="form[field.field]"
+                                v-model:formatted-value="form[field.field]"
                                 :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
+                                format="dd/MM/yyyy - HH:mm"
+                                value-format="dd/MM/yyyy - HH:mm"
                                 class="w-full"
                                 type="datetime"
+                                clearable
                             />
                             <NTransfer
                                 v-if="field.rules.type === 'Transfer'"

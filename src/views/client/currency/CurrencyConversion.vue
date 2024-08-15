@@ -23,9 +23,13 @@
             translated: "tables.operator",
             span: 8,
             rules: {
-                type: String,
+                type: 'Select',
                 required: true,
-                default: null
+                default: null,
+                options: [
+                    { value: '*', label: '*' },
+                    { value: '/', label: '/' }
+                ]
             },
             table: {
                 align: 'center'

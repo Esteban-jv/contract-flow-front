@@ -38,7 +38,8 @@ export const useAuth = defineStore('useAuth', () => {
             localStorage.setItem('AUTH_TOKEN',token)
             localStorage.setItem('USER',JSON.stringify({
                 first_name: user.first_name,
-                last_name: user.last_name
+                last_name: user.last_name,
+                username: user.username,
             }))
 
             groups.forEach(g => {

@@ -3,8 +3,9 @@
     import { RouterLink, useRoute, useRouter } from 'vue-router';
     import {
         NFlex, NLayout, NLayoutSider, NMenu, NIcon, // Sidemenu
-        NSplit, NAvatar, NSwitch, NDropdown, NLayoutHeader, // Header
-        NScrollbar
+        NSplit, NAvatar, NDropdown, NLayoutHeader, NText, // Header
+        NScrollbar,
+        NSelect
     } from 'naive-ui';
     import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserLock, UserFriends, UserTag, UsersCog,
       MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell
@@ -14,13 +15,13 @@
     import Footer from '@/components/Footer.vue'
     import { useAuth } from '@/stores/useAuth';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
+    import { i18n } from '@/plugins/i18n';
 
     // DATA
     const { $can, $t } = useGlobalHelpers()
     const preferences = usePreferences()
     const route = useRoute()
     const router = useRouter()
-    const auth = useAuth()
 
     const user = ref({})
     const collapsed = ref(false)
@@ -33,18 +34,53 @@
     const userLetters = computed(() => {
       return Array.from(user.value.first_name || '')[0] + Array.from(user.value.last_name || '')[0]
     })
+    const avatar = computed(() => {
+      return user.profile_picture ? 
+      h(NAvatar, {
+        round: true,
+        style: "margin-right: 12px;",
+        src: user.profile_picture,
+        fallbackSrc: "https://07akioni.oss-cn-beijing.aliyuncs.com/demo1.JPG"
+      })
+        :
+      h(NAvatar, {
+        round: true,
+        style: "margin-right: 12px;",
+        class: "bg-green-400 dark:bg-green-800",
+        },
+        { default: () => userLetters.value })
+    })
 
     // Menu Data
     const menuOptions = ref([])
     const logout = async () => {
         await ClientAuthApi.logout()
         localStorage.removeItem('AUTH_TOKEN')
+        localStorage.removeItem('USER')
+        localStorage.removeItem('P')
         router.push({ name: 'login' })
+    }
+    function renderCustomHeader() {
+      return h(
+        "div", { style: "display: flex; align-items: center; padding: 8px 12px;" },
+        [
+          avatar.value,
+          h("div", null, [
+            h("div", null, [ h(NText, { depth: 2 }, { default: () => userName.value }) ]),
+            h("div", { style: "font-size: 12px;" }, [ h(NText, { depth: 3 }, { default: () => `${user.value.username}` }) ])
+          ])
+        ]
+      );
     }
     const userOptions = ref([
       {
-        label: userName,
-        key: "username",
+        key: "header",
+        type: "render",
+        render: renderCustomHeader
+      },
+      {
+        key: "header-divider",
+        type: "divider"
       },
       {
         label: () => h(
@@ -60,6 +96,30 @@
           { default: () => $t('dashboard') }
         ),
         key: "dashboard",
+      },
+      {
+        label: 'theme',
+        children: [
+          {
+            label: 'light',
+            key: 'light',
+          },
+          {
+            label: 'dark',
+            key: 'dark',
+          }
+        ],
+        key: 'theme'
+      },
+      {
+        label: i18n.global.locale || 'xdd',
+        children : i18n.global.availableLocales.map( locale => {
+          return {
+            label: locale,
+            key: locale,
+          }
+        }),
+        key: "settings",
       },
       {
         label: 'logout',
@@ -84,54 +144,31 @@
         key: "dashboard",
       },
     ])
-   
-    // TODO Improve this part of header
-    /*const userOptions = ref([
-      {
-        label: () => h(
-          NAvatar, {
-            src: 'https://cdn4.iconfinder.com/data/icons/user-people-2/48/6-512.png'
-          }
-        ),
-        key: 'user',
-        children: [
-            {
-            label: userName,
-            key: "username",
-          },
-          {
-            label: () => h(
-              RouterLink,
-              {
-                to: {
-                  name: "dashboard",
-                  // params: {
-                    // lang: "en-US"
-                  // }
-                }
-              },
-              { default: () => $t('dashboard') }
-            ),
-            key: "dashboard",
-          },
-          {
-            label: 'logout',
-            key: "logout",
-          }
-        ]
-      },
-      {
-        label: () => h(
-          NSwitch, {
-            "v-model:value": preferences.switchTheme
-          }
-        ),
-        key: 'theme'
-      }
-    ])*/
+
+    // Handle User Options
     const handleSelect = async key => {
-      if(key === 'logout') {
-        await logout()
+      const { availableLocales } = i18n.global
+      // console.warn(key, availableLocales)
+      switch (key) {
+        case 'logout':
+          await logout()
+          break;
+        case 'light':
+          console.log('light')
+          preferences.theme = 'light'
+          preferences.switchTheme = false
+          break;
+        case 'dark':
+          console.log('dark')
+          preferences.theme = 'dark'
+          preferences.switchTheme = true
+          break;
+        default:
+          if (availableLocales.includes(key)) {
+            i18n.global.locale.value = key
+            preferences.setLocaleInStorage()
+          }
+          break;
       }
     }
     function renderIcon(icon) {
@@ -269,26 +306,10 @@
         />
       </template>
       <template #2>
-        <!-- <NMenu
-          mode="horizontal"
-          :options="userOptions"
-          v-model:value="currentRoute"
-          responsive
-        >
-
-        </NMenu> -->
-        <NFlex justify="space-between" class="px-2">
-          <NDropdown :options="userOptions" @select="handleSelect">
+        <NFlex justify="end" class="px-2">
+          <NDropdown :options="userOptions" @select="handleSelect" trigger="click">
             <NAvatar class="my-1">{{ userLetters }}</NAvatar>
           </NDropdown>
-          <NSwitch v-model:value="preferences.switchTheme" class="my-2">
-            <template #icon>
-              {{ preferences.theme === 'dark' ? '🌞' : '🌛' }}
-            </template>
-          </NSwitch>
-          <select class="p-1 my-2 h-full bg-white  dark:bg-zinc-900" v-model="$i18n.locale" id="locale" @change="preferences.setLocaleInStorage()">
-            <option v-for="locale in $i18n.availableLocales" :value="locale">{{ locale }}</option>
-          </select>
         </NFlex>
       </template>
     </NSplit>

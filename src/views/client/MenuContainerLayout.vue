@@ -98,7 +98,7 @@
         key: "dashboard",
       },
       {
-        label: 'theme',
+        label: $t('theme'),
         children: [
           {
             label: 'light',

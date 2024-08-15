@@ -5,6 +5,7 @@
     "about": "About",
     "help": "Help",
     "made_by": "Made by",
+    "theme": "Theme",
     "pages": {
         "403_title": "403 Unautorized action.",
         "403_msg": "You do not have permission to see this.",

@@ -91,6 +91,16 @@ export function useResource() {
         })
         return rules
     }
+    const makeRulesArray = async fields => {
+        const rules = []
+        fields.forEach(async f => {
+            console.warn(f)
+            // Get rules
+            rules = await makeRules(f.fields)
+        })
+        console.log(rules)
+        return rules
+    }
 
     const updatePage = (page, endpoint) => {
         pagination.page = page
@@ -127,11 +137,13 @@ export function useResource() {
         return current
     }
     // Render Input Functions
-    const inputText = (row, index, f, items) => {
+    const inputText = (row, index, f, items, allowAny=true) => {
         const { field, translated } = f
+        // TODO: Wrapp NInput in a NForm in order to add validations
         return h(NInput, {
             value: row[field],
             placeholder: $t('forms.enter_field', { field: translated ? $t(translated) : '?' }),
+            allowInput: allowAny ? () => true : onlyAllowNumber,
             class: "my-1",
             onUpdateValue(v) {
                 items[index][field] = v;
@@ -164,6 +176,8 @@ export function useResource() {
         switch (rules.type) {
             case String:
                 return inputText(row, index, f, items)
+            case Number:
+                return inputText(row, index, f, items, false)
             case Boolean:
                 return checkBox(row, index, f.field, items)
             case 'Select':
@@ -183,7 +197,7 @@ export function useResource() {
                 }
             })
             items.value = data.results
-            console.log(items.value)
+            // console.log(items.value)
             pagination.itemCount = data.count
             pagination.pageCount = Math.ceil(data.count / pagination.pageSize)
             loadingBar.finish()
@@ -290,6 +304,7 @@ export function useResource() {
         mapEditableColumns,
         mapGroupedEditableColumns,
 
-        makeRules
+        makeRules,
+        makeRulesArray
     }
 }

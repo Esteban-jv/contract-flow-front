@@ -1,7 +1,7 @@
 <script setup>
     import { ref, computed, onMounted, h } from 'vue';
     import { useRouter } from 'vue-router';
-    import { NDataTable, NButton, NFlex, NCard, NGrid, NInput, NGi, NSelect, NFormItem } from 'naive-ui';
+    import { NDataTable, NButton, NFlex, NCard, NGrid, NInput, NGi, NSelect, NFormItem, NAlert } from 'naive-ui';
     import { useLoadingBar } from 'naive-ui';
     import { Trash } from '@vicons/fa';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
@@ -159,8 +159,25 @@
     })
 
     const items = ref([])
+    const errorsMsg = ref('')
 
     // Methods
+    const displayErrors = error => {
+        errorsMsg.value = ''
+        if(error.response) {
+            console.error(error.response)
+            const { data } = error.response
+            if(data.length) {
+                data.forEach( (e, i) => {
+                    errorsMsg.value += `<b>${i+1}</b>: \n <br>`
+                    Object.entries(e).forEach( ([key, value]) => {
+                        errorsMsg.value += `${key}: ${value} \n <br>`
+                    })
+                })
+            }
+        }
+    }
+    const clearMsg = () => errorsMsg.value = ''
     const addNewRow = (counter = 1) => {
         for(var i = 1; i<=counter; i++) {
             items.value.push({
@@ -191,7 +208,7 @@
             loadingBar.finish()
             router.push({ name: prevPage.value })
         } catch (error) {
-            console.error(error)
+            displayErrors(error)
             $toastError(error)
             loadingBar.error()
         } finally {
@@ -231,6 +248,7 @@
     onMounted(async () => {
         LanguageOptions.value = await resources.getFromApi("language")
         SalesRoomeOptions.value = await resources.getFromApi("hostess-sales-room")
+        // await resources.makeRulesArray(fields.value)
     })
 </script>
 <template>
@@ -279,6 +297,9 @@
             </NFlex>
         </template>
     </NCard>
+    <NAlert title="Error Text" type="error" class="mb-2" v-if="errorsMsg" :on-close="() => clearMsg">
+        <p v-if="errorsMsg" v-html="errorsMsg"></p>
+    </NAlert>
     <NDataTable
         :columns="computedColumns"
         :data="items"

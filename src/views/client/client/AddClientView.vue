@@ -123,6 +123,21 @@
             table: {
                 align: 'left'
             }
+        },
+        {
+            field: "sales_room",
+            translated: "sale_room",
+            span: 8,
+            rules: {
+                type: 'Select',
+                required: false,
+                default: null,
+                options: [],
+                optionsEndpoint : "sales-room"
+            },
+            table: {
+                align: 'left'
+            }
         }
     ])
 </script>

@@ -5,7 +5,7 @@
 
     const model = ref('client')
     const fields = ref([
-    {
+        {
             field: "sales_room",
             translated: "sale_room",
             rules: {

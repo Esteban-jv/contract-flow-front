@@ -133,13 +133,13 @@ import DeleteButton from './DeleteButton.vue';
         // Add actions column to a table
         const can_edit = $can('change',permission.value)
         const can_delete = $can('delete',permission.value)
-        console.log(can_edit, can_delete)
-        console.log(formRules.value)
+        // console.log(can_edit, can_delete)
+        // console.log(formRules.value)
     })
 
     // Submit method
     const saveChanges = () => {
-        console.log(formRef.value, form.value)
+        // console.log(formRef.value, form.value)
         formRef.value?.validate(
             errors => {
                 if(!errors) {
@@ -167,7 +167,7 @@ import DeleteButton from './DeleteButton.vue';
             loadingBar.finish()
             router.push({ name: prevPage.value })
         } catch (err) {
-            console.warn(err)
+            // console.warn(err)
             loadingBar.error()
             $toastError(err)
         } finally {

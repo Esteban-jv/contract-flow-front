@@ -6,7 +6,7 @@ const host = () => getDomain().split('.')
   
 export default {
     getDomain,
-    isAdmin: () => host().length === 1,
+    isAdmin: () => host().length === import.meta.env.VITE_API_DOMAIN.split('.').length,
     getSubdomain: () => host()[0]
 }
   

@@ -360,7 +360,7 @@
                     <RouterView />
                   </div>
                 </div>
-                <Footer class="footer mt-auto" />
+                <!-- <Footer class="footer mt-auto" /> -->
               </NScrollbar>
           </NLayout>
       </NLayout>

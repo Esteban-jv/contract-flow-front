@@ -39,6 +39,7 @@
         // api get from history
         console.log("Gonna consult here", row)
         const { data } = await api.get(`historical-${props.endpoint}/${row.id}/`)
+        historyRecords.value = data.results
         console.log(data)
     }
     const closeModal = () => {
@@ -74,6 +75,7 @@
     // For table
     const columns = ref([])
     const items = ref([])
+    const historyRecords = ref([])
     // For pagination
     const pageSizes = ref([5, 10, 20, 50])
     const pagination = reactive({
@@ -126,7 +128,7 @@
         await getResource()
     }
 
-    const computedColumns = computed( () => {
+    const mapColumns = withOptions => {
         const cols = props.fields.map((f) => {
             // Get field
             const name = f.field
@@ -147,7 +149,7 @@
         })
 
         // Add actions column to a table
-        if($can('change',permission.value)) {
+        if($can('change',permission.value) && withOptions) {
             cols.push({
                 align: 'center',
                 title: $t('history'),
@@ -169,6 +171,18 @@
         }
 
         return cols
+    }
+
+    const computedColumns = computed( () => {
+        return mapColumns(true)
+    })
+    const computedHistoryColumns = computed( () => {
+        return mapColumns(false)
+    })
+
+    const computedHistoryRecords = computed(() => {
+        return historyRecords.value.map( r => itemData(r, objectFields.value) )
+        // return historyRecords.value
     })
 
     onMounted(async () => {
@@ -193,8 +207,10 @@
         </NSpace>
     </NCard>
     <NModal
+            class="min-w-[700px] overflow-auto"
             v-model:show="showModal"
             :mask-closable="false"
+            size="extra-large"
         >
             <NCard
                 style="width: 600px; max-width: 90%;"
@@ -212,6 +228,13 @@
                     </NIcon>
                 </NButton>
             </template>
+            <!-- <NDataTable
+                v-if="historyRecords.length"
+                :bordered="false"
+                :single-line="false"
+                single-column
+                :columns="computedHistoryColumns"
+                :data="computedHistoryRecords"></NDataTable> -->
             </NCard>
     </NModal>
     <div class="w-full">

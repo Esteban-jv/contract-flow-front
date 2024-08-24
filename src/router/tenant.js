@@ -95,7 +95,7 @@ const router = createRouter({
         },
         {
           path: '/partner/:id',
-          name: 'add-partner',
+          name: 'edit-partner',
           component: () => import('../views/client/partner/AddPartnerView.vue')
         },
         /* SALES */

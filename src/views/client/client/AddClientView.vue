@@ -187,7 +187,7 @@
                     resource.createOrUpdateResource(
                         'partner',
                         partnerForm.value,
-                        { name: 'add-partner', params: { id: id.value } }
+                        { name: 'edit-partner', params: { id: id.value } }
                     )
                 } else {
                     $toast.open({
@@ -197,7 +197,7 @@
                 }
             }
         )
-        // router.push({ name: 'add-partner', params: { id: route.params.id } })
+        // router.push({ name: 'edit-partner', params: { id: route.params.id } })
     }
 
     onMounted(async () => {

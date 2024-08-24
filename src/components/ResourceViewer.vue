@@ -25,6 +25,11 @@
             type: Array,
             required: true
         },
+        idEdit: {
+            type: String,
+            required: false,
+            default: null
+        },
         filters: {
             type: Boolean,
             required: false,
@@ -69,7 +74,7 @@
     })
 
     const edit = async row => {
-        router.push({ name: `edit-${props.model}`, params: { id: row.id }})
+        router.push({ name: `edit-${props.model}`, params: { id: props.idEdit ? row[props.idEdit].id : row.id }})
     }
     const GoToDetails = async () => {
         router.push({ name: `add-${props.model}`})

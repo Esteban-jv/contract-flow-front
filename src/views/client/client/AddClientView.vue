@@ -1,16 +1,20 @@
 <script setup>
-    import { ref, computed } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
     import { NFlex, NPopconfirm, NButton, NIcon, NForm, NGrid, NFormItemGi, NSelect, NInput } from 'naive-ui';
     import { useRouter, useRoute } from 'vue-router';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import { UserCheck } from '@vicons/fa';
     import ObjectForm from '@/components/ObjectForm.vue';
+    import { useResource } from '@/composables/useResource';
 
-    const { $t } = useGlobalHelpers()
+    const { $t, $toast } = useGlobalHelpers()
+    const resource = useResource()
     const router = useRouter()
     const route = useRoute()
     const model = ref('client')
 
+    const id = computed(() => route.params.id ?? null)
+    const formRef = ref(null)
     const MaritalStatusOptions = ref([
         { label: $t("marital_status.single"), value: 2 },
         { label: $t("marital_status.married"), value: 3 },
@@ -151,15 +155,16 @@
     const partnerForm = ref({
         nationality: null,
         id_type: null,
-        official_id: null
+        official_id: null,
+        client: null
     })
     const partnerFormRules = ref(
         {
             nationality: [
-                { required: true, message: $t('forms.field_is_required', { field: $t('tables.nationality') }), trigger: 'blur' }
+                { type: "number",  required: true, message: $t('forms.field_is_required', { field: $t('tables.nationality') }), trigger: 'blur' }
             ],
             id_type: [
-                { required: true, message: $t('forms.field_is_required', { field: $t('tables.id_type') }), trigger: 'blur' }
+                { type: "number", required: true, message: $t('forms.field_is_required', { field: $t('tables.id_type') }), trigger: 'blur' }
             ],
             official_id: [
                 { required: true, message: $t('forms.field_is_required', { field: $t('tables.official_id') }), trigger: 'blur' }
@@ -169,39 +174,57 @@
     const nationalities = ref([])
     const idTypes = ref([])
 
-    const nationalitiesOptions = computed(() => {
-        return nationalities.value.map(n => ({ label: n.name, value: n.id }))
-    })
-    const idTypesOptions = computed(() => {
-        return idTypes.value.map(i => ({ label: i.name, value: i.id }))
-    })
-
-    
-
-    const goToAddPartner = () => {
-        // In order to store the partner we need to know for sure: 
-        router.push({ name: 'add-partner', params: { id: route.params.id } })
+    const goToAddPartner = e => {
+        e.preventDefault()
+        console.log("Going to add partner")
+        // Validate form by ref
+        formRef.value?.validate(
+            errors => {
+                if(!errors) {
+                    // Create partner
+                    console.log('Creating partner')
+                    partnerForm.value.client = id.value
+                    resource.createOrUpdateResource(
+                        'partner',
+                        partnerForm.value,
+                        { name: 'add-partner', params: { id: id.value } }
+                    )
+                } else {
+                    $toast.open({
+                        message: $t('forms.check_all_fields_msg'),
+                        type: 'error'
+                    })
+                }
+            }
+        )
+        // router.push({ name: 'add-partner', params: { id: route.params.id } })
     }
+
+    onMounted(async () => {
+        // Fetch filters
+        nationalities.value = await resource.getFromApi('nationality')
+        idTypes.value = await resource.getFromApi('idtype')
+
+        console.log('nationalities', nationalities.value, idTypes.value)
+    })
 </script>
 <template>
     <!-- Animate the next form to esae in -->
-    <Transition name="slide-fade">
+    <Transition name="slide-fade" v-if="id">
         <NForm v-if="willAddToPartner" ref="formRef" :model="partnerForm" :rules="partnerFormRules" label-placement="top">
             <NGrid :span="24" :x-gap="11" item-responsive responsive="screen">
                 <NFormItemGi :label="$t('tables.nationality')" path="nationality" :span=8>
                     <NSelect
-                        name="nationality"
                         v-model:value="partnerForm.nationality"
                         :placeholder="$t('forms.enter_field', { field: $t('tables.nationality')})"
-                        :options="nationalitiesOptions"
+                        :options="nationalities"
                     />
                 </NFormItemGi>
                 <NFormItemGi :label="$t('tables.id_type')" path="id_type" :span="8">
                     <NSelect
-                        name="id_type"
                         v-model:value="partnerForm.id_type"
                         :placeholder="$t('forms.enter_field', { field: $t('tables.id_type')})"
-                        :options="idTypesOptions"
+                        :options="idTypes"
                     />
                 </NFormItemGi>
                 <NFormItemGi :label="$t('tables.official_id')" path="official_id" :span="8">
@@ -214,7 +237,7 @@
             </NGrid>
         </NForm>
     </Transition>
-    <NFlex justify="end" class="mb-4">
+    <NFlex justify="end" class="mb-4" v-if="id">
         <NButton
             v-if="!willAddToPartner"
             type="warning"
@@ -241,7 +264,7 @@
             title="{{ $t('partners.make_partner') }}"
             :positive-text="$t('actions.confirm')"
             :negative-text="$t('actions.cancel')"
-            @positive-click="goToAddPartner()"
+            @positive-click="goToAddPartner"
             >
                 <template #trigger>
                     <NButton

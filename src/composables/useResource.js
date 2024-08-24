@@ -1,4 +1,5 @@
 import { ref, computed, reactive, h } from "vue";
+import { useRouter } from "vue-router";
 import { useGlobalHelpers } from "./useGlobalHelpers";
 import { useLoadingBar, NFormItem, NInput, NIcon, NCheckbox, NSelect } from "naive-ui";
 import { CheckCircle, TimesCircle, Times, Edit } from '@vicons/fa';
@@ -8,6 +9,7 @@ export function useResource() {
     // Helpers
     const { $t, $toast, $toastError } = useGlobalHelpers()
     const loadingBar = useLoadingBar()
+    const router = useRouter()
     // Data
     const isLoading = ref(false)
     // For pagination
@@ -346,6 +348,28 @@ export function useResource() {
         // console.error(fieldColumns)
         return fieldColumns
     }
+    const createOrUpdateResource = async (endpoint, form, nextPageObj) => {
+        try {
+            isLoading.value = true
+            loadingBar.start()
+            if (form.id) {
+                const { data } = await api.put(`${endpoint}/${form.id}/`,form)
+                console.log("Updated", data)
+            } else {
+                const { data } = await api.post(`${endpoint}/`,form)
+                console.log("Created", data)
+            }
+            loadingBar.finish()
+            console.log(nextPageObj)
+            router.push(nextPageObj)
+        } catch (err) {
+            // console.warn(err)
+            loadingBar.error()
+            $toastError(err)
+        } finally {
+            isLoading.value = false
+        }
+    }
 
     
     return {
@@ -373,6 +397,8 @@ export function useResource() {
         mapGroupedEditableColumns,
 
         makeRules,
-        makeRulesArray
+        makeRulesArray,
+
+        createOrUpdateResource
     }
 }

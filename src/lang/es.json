@@ -69,6 +69,7 @@
         "language":"Idioma | Idiomas",
         "nationality":"Nacionalidad | Nacionalidades",
         "id_type":"Identificación oficial | Identificaciones oficiales",
+        "official_id":"Identificación No. | Identificaciones No.",
         "partner":"Socio | Socios",
         "code": "Código",
         "currency":"Divisa | Divisas",
@@ -103,5 +104,14 @@
     "messages": {
         "success": "Está hecho.",
         "deleted_successfully": "se eliminó {obj} correctamente."
+    },
+    "partners": {
+        "make_partner": "Hacer socio",
+        "sure_of_making_partner": "¿Estás seguro de hacer socio a este cliente?",
+        "client_data": "Datos del cliente",
+        "payment_data": "Datos de pago",
+        "contact_data": "Datos de contacto",
+        "address_data": "Datos de dirección",
+        "beneficiary_data": "Datos del beneficiario"
     }
 }

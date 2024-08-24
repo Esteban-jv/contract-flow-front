@@ -7,7 +7,7 @@
         NScrollbar,
         NSelect
     } from 'naive-ui';
-    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserClock, UserFriends, UserTag, UsersCog,
+    import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserClock, UserFriends, UserTag, UserPlus, UsersCog, UserCheck,
       MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell
      } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
@@ -259,7 +259,7 @@
         icon: UsersCog,
         permissions: [
           { model: 'client', name:'client', icon: UserTag, path:'clients', allow: false },
-          { model: 'client', name:'add_client', icon: UserTag, path:'add-client', allow: false},
+          { model: 'client', name:'add_client', icon: UserPlus, path:'add-client', allow: false},
           { model: 'client', name:'add_massive_client', icon: UserFriends, path:'clients-massive', allow: false},
         ],
         singular: 'client',
@@ -267,21 +267,19 @@
       })
 
       /* PARTNER */
-      const partner_permission = { model: 'partner', icon: UserFriends, path:'', allow: false }
+      const partner_permission = { model: 'partner', icon: UserCheck, path:'', allow: false }
       menuOptions.value.push({
         label: () => h(
           RouterLink,
           {
             to: {
-              // name: partner_permission.model
-              name: '403'
+              name: partner_permission.model
             }
           },
           { default: () => $t(partner_permission.model, 2) }
         ),
         key: partner_permission.model,
-        icon: renderIcon(partner_permission.icon),
-        disabled: true
+        icon: renderIcon(partner_permission.icon)
       })
 
       /* SYSTEM Activity */

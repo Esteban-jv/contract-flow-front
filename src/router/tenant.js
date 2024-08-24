@@ -66,22 +66,6 @@ const router = createRouter({
           name: 'currency-conversion',
           component: () => import('../views/client/currency/CurrencyConversion.vue')
         },
-        // TODO: partner
-        {
-          path: '/partner',
-          name: 'partner',
-          component: () => import('../views/client/partner/PartnerView.vue')
-        },
-        {
-          path: '/add-partner',
-          name: 'add-partner',
-          component: () => import('../views/client/partner/AddPartnerView.vue')
-        },
-        {
-          path: '/edit-partner/:id',
-          name: 'edit-partner',
-          component: () => import('../views/client/partner/AddPartnerView.vue')
-        },
         /* CLIENTS */
         {
           path: '/clients',
@@ -102,6 +86,17 @@ const router = createRouter({
           path: '/clients-massive',
           name: 'clients-massive',
           component: () => import('../views/client/client/MassiveClientsView.vue')
+        },
+        // PARTNER
+        {
+          path: '/partners',
+          name: 'partner',
+          component: () => import('../views/client/partner/PartnerView.vue')
+        },
+        {
+          path: '/partner/:id',
+          name: 'add-partner',
+          component: () => import('../views/client/partner/AddPartnerView.vue')
         },
         /* SALES */
         {

@@ -68,6 +68,7 @@
         "language":"Language | Languages",
         "nationality":"Nationality | Nationalities",
         "id_type":"Oficial ID | Oficial IDs",
+        "official_id":"Official ID No. | Official IDs No.",
         "partner":"Partner | Partners",
         "code": "Code",
         "currency":"Currency | Currencies",
@@ -102,5 +103,14 @@
     "messages": {
         "success": "It's done.",
         "deleted_successfully": "{obj} deleted successfully."
+    },
+    "partners": {
+        "make_partner": "Make partner",
+        "sure_of_making_partner": "Are you sure of making partner this client?",
+        "client_data": "Client data",
+        "payment_data": "Payment data",
+        "contact_data": "Contact data",
+        "address_data": "Address data",
+        "beneficiary_data": "Beneficiary data"
     }
 }

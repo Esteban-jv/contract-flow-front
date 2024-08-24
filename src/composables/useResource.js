@@ -232,6 +232,28 @@ export function useResource() {
                 return inputText(row, index, f, items)
         }
     }
+    const retrieveResourceById = async (endpoint, id) => {
+        try {
+            isLoading.value = true
+            loadingBar.start()
+            const { data } = await api.get(`${endpoint}/${id}/`, {
+                params: {
+                    limit: pagination.pageSize,
+                    offset: (pagination.page - 1) * pagination.pageSize
+                }
+            })
+            console.error(endpoint, id, data)
+            loadingBar.finish()
+            return data
+        } catch (err) {
+            // console.error(err)
+            loadingBar.error()
+            $toast.open({
+                message: $t('forms.something_went_wrong'),
+                type: 'error'
+            })
+        } finally { isLoading.value = false }
+    }
     const getResource = async endpoint => {
         try {
             isLoading.value = true
@@ -345,7 +367,7 @@ export function useResource() {
         itemData,
         itemTagsData,
         getFromApi,
-        getResource,
+        retrieveResourceById,
         mapColumns,
         mapEditableColumns,
         mapGroupedEditableColumns,

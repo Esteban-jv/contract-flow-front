@@ -268,7 +268,6 @@
         }
     ])
 
-    const phoneId = ref(null)
     const phoneModel = ref('phone')
     const phoneFields = ref([
         {
@@ -347,6 +346,38 @@
             }
         }
     ])
+    const emailModel = ref('email')
+    const emailFields = ref([
+        {
+            field: "email",
+            translated: "tables.email",
+            span: 23,
+            rules: {
+                type: String,
+                required: true,
+                regex: /^\S+@\S+\.\S+$/,
+                default: ""
+            },
+            table: {
+                align: 'left',
+                width: '70%',
+            }
+        },
+        {
+            field: "partner",
+            translated: " ",
+            span: 1,
+            rules: {
+                type: "Hidden",
+                required: true,
+                default: id.value
+            },
+            table: {
+                align: 'left',
+                width: '0%',
+            }
+        }
+    ])
 
     const computedMessage = computed(() => {
         console.log("Computed!")
@@ -379,6 +410,12 @@
                 :endpoint="`/${phoneModel}`"
                 :model="phoneModel"
                 :fields="phoneFields"
+            />
+            <ResourceCreator
+                :filters="{ partner: id }"
+                :endpoint="`/${emailModel}`"
+                :model="emailModel"
+                :fields="emailFields"
             />
         </NTabPane>
         <NTabPane title="address_data" :name="$t('partners.address_data')" display-directive="show:lazy">

@@ -22,6 +22,11 @@ import DeleteButton from './DeleteButton.vue';
             type: String,
             required: true
         },
+        id: {
+            type: [String, Number],
+            required: false,
+            default: null
+        },
         permissionModel: {
             type: String,
             required: false
@@ -40,7 +45,7 @@ import DeleteButton from './DeleteButton.vue';
         }
     })
 
-    const id = computed(() => route.params.id ?? null )
+    const id = computed(() => props.id ?? null )
     const permission = computed(() => props.permissionModel ?? props.model)
     const prevPage = computed(() => props.prevPage ?? props.model)
     const disableEdit = computed(() => id.value && !$can('change',permission.value) )
@@ -87,7 +92,7 @@ import DeleteButton from './DeleteButton.vue';
     }
 
     onMounted(async () => {
-        const { id } = route.params
+        const { id } = props
         if(id) {
             getResource(id)
         }

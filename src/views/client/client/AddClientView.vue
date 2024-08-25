@@ -288,6 +288,7 @@
         :model="model"
         :fields="fields"
         prev-page="clients"
+        :id="id"
     />
 </template>
 <style scoped>

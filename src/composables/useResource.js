@@ -238,13 +238,12 @@ export function useResource() {
         try {
             isLoading.value = true
             loadingBar.start()
-            const { data } = await api.get(`${endpoint}/${id}/`, {
+            const data = await api.get(`${endpoint}/${id}/`, {
                 params: {
                     limit: pagination.pageSize,
                     offset: (pagination.page - 1) * pagination.pageSize
                 }
             })
-            console.error(endpoint, id, data)
             loadingBar.finish()
             return data
         } catch (err) {
@@ -289,7 +288,7 @@ export function useResource() {
 
             // Set Table Columns
             var current = {
-                align: f.table.align,
+                align: f.table.align ?? 'left',
                 title: $t(translated),
                 key: name,
                 width: f.table.width || '15%',

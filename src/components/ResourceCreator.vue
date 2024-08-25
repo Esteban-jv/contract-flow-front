@@ -18,6 +18,11 @@
             type: String,
             required: true
         },
+        filters: {
+            type: Object,
+            required: false,
+            default: () => ({})
+        },
         permissionModel: {
             type: String,
             required: false
@@ -66,8 +71,7 @@
     // For table
     // const columns = ref([])
     const columns = computed(() => {
-        const cols = resource.mapColumns(props.fields)
-        console.log(permission.value)
+        const cols = resource.mapColumns(props.fields.filter(f => f.rules.type !== 'Hidden'))
         // Now add Editable columns
         const can_edit = $can('change',permission.value)
         const can_delete = $can('delete',permission.value)
@@ -167,7 +171,6 @@
                 const name = f.field
                 // Set ref of form
                 form.value[name] = f.rules.default
-                console.log(form.value[name])
             })
         }
         if(!m) {
@@ -220,12 +223,13 @@
         try {
             isLoading.value = true
             loadingBar.start()
-            const { data } = await api.get(`${props.endpoint}/`, {
-                params: {
-                    limit: pagination.pageSize,
-                    offset: (pagination.page - 1) * pagination.pageSize
-                }
-            })
+            // We add props.filters to the search
+            const params = {
+                ...props.filters,
+                limit: pagination.pageSize,
+                offset: (pagination.page - 1) * pagination.pageSize,
+            }
+            const { data } = await api.get(`${props.endpoint}/`, { params })
             items.value = handleItems(data.results)
             pagination.itemCount = data.count
             pagination.pageCount = Math.ceil(data.count / pagination.pageSize)
@@ -287,7 +291,7 @@
         const rules = await resource.makeRules(props.fields)
         formRules.value = rules
         // console.log(rules)
-        console.log(formRules.value['hostesses'])
+        // console.log(formRules.value['hostesses'])
     })
 
     const generalOptions = ref(["groode", "veli good", "emazing", "lidiculous"].map(

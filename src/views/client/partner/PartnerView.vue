@@ -63,6 +63,5 @@
         :endpoint="`/${model}`"
         :model="model"
         :fields="fields"
-        idEdit="client"
     />
 </template>

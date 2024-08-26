@@ -102,7 +102,8 @@
         "card_name": "Nombre en la tarjeta",
         "card_type": "Tipo de tarjeta",
         "expiration_date": "Fecha de expiración",
-        "cvv": "CVV"
+        "cvv": "CVV",
+        "main": "Principal"
     },
     "marital_status": {
         "single":"Soltero",
@@ -110,6 +111,10 @@
         "divorced":"Divorciado",
         "widowed":"Viudo",
         "other":"Otro"
+    },
+    "card_types": {
+        "credit":"Crédito",
+        "debit":"Débito"
     },
     "actions": {
         "save": "Guardar",

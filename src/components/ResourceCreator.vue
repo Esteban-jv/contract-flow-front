@@ -71,7 +71,7 @@
     // For table
     // const columns = ref([])
     const columns = computed(() => {
-        const cols = resource.mapColumns(props.fields.filter(f => f.rules.type !== 'Hidden'))
+        const cols = resource.mapColumns(props.fields.filter(f => (f.rules.type !== 'Hidden' && f.table.width !== false)))
         // Now add Editable columns
         const can_edit = $can('change',permission.value)
         const can_delete = $can('delete',permission.value)
@@ -371,9 +371,21 @@
                                 v-model:value="form[field.field]"
                                 :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                             />
+                            <!-- credit cards will display a 7 years options -->
+                            <NDatePicker
+                                v-if="field.rules.type === 'ExpirationDate'"
+                                v-model:formatted-value="form[field.field]"
+                                :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
+                                format="MM/yyyy"
+                                value-format="MM/yy"
+                                class="w-full"
+                                type="month"
+                                clearable
+                            />
                             <NInput
                                 v-if="field.rules.type === Number"
                                 :allow-input="resource.onlyAllowNumber"
+                                :maxlength="field.rules.maxLength ?? 256"
                                 v-model:value="form[field.field]"
                                 :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                             />

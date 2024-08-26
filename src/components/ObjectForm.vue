@@ -31,6 +31,11 @@ import DeleteButton from './DeleteButton.vue';
             type: String,
             required: false
         },
+        fronendPermissions: {
+            type: String,
+            required: false,
+            default: 'crud'
+        },
         prevPage: {
             type: String,
             required: false
@@ -228,7 +233,7 @@ import DeleteButton from './DeleteButton.vue';
         <template #action>
             <NFlex justify="space-between">
                 <DeleteButton
-                    v-if="!disableEdit"
+                    v-if="!disableEdit && props.fronendPermissions.includes('d')"
                     :delete_msg="$t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) })"
                     :deleted_msg="$t('messages.deleted_successfully',{ obj: $t(props.model) })"
                     :delete_endpoint="`${props.endpoint}/${id}/`"
@@ -237,7 +242,7 @@ import DeleteButton from './DeleteButton.vue';
                 <NFlex justify="end">
                     <NButton
                         v-if="!disableEdit"
-                        :disabled="isLoading"
+                        :disabled="isLoading || !props.fronendPermissions.includes('u')"
                         type="primary"
                         @click="saveChanges()"
                     >{{ (form.id ? $t('tables.edit') : $t('tables.add')) }}</NButton>

@@ -284,7 +284,7 @@
             },
             table: {
                 align: 'left',
-                width: '23%',
+                width: '20%',
             }
         },
         {
@@ -296,13 +296,13 @@
                 required: true,
                 default: 'credit',
                 options: [
-                    { label: 'Credit', value: 'credit' },
-                    { label: 'Debit', value: 'debit' }
+                    { label: $t('card_types.credit'), value: 'credit' },
+                    { label: $t('card_types.debit'), value: 'debit' }
                 ]
             },
             table: {
                 align: 'left',
-                width: '23%',
+                width: '15%',
             }
         },
         {
@@ -312,11 +312,12 @@
             rules: {
                 type: Number,
                 required: true,
-                default: null
+                default: null,
+                maxLength: 16,
             },
             table: {
                 align: 'left',
-                width: '23%',
+                width: '22%',
             }
         },
         {
@@ -324,12 +325,13 @@
             translated: "tables.expiration_date",
             span: 8,
             rules: {
-                type: String,
+                type: 'ExpirationDate',
                 required: true,
                 default: null
             },
             table: {
                 align: 'left',
+                width: false,
             }
         },
         {
@@ -339,10 +341,26 @@
             rules: {
                 type: Number,
                 required: true,
-                default: null
+                default: null,
+                maxLength: 3,
             },
             table: {
                 align: 'left',
+                width: false,
+            }
+        },
+        {
+            field: "is_default",
+            translated: "tables.main",
+            span: 23,
+            rules: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            table: {
+                align: 'center',
+                width: '10%',
             }
         },
         {
@@ -356,7 +374,7 @@
             },
             table: {
                 align: 'left',
-                width: '0%',
+                width: false,
             }
         }
     ])
@@ -501,7 +519,7 @@
             },
             table: {
                 align: 'left',
-                width: '5%',
+                width: false,
             }
         },
         {
@@ -529,7 +547,7 @@
             },
             table: {
                 align: 'left',
-                width: '20%',
+                width: '25%',
             }
         },
         {
@@ -543,7 +561,7 @@
             },
             table: {
                 align: 'left',
-                width: '5%',
+                width: false,
             }
         },
         {
@@ -557,7 +575,7 @@
             },
             table: {
                 align: 'left',
-                width: '10%',
+                width: false,
             }
         },
         {
@@ -571,7 +589,7 @@
             },
             table: {
                 align: 'left',
-                width: '10%',
+                width: false,
             }
         },
         {
@@ -585,6 +603,34 @@
             },
             table: {
                 align: 'left',
+                width: false,
+            }
+        },
+        {
+            field: "full_name",
+            translated: "tables.name",
+            span: 24,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '15%',
+            }
+        },
+        {
+            field: "is_default",
+            translated: "tables.main",
+            span: 23,
+            rules: {
+                type: Boolean,
+                required: false,
+                default: true
+            },
+            table: {
+                align: 'center',
                 width: '10%',
             }
         },
@@ -609,7 +655,7 @@
         {
             field: "name",
             translated: "tables.name",
-            span: 8,
+            span: 12,
             rules: {
                 type: String,
                 required: true,
@@ -622,7 +668,7 @@
         {
             field: "last_name",
             translated: "tables.last_name",
-            span: 8,
+            span: 12,
             rules: {
                 type: String,
                 required: true,
@@ -639,7 +685,8 @@
             rules: {
                 type: Number,
                 required: false,
-                default: null
+                default: null,
+                maxLength: 10,
             },
             table: {
                 align: 'left',
@@ -671,6 +718,7 @@
             },
             table: {
                 align: 'left',
+                width: false,
             }
         },
         {
@@ -684,6 +732,7 @@
             },
             table: {
                 align: 'left',
+                width: false,
             }
         },
         {
@@ -698,12 +747,14 @@
                 optionsEndpoint : "language"
             },
             table: {
-                align: 'left'
+                align: 'left',
+                width: false,
             }
         },
         {
             field: "partner",
             translated: " ",
+            span: 1,
             rules: {
                 type: "Hidden",
                 required: true,
@@ -731,6 +782,7 @@
                 :id="clientId"
                 :fields="clientFields"
                 prev-page="partner"
+                fronend-permissions="cru"
             />
         </NTabPane>
         <NTabPane title="payment_data" :name="$t('partners.payment_data')" display-directive="show:lazy">

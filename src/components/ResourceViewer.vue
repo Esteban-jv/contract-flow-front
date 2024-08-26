@@ -17,6 +17,11 @@
             type: String,
             required: false
         },
+        forntendPermissions: {
+            type: String,
+            required: false,
+            default: 'crud'
+        },
         endpoint: {
             type: String,
             required: true
@@ -142,7 +147,7 @@
         })
 
         // Add actions column to a table
-        if($can('change',permission.value)) {
+        if($can('change',permission.value) && props.forntendPermissions.includes('u')) {
             cols.push({
                 align: 'center',
                 title: $t('tables.edit'),
@@ -187,7 +192,7 @@
             </NButton>
         </NSpace>
     </NCard>
-    <NFlex justify="end" class="py-3">
+    <NFlex v-if="props.forntendPermissions.includes('c')" justify="end" class="py-3">
         <NButton @click="GoToDetails(true)">
             {{ $t('tables.add_new', { item: $t(props.model)}) }}
         </NButton>

@@ -60,6 +60,7 @@
 <template>
     <h1 class="text-2xl pb-4">{{ $t('partner',2) }}</h1>
     <ResourceViewer
+        forntend-permissions="rud"
         :endpoint="`/${model}`"
         :model="model"
         :fields="fields"

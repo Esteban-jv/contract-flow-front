@@ -99,9 +99,11 @@
         "zip_code": "Z.C.",
         "beneficiary": "Beneficiary",
         "card_number": "Card number",
+        "card_type": "Card type",
         "card_name": "Card name",
         "expiration_date": "Expiration date",
-        "cvv": "CVV"
+        "cvv": "CVV",
+        "main": "Main"
     },
     "marital_status": {
         "single":"Single",
@@ -109,6 +111,10 @@
         "divorced":"Divorced",
         "widowed":"Widowed",
         "other":"Other"
+    },
+    "card_types": {
+        "credit":"Credit",
+        "debit":"Debit"
     },
     "actions": {
         "save": "Save",

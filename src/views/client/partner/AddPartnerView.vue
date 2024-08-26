@@ -19,6 +19,7 @@
         { label: $t("marital_status.other"), value: 1 },
     ])
 
+    // Partner
     const id = computed(() => route.params.id ?? null)
     const partnerModel = ref('partner')
     const partnerFields = ref([
@@ -138,6 +139,7 @@
         }
     ])
 
+    // Client
     const clientId = ref(null)
     const clientModel = ref('client')
     const clientFields = ref([
@@ -268,6 +270,98 @@
         }
     ])
 
+    // Payment
+    const cardModel = ref('card')
+    const cardFields = ref([
+        {
+            field: "card_name",
+            translated: "tables.card_name",
+            span: 16,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '23%',
+            }
+        },
+        {
+            field: "card_type",
+            translated: "tables.card_type",
+            span: 8,
+            rules: {
+                type: 'Select',
+                required: true,
+                default: 'credit',
+                options: [
+                    { label: 'Credit', value: 'credit' },
+                    { label: 'Debit', value: 'debit' }
+                ]
+            },
+            table: {
+                align: 'left',
+                width: '23%',
+            }
+        },
+        {
+            field: "card_number",
+            translated: "tables.card_number",
+            span: 8,
+            rules: {
+                type: Number,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '23%',
+            }
+        },
+        {
+            field: "expiration_date",
+            translated: "tables.expiration_date",
+            span: 8,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+            }
+        },
+        {
+            field: "cvv",
+            translated: "tables.cvv",
+            span: 8,
+            rules: {
+                type: Number,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+            }
+        },
+        {
+            field: "partner",
+            translated: " ",
+            span: 1,
+            rules: {
+                type: "Hidden",
+                required: true,
+                default: id.value
+            },
+            table: {
+                align: 'left',
+                width: '0%',
+            }
+        }
+    ])
+
+    // Contact
     const phoneModel = ref('phone')
     const phoneFields = ref([
         {
@@ -379,10 +473,248 @@
         }
     ])
 
-    const computedMessage = computed(() => {
-        console.log("Computed!")
-        return "Computed message"
-    })
+    // Address
+    const addressModel = ref('address')
+    const addressFields = ref([
+        {
+            field: "street",
+            translated: "tables.street",
+            span: 12,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '10%',
+            }
+        },
+        {
+            field: "number",
+            translated: "tables.number",
+            span: 4,
+            rules: {
+                type: Number,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '5%',
+            }
+        },
+        {
+            field: "suburb",
+            translated: "tables.suburb",
+            span: 8,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '10%',
+            }
+        },
+        {
+            field: "address",
+            translated: "tables.address",
+            span: 24,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '20%',
+            }
+        },
+        {
+            field: "zip",
+            translated: "tables.zip_code",
+            span: 8,
+            rules: {
+                type: Number,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '5%',
+            }
+        },
+        {
+            field: "city",
+            translated: "tables.city",
+            span: 8,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '10%',
+            }
+        },
+        {
+            field: "state",
+            translated: "tables.state",
+            span: 8,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '10%',
+            }
+        },
+        {
+            field: "country",
+            translated: "tables.country",
+            span: 12,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '10%',
+            }
+        },
+        {
+            field: "partner",
+            translated: " ",
+            rules: {
+                type: "Hidden",
+                required: true,
+                default: id.value
+            },
+            table: {
+                align: 'left',
+                width: '0%',
+            }
+        }
+    ])
+
+    // Beneficiary
+    const beneficiaryModel = ref('beneficiary')
+    const beneficiaryFields = ref([
+        {
+            field: "name",
+            translated: "tables.name",
+            span: 8,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left'
+            }
+        },
+        {
+            field: "last_name",
+            translated: "tables.last_name",
+            span: 8,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left'
+            }
+        },
+        {
+            field: "phone",
+            translated: "tables.main_phone",
+            span: 8,
+            rules: {
+                type: Number,
+                required: false,
+                default: null
+            },
+            table: {
+                align: 'left',
+                width: '23%',
+            }
+        },
+        {
+            field: "email",
+            translated: "tables.main_email",
+            span: 8,
+            rules: {
+                type: String,
+                required: false,
+                regex: /^\S+@\S+\.\S+$/,
+                default: ""
+            },
+            table: {
+                align: 'left',
+            }
+        },
+        {
+            field: "state",
+            translated: "tables.state",
+            span: 8,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+            }
+        },
+        {
+            field: "country",
+            translated: "tables.country",
+            span: 8,
+            rules: {
+                type: String,
+                required: true,
+                default: null
+            },
+            table: {
+                align: 'left',
+            }
+        },
+        {
+            field: "language",
+            translated: "language",
+            span: 8,
+            rules: {
+                type: 'Select',
+                required: true,
+                default: null,
+                options: [],
+                optionsEndpoint : "language"
+            },
+            table: {
+                align: 'left'
+            }
+        },
+        {
+            field: "partner",
+            translated: " ",
+            rules: {
+                type: "Hidden",
+                required: true,
+                default: id.value
+            },
+            table: {
+                align: 'left',
+                width: '0%',
+            }
+        }
+    ])
 
     onMounted(async () => {
         const { data } = await resource.retrieveResourceById(partnerModel.value, id.value)
@@ -402,7 +734,12 @@
             />
         </NTabPane>
         <NTabPane title="payment_data" :name="$t('partners.payment_data')" display-directive="show:lazy">
-            <p>{{ computedMessage }}</p>
+            <ResourceCreator
+                :filters="{ partner: id }"
+                :endpoint="`/${cardModel}`"
+                :model="cardModel"
+                :fields="cardFields"
+            />
         </NTabPane>
         <NTabPane title="contact_data" :name="$t('partners.contact_data')" display-directive="show:lazy">
             <ResourceCreator
@@ -419,10 +756,20 @@
             />
         </NTabPane>
         <NTabPane title="address_data" :name="$t('partners.address_data')" display-directive="show:lazy">
-            <p>{{ computedMessage }}</p>
+            <ResourceCreator
+                :filters="{ partner: id }"
+                :endpoint="`/${addressModel}`"
+                :model="addressModel"
+                :fields="addressFields"
+            />
         </NTabPane>
         <NTabPane title="beneficiary_data" :name="$t('partners.beneficiary_data')" display-directive="show:lazy">
-            <p>{{ computedMessage }}</p>
+            <ResourceCreator
+                :filters="{ partner: id }"
+                :endpoint="`/${beneficiaryModel}`"
+                :model="beneficiaryModel"
+                :fields="beneficiaryFields"
+            />
         </NTabPane>
     </NTabs>
 </template>

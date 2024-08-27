@@ -294,7 +294,7 @@ export function useResource() {
                 width: f.table.width || '15%',
             }
             if(f.rules.type === Boolean) {
-                current.render = ((row) => row.status ? 
+                current.render = ((row) => row[name] ? 
                     renderIcon(CheckCircle, { color: '#0e7a0d'}) : 
                     renderIcon(TimesCircle, { color: '#D50049'}))
             }
@@ -351,16 +351,26 @@ export function useResource() {
         try {
             isLoading.value = true
             loadingBar.start()
+            var data = {}
             if (form.id) {
-                const { data } = await api.put(`${endpoint}/${form.id}/`,form)
+                const response = await api.put(`${endpoint}/${form.id}/`,form)
+                data = response.data
                 console.log("Updated", data)
             } else {
-                const { data } = await api.post(`${endpoint}/`,form)
+                const response = await api.post(`${endpoint}/`,form)
+                data = response.data
                 console.log("Created", data)
             }
             loadingBar.finish()
             console.log(nextPageObj)
-            router.push(nextPageObj)
+            if(nextPageObj.params) {
+                var params = nextPageObj.params
+                if(params.id === 'ObjectCreatedId') {
+                    params.id = data.id
+                }
+                return router.push({ name: nextPageObj.name, params: params })
+            }
+            return router.push(nextPageObj)
         } catch (err) {
             // console.warn(err)
             loadingBar.error()

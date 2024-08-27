@@ -51,6 +51,7 @@
     "beneficiary":"Beneficiary | Beneficiaries",
     "card":"Card | Cards",
     "search":"Search",
+    "all":"All",
     "search_by":"Search by",
     "historical_record":"Historical record | Historical records",
     "tables": {

@@ -5,7 +5,7 @@
     const model = ref('partner')
     const fields = ref([
         {
-            field: "client.name",
+            field: "full_name",
             translated: "tables.name",
             rules: {
                 type: String,
@@ -26,7 +26,7 @@
             }
         },
         {
-            field: "main_phone",
+            field: "client.phone",
             translated: "tables.main_phone",
             rules: {
                 type: String,
@@ -36,7 +36,7 @@
             }
         },
         {
-            field: "main_email",
+            field: "client.email",
             translated: "tables.main_email",
             rules: {
                 type: String,
@@ -64,5 +64,6 @@
         :endpoint="`/${model}`"
         :model="model"
         :fields="fields"
+        :filters="true"
     />
 </template>

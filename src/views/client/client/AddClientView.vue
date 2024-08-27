@@ -56,7 +56,8 @@
             rules: {
                 type: Number,
                 required: false,
-                default: null
+                default: null,
+                maxLength: 10,
             },
             table: {
                 align: 'left',
@@ -187,7 +188,7 @@
                     resource.createOrUpdateResource(
                         'partner',
                         partnerForm.value,
-                        { name: 'edit-partner', params: { id: id.value } }
+                        { name: 'edit-partner', params: { id: 'ObjectCreatedId' } }
                     )
                 } else {
                     $toast.open({
@@ -205,7 +206,7 @@
         nationalities.value = await resource.getFromApi('nationality')
         idTypes.value = await resource.getFromApi('idtype')
 
-        console.log('nationalities', nationalities.value, idTypes.value)
+        // console.log('nationalities', nationalities.value, idTypes.value)
     })
 </script>
 <template>

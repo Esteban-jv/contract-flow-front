@@ -51,6 +51,7 @@
     "beneficiary":"Beneficiario | Beneficiarios",
     "card":"Tarjeta | Tarjetas",
     "search":"Buscar",
+    "all":"Todos",
     "search_by":"Buscar por",
     "historical_record":"Historia de registros | Historial de regirstros",
     "tables": {

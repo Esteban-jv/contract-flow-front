@@ -64,15 +64,15 @@ import DeleteButton from './DeleteButton.vue';
             return `24 s:12 m:${(span ?? 24)}`
         return 24
     }
-    const getFromApi = async endpoint => {
+    const getFromApi = async (endpoint, filters=null, value='id') => {
         try {
-            const { data } = await api.get(`${endpoint}/`, {
-                params: {
-                    limit: MAX_OPTION_ITEMS,
-                    offset: 0
-                }
-            })
-            return data.results.map( d => { return { label: d.name, value: d.id} })
+            const params = {
+                ...filters,
+                limit: MAX_OPTION_ITEMS,
+                offset: 0,
+            }
+            const { data } = await api.get(`${endpoint}/`, {params})
+            return data.results.map( d => { return { label: d.name, value: d[value]} })
         } catch (err){
             $toastError(err)
             throw err
@@ -136,7 +136,7 @@ import DeleteButton from './DeleteButton.vue';
             }
 
             if(f.rules.optionsEndpoint) {
-                f.rules.options = await getFromApi(f.rules.optionsEndpoint)
+                f.rules.options = await getFromApi(f.rules.optionsEndpoint, f.rules.endpointFilters ?? null, f.rules.idValue ?? 'id') 
             }
         })
 
@@ -212,12 +212,22 @@ import DeleteButton from './DeleteButton.vue';
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                         :disabled="disableEdit"
+                        :maxlength="field.rules.maxLength ?? 256"
                     />
                     <NInput
                         v-if="field.rules.type === Number"
+                        :maxlength="field.rules.maxLength ?? 256"
                         :allow-input="onlyAllowNumber"
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                        :disabled="disableEdit"
+                    />
+                    <NSelect
+                        v-if="field.rules.type === 'DynamicSelect'"
+                        filterable tag
+                        v-model:value="form[field.field]"
+                        :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                        :options="field.rules.options"
                         :disabled="disableEdit"
                     />
                     <NSelect

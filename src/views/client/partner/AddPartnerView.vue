@@ -174,9 +174,14 @@
             translated: "tables.main_phone",
             span: 8,
             rules: {
-                type: Number,
-                required: false,
-                default: null
+                type: 'DynamicSelect',
+                regex: /^[0-9]{10}$|^\+\d{1,3}\s\d{8,10}$/,
+                required: true,
+                default: null,
+                options: [],
+                optionsEndpoint : "phone",
+                endpointFilters: { partner: id.value },
+                idValue: 'name'
             },
             table: {
                 align: 'left',
@@ -188,10 +193,14 @@
             translated: "tables.main_email",
             span: 8,
             rules: {
-                type: String,
-                required: false,
+                type: 'DynamicSelect',
+                required: true,
                 regex: /^\S+@\S+\.\S+$/,
-                default: ""
+                default: "",
+                options: [],
+                optionsEndpoint : "email",
+                endpointFilters: { partner: id.value },
+                idValue: 'name'
             },
             table: {
                 align: 'left',
@@ -350,7 +359,7 @@
             }
         },
         {
-            field: "is_default",
+        field: "is_default",
             translated: "tables.main",
             span: 23,
             rules: {
@@ -422,7 +431,8 @@
             rules: {
                 type: Number,
                 required: true,
-                default: null
+                default: null,
+                maxLength: 10,
             },
             table: {
                 align: 'left',
@@ -557,7 +567,8 @@
             rules: {
                 type: Number,
                 required: true,
-                default: null
+                default: null,
+                maxLength: 5,
             },
             table: {
                 align: 'left',
@@ -595,7 +606,7 @@
         {
             field: "country",
             translated: "tables.country",
-            span: 12,
+            span: 6,
             rules: {
                 type: String,
                 required: true,
@@ -609,7 +620,7 @@
         {
             field: "full_name",
             translated: "tables.name",
-            span: 24,
+            span: 18,
             rules: {
                 type: String,
                 required: true,
@@ -637,6 +648,7 @@
         {
             field: "partner",
             translated: " ",
+            span: 1,
             rules: {
                 type: "Hidden",
                 required: true,

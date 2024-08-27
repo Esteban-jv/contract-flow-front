@@ -121,8 +121,9 @@
             })
         } finally { isLoading.value = false }
     }
-    const resetResource = async () => {
+    const resetResource = async (clear_filters=false) => {
         pagination.page = 1
+        if(clear_filters) search.value = ''
         await getResource()
     }
 
@@ -187,9 +188,14 @@
                 :loading="isLoading"
                 @keyup="handleKeyUp"
             />
-            <NButton @click="getResource()">
-                {{ $t('search') }}
-            </NButton>
+            <div class="flex gap-2">
+                <NButton @click="getResource()" strong secondary type="info">
+                    {{ $t('search') }}
+                </NButton>
+                <NButton @click="resetResource(true)" strong secondary>
+                    {{ $t('all') }}
+                </NButton>
+            </div>
         </NSpace>
     </NCard>
     <NFlex v-if="props.forntendPermissions.includes('c')" justify="end" class="py-3">

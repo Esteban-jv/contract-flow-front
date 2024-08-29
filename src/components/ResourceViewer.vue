@@ -140,7 +140,7 @@
                 key: name
             }
             if(f.rules.type === Boolean) {
-                current.render = ((row) => row.status ? 
+                current.render = ((row) => row[name] ? 
                     renderIcon(CheckCircle, { color: '#0e7a0d'}) : 
                     renderIcon(TimesCircle, { color: '#D50049'}))
             }

@@ -8,7 +8,7 @@
         NSelect
     } from 'naive-ui';
     import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserClock, UserFriends, UserTag, UserPlus, UsersCog, UserCheck,
-      MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell
+      MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell, Cog
      } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
@@ -174,7 +174,8 @@
     function renderIcon(icon) {
       return () => h(NIcon, null, { default: () => h(icon) });
     }
-    const buildModule = module => {
+    // Deprecated
+    const deprecatedBuildModule = module => {
       // substract vars
       const { icon, singular, plural, permissions } = module
 
@@ -199,7 +200,8 @@
                 { default: () => $t(cp.name, 2) }
               ),
               key: cp.path,
-              icon: renderIcon(cp.icon)
+              icon: renderIcon(cp.icon),
+              children: null // if children map and recursive buldModule else, null
             })
           }
         })
@@ -212,6 +214,61 @@
         })
       }
     }
+    const buildModule = (module, parentChildren = null) => {
+    // extraer variables
+    const { icon, singular, plural, permissions, children } = module
+
+    // Verificar todos los permisos del array
+    permissions.forEach(cp => {
+      cp.allow = $can('view', cp.model)
+    });
+
+    // Verificar si al menos un permiso está concedido
+    if (permissions.some(cp => cp.allow === true)) {
+      let cat_children = []
+
+      // Agregar solo RouterLink concedidos
+      permissions.forEach(cp => {
+        if (cp.allow) {
+          cat_children.push({
+            label: () => h(
+              RouterLink,
+              {
+                to: {
+                  name: cp.path
+                }
+              },
+              { default: () => $t(cp.name, 2) }
+            ),
+            key: cp.path,
+            icon: renderIcon(cp.icon),
+            children: null
+          })
+        }
+      })
+
+      // Procesar hijos recursivamente si existen
+      if (children && Array.isArray(children)) {
+        children.forEach(childModule => {
+          buildModule(childModule, cat_children)
+        })
+      }
+
+      // Renderizar todos los RouterLinks en el objeto de menú actual
+      const menuItem = {
+        label: $t(singular, 2),
+        key: plural,
+        icon: renderIcon(icon),
+        children: cat_children
+      }
+
+      if (parentChildren) {
+        parentChildren.push(menuItem)
+      } else {
+        menuOptions.value.push(menuItem)
+      }
+    }
+  }
     function buildMenu() {
       menuOptions.value = []
       menuOptions.value.push({
@@ -283,15 +340,33 @@
       })
 
       /* SYSTEM Activity */
-      /* CLIENTS */
       buildModule({
-        icon: UserClock,
+        icon: Cog,
         permissions: [
-          { model: 'historicaluser', name:'client', icon: UserTag, path:'system-activity', allow: false },
+          { model: 'user', name:'user', icon: UserTag, path:'users', allow: false },
         ],
-        singular: 'historical_record',
-        plural: 'historical-records',
+        singular: 'system',
+        plural: 'users',
+        children: [
+          {
+            icon: UserClock,
+            permissions: [
+              { model: 'historicaluser', name:'client', icon: UserClock, path:'system-activity', allow: false },
+            ],
+            singular: 'historical_record',
+            plural: 'historical-records',
+          }
+        ]
       })
+      /* CLIENTS */
+      // buildModule({
+      //   icon: UserClock,
+      //   permissions: [
+      //     { model: 'historicaluser', name:'client', icon: UserTag, path:'system-activity', allow: false },
+      //   ],
+      //   singular: 'historical_record',
+      //   plural: 'historical-records',
+      // })
 
     }
 

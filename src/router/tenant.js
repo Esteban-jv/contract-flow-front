@@ -98,7 +98,24 @@ const router = createRouter({
           name: 'edit-partner',
           component: () => import('../views/client/partner/AddPartnerView.vue')
         },
-        /* SALES */
+        /* USERS */
+        {
+          path: '/users',
+          name: 'users',
+          component: () => import('../views/client/system/UserView.vue')
+        },
+        {
+          // optional id
+          path: '/add-user/:id?',
+          name: 'add-user',
+          component: () => import('../views/client/system/AddUserView.vue')
+        },
+        {
+          path: '/edit-user/:id',
+          name: 'edit-user',
+          component: () => import('../views/client/system/AddUserView.vue')
+        },
+        /* SALES ROOM */
         {
           path: '/sales-room',
           name: 'sales-room',

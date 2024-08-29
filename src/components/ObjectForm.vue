@@ -1,7 +1,7 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
-    import { NButton, NFlex, NCard, NForm, NGrid, NSelect, NAutoComplete,
+    import { NButton, NFlex, NCard, NForm, NGrid, NSelect, NDatePicker, NTransfer,
         NFormItemGi, NInput, NCheckbox, NSkeleton, NSpace, useLoadingBar } from 'naive-ui';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import api from "@/lib/axios";
@@ -12,8 +12,8 @@ import DeleteButton from './DeleteButton.vue';
     const { $t, $can, $toast, $toastError } = useGlobalHelpers()
     const loadingBar = useLoadingBar()
 
-    const isLoading = ref(false)
-    const MAX_OPTION_ITEMS = 50
+    const isLoading = ref(true)
+    const MAX_OPTION_ITEMS = 350
     const formRef = ref(null);
     const form = ref({})
 
@@ -97,12 +97,11 @@ import DeleteButton from './DeleteButton.vue';
     }
 
     onMounted(async () => {
-        const { id } = props
-        if(id) {
-            getResource(id)
-        }
-        // getResource()
-        props.fields.forEach(async (f, i) => {
+        isLoading.value = true
+        // First build the form rules
+        for(var i = 0; i < props.fields.length; i++) {
+            const f = props.fields[i]
+            console.warn(f.rules)
             // Get field
             const name = f.field
             const translated = f.translated
@@ -138,13 +137,19 @@ import DeleteButton from './DeleteButton.vue';
             if(f.rules.optionsEndpoint) {
                 f.rules.options = await getFromApi(f.rules.optionsEndpoint, f.rules.endpointFilters ?? null, f.rules.idValue ?? 'id') 
             }
-        })
+        }
+        const { id } = props
+        if(id) {
+            await getResource(id)
+        }
+        // getResource()
 
         // Add actions column to a table
         const can_edit = $can('change',permission.value)
         const can_delete = $can('delete',permission.value)
         // console.log(can_edit, can_delete)
-        // console.log(formRules.value)
+        console.log(form.value)
+        isLoading.value = false
     })
 
     // Submit method
@@ -215,6 +220,15 @@ import DeleteButton from './DeleteButton.vue';
                         :maxlength="field.rules.maxLength ?? 256"
                     />
                     <NInput
+                        v-if="field.rules.type === 'Password'"
+                        type="password"
+                        show-password-on="click"
+                        v-model:value="form[field.field]"
+                        :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
+                        :disabled="disableEdit"
+                        :maxlength="field.rules.maxLength ?? 256"
+                    />
+                    <NInput
                         v-if="field.rules.type === Number"
                         :maxlength="field.rules.maxLength ?? 256"
                         :allow-input="onlyAllowNumber"
@@ -232,10 +246,28 @@ import DeleteButton from './DeleteButton.vue';
                     />
                     <NSelect
                         v-if="field.rules.type === 'Select'"
+                        :multiple="field.rules.multiple === true ? true : false"
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"
                         :options="field.rules.options"
                         :disabled="disableEdit"
+                    />
+                    <NDatePicker
+                        v-if="field.rules.type === Date"
+                        v-model:formatted-value="form[field.field]"
+                        :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
+                        format="dd/MM/yyyy - HH:mm"
+                        value-format="dd/MM/yyyy - HH:mm"
+                        class="w-full"
+                        type="datetime"
+                        clearable
+                    />
+                    <NTransfer
+                        v-if="field.rules.type === 'Transfer'"
+                        v-model:value="form[field.field]"
+                        :options="field.rules.options"
+                        :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
+                        class="w-full"
                     />
                 </NFormItemGi>
             </NGrid>

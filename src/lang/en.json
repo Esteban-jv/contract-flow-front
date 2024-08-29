@@ -8,6 +8,7 @@
     "made_by": "Made by",
     "theme": "Theme",
     "history": "History",
+    "system": "System",
     "pages": {
         "403_title": "403 Unautorized action.",
         "403_msg": "You do not have permission to see this.",
@@ -50,6 +51,7 @@
     "address":"Address | Addresses",
     "beneficiary":"Beneficiary | Beneficiaries",
     "card":"Card | Cards",
+    "user":"User | Users",
     "search":"Search",
     "all":"All",
     "search_by":"Search by",
@@ -104,7 +106,16 @@
         "card_name": "Card name",
         "expiration_date": "Expiration date",
         "cvv": "CVV",
-        "main": "Main"
+        "main": "Main",
+        "username": "Username",
+        "password": "Password",
+        "is_active": "Active",
+        "is_superuser": "Superuser",
+        "is_staff": "Staff",
+        "date_joined": "Joined date",
+        "first_name": "First name",
+        "roles": "Roles",
+        "permissions": "Permissions"
     },
     "marital_status": {
         "single":"Single",

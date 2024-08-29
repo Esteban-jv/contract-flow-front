@@ -8,6 +8,7 @@
     "made_by": "Hecho por",
     "theme": "Tema",
     "history": "Históricos",
+    "system": "Sistema",
     "pages": {
         "403_title": "403 Acción no autorizada.",
         "403_msg": "No tienes acceso para ver este recurso.",
@@ -50,6 +51,7 @@
     "address":"Dirección | Direcciones",
     "beneficiary":"Beneficiario | Beneficiarios",
     "card":"Tarjeta | Tarjetas",
+    "user":"Usuario | Usuarios",
     "search":"Buscar",
     "all":"Todos",
     "search_by":"Buscar por",
@@ -104,7 +106,16 @@
         "card_type": "Tipo de tarjeta",
         "expiration_date": "Fecha de expiración",
         "cvv": "CVV",
-        "main": "Principal"
+        "main": "Principal",
+        "username": "Usuario",
+        "password": "Contraseña",
+        "is_active": "Activo",
+        "is_superuser": "Superusuario",
+        "is_staff": "Staff",
+        "date_joined": "Fecha de registro",
+        "first_name": "Nombre",
+        "roles": "Roles",
+        "permissions": "Permisos"
     },
     "marital_status": {
         "single":"Soltero",

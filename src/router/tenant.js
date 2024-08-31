@@ -110,6 +110,11 @@ const router = createRouter({
           name: 'add-user',
           component: () => import('../views/client/system/AddUserView.vue')
         },
+        { // Role
+          path: '/roles',
+          name: 'groups',
+          component: () => import('../views/client/system/GroupsView.vue')
+        },
         {
           path: '/edit-user/:id',
           name: 'edit-user',

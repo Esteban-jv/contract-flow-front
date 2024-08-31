@@ -14,7 +14,7 @@ export function useResource() {
     const isLoading = ref(false)
     // For pagination
     const pageSizes = ref([5, 10, 20, 50])
-    const MAX_OPTION_ITEMS = ref(50)
+    const MAX_OPTION_ITEMS = ref(350)
     const pagination = reactive({
         pageSize:5,
         page:1

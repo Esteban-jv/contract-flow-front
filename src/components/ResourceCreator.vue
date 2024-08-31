@@ -47,7 +47,7 @@
     const { zoom, pin } = useLocationMap()
     const resource = useResource()
     const loadingBar = useLoadingBar()
-    const MAX_OPTION_ITEMS = 50
+    const MAX_OPTION_ITEMS = 350
 
     const translated = computed(() => props.translated ?? props.model)
     const permission = computed(() => props.permissionModel ?? props.model)
@@ -411,6 +411,8 @@
                                 :options="field.rules.options"
                                 :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
                                 class="w-full"
+                                source-filterable
+                                target-filterable
                             />
                             <div v-if="field.rules.type === 'Location' && form[field.field]" class="h-[250px] w-full">
                                 <LMap ref="map" v-model:zoom="zoom" :center="form[field.field]" :use-global-leaflet="false">

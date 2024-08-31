@@ -318,13 +318,14 @@
           { model: 'client', name:'client', icon: UserTag, path:'clients', allow: false },
           { model: 'client', name:'add_client', icon: UserPlus, path:'add-client', allow: false},
           { model: 'client', name:'add_massive_client', icon: UserFriends, path:'clients-massive', allow: false},
+          { model: 'partner', name:'partner', icon: UserCheck, path:'partner', allow: false }
         ],
         singular: 'client',
         plural: 'clients',
       })
 
       /* PARTNER */
-      const partner_permission = { model: 'partner', icon: UserCheck, path:'', allow: false }
+      /*const partner_permission = { model: 'partner', icon: UserCheck, path:'', allow: false }
       menuOptions.value.push({
         label: () => h(
           RouterLink,
@@ -337,13 +338,14 @@
         ),
         key: partner_permission.model,
         icon: renderIcon(partner_permission.icon)
-      })
+      })*/
 
       /* SYSTEM Activity */
       buildModule({
         icon: Cog,
         permissions: [
           { model: 'user', name:'user', icon: UserTag, path:'users', allow: false },
+          { model: 'group', name:'group', icon: UserTag, path:'groups', allow: false },
         ],
         singular: 'system',
         plural: 'users',

@@ -55,6 +55,7 @@
     "beneficiary":"Beneficiary | Beneficiaries",
     "card":"Card | Cards",
     "user":"User | Users",
+    "group": "Group | Groups",
     "search":"Search",
     "all":"All",
     "search_by":"Search by",

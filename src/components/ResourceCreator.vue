@@ -53,6 +53,10 @@
     const permission = computed(() => props.permissionModel ?? props.model)
     const objectFields = computed(() => props.fields.filter(f => !!f.table.text))
     const tagsFields = computed(() => props.fields.filter(f => !!f.table.tagsName))
+    const can_add = computed(() => $can('add',permission.value))
+    const can_edit = computed(() => $can('change',permission.value))
+    const can_delete = computed(() => $can('delete',permission.value))
+    const can_add_or_edit = computed(() => can_add.value || can_edit.value)
 
     // Data
     const showModal = ref(false)
@@ -73,9 +77,7 @@
     const columns = computed(() => {
         const cols = resource.mapColumns(props.fields.filter(f => (f.rules.type !== 'Hidden' && f.table.width !== false)))
         // Now add Editable columns
-        const can_edit = $can('change',permission.value)
-        const can_delete = $can('delete',permission.value)
-        if(can_edit && can_delete) {
+        if(can_edit.value && can_delete.value) {
             cols.push({
                 key: 'actions',
                 align: 'center',
@@ -107,8 +109,8 @@
                 }
             })
         } else {
-            if(can_edit) {
-                cols.value.push({
+            if(can_edit.value) {
+                cols.push({
                     align: 'center',
                     title: $t('tables.edit'),
                     render(row) {
@@ -127,8 +129,8 @@
                     key: "edit",
                 })
             }
-            if(can_delete) {
-                cols.value.push({
+            if(can_delete.value) {
+                cols.push({
                     align: 'center',
                     title: $t('tables.delete'),
                     render(row) {
@@ -136,6 +138,7 @@
                             DeleteButton,
                             {
                                 disabled: !$can('delete',permission.value),
+                                deleted_msg: $t('messages.deleted_successfully',{ obj: $t(translated.value) }),
                                 delete_msg: $t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) }),
                                 delete_endpoint: `${props.endpoint}/${row.id}/` ,
                                 onObjectDeleted: () => getResource()
@@ -288,7 +291,7 @@
 
     onMounted(async () => {
         getResource()
-        const rules = await resource.makeRules(props.fields)
+        const rules = await resource.makeRules(props.fields, can_add_or_edit.value)
         formRules.value = rules
         // console.log(rules)
         // console.log(formRules.value['hostesses'])
@@ -303,7 +306,7 @@
 </script>
 <template>
     <NFlex justify="end" class="py-3">
-        <NButton @click="toggleModal(true)">
+        <NButton @click="toggleModal(true)" :disabled="!can_add">
             {{ $t('tables.add_new', { item: $t(translated)}) }}
         </NButton>
     </NFlex>
@@ -431,7 +434,7 @@
                 </NForm>
                 <template #action>
                     <NFlex justify="end">
-                        <NButton :disabled="isLoading" type="primary" @click="saveChanges(form)">{{ $t('actions.save') }}</NButton>
+                        <NButton :disabled="isLoading || !can_add_or_edit" type="primary" @click="saveChanges(form)">{{ $t('actions.save') }}</NButton>
                         <NButton :disabled="isLoading" secondary @click="toggleModal(false)">{{ $t('actions.cancel') }}</NButton>
                     </NFlex>
                 </template>

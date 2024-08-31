@@ -52,7 +52,7 @@ export function useResource() {
             return `24 s:12 m:${(span ?? 24)}`
         return 24
     }
-    const makeRules = async fields => {
+    const makeRules = async (fields, add_or_edit = true) => {
         const rules = []
         fields.forEach(async f => {
             // Get field
@@ -87,7 +87,7 @@ export function useResource() {
                 }
             }
 
-            if(f.rules.optionsEndpoint) {
+            if(f.rules.optionsEndpoint && add_or_edit) {
                 f.rules.options = await getFromApi(f.rules.optionsEndpoint)
             }
         })
@@ -281,6 +281,7 @@ export function useResource() {
     }
     // Render Columns Functions
     const mapColumns = fields => {
+        console.warn("MapColumns",fields)
         return fields.map((f) => {
             // Get field
             const name = f.field

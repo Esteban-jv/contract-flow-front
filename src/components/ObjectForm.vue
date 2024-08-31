@@ -101,7 +101,6 @@ import DeleteButton from './DeleteButton.vue';
         // First build the form rules
         for(var i = 0; i < props.fields.length; i++) {
             const f = props.fields[i]
-            console.warn(f.rules)
             // Get field
             const name = f.field
             const translated = f.translated
@@ -148,7 +147,6 @@ import DeleteButton from './DeleteButton.vue';
         const can_edit = $can('change',permission.value)
         const can_delete = $can('delete',permission.value)
         // console.log(can_edit, can_delete)
-        console.log(form.value)
         isLoading.value = false
     })
 
@@ -276,6 +274,7 @@ import DeleteButton from './DeleteButton.vue';
             <NFlex justify="space-between">
                 <DeleteButton
                     v-if="!disableEdit && props.fronendPermissions.includes('d')"
+                    :disabled="props.fronendPermissions.includes('dd')"
                     :delete_msg="$t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) })"
                     :deleted_msg="$t('messages.deleted_successfully',{ obj: $t(props.model) })"
                     :delete_endpoint="`${props.endpoint}/${id}/`"

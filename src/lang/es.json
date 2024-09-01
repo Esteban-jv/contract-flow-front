@@ -1,6 +1,8 @@
 {
     "intro_msg":"Esto se convertirá en un muy emocionante sitio web",
     " ": "",
+    "null": "Nulo",
+    "none": "Ninguno",
     "go_to_main":"Ir a inicio",
     "contact": "Contacto",
     "about": "Acerca de",
@@ -120,7 +122,8 @@
         "date_joined": "Fecha de registro",
         "first_name": "Nombre",
         "roles": "Roles",
-        "permissions": "Permisos"
+        "permissions": "Permisos",
+        "date": "Fecha"
     },
     "marital_status": {
         "single":"Soltero",

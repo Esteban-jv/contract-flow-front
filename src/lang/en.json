@@ -1,6 +1,8 @@
 {
     "intro_msg":"This is gonna become into a really exciting website",
     " ": "",
+    "null": "Null",
+    "none": "None",
     "go_to_main":"Go to main",
     "contact": "Contact",
     "about": "About",
@@ -120,7 +122,8 @@
         "date_joined": "Joined date",
         "first_name": "First name",
         "roles": "Roles",
-        "permissions": "Permissions"
+        "permissions": "Permissions",
+        "date": "Date"
     },
     "marital_status": {
         "single":"Single",

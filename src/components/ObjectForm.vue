@@ -244,6 +244,7 @@ import DeleteButton from './DeleteButton.vue';
                     />
                     <NSelect
                         v-if="field.rules.type === 'Select'"
+                        clearable
                         :multiple="field.rules.multiple === true ? true : false"
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.enter_field', { field: $t(field.translated)})"

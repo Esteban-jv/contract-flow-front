@@ -17,8 +17,19 @@
             }
         },
         {
-            field: "full_name",
+            field: "name",
             translated: "tables.name",
+            rules: {
+                type: String,
+                required: true
+            },
+            table: {
+                align: 'left'
+            }
+        },
+        {
+            field: "last_name",
+            translated: "tables.last_name",
             rules: {
                 type: String,
                 required: true

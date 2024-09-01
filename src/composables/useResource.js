@@ -96,7 +96,6 @@ export function useResource() {
     const makeRulesArray = async fields => {
         const rules = []
         fields.forEach(async f => {
-            console.warn(f)
             // Get rules
             rules = await makeRules(f.fields)
         })
@@ -172,7 +171,6 @@ export function useResource() {
     // Render Input Functions
     const inputText = (row, index, f, items, allowAny=true) => {
         const { field, translated, rules } = f
-        console.warn(rules, f)
         const rule = getRule(field, translated, rules, row)
         return h(NFormItem, {
             rule,
@@ -281,7 +279,6 @@ export function useResource() {
     }
     // Render Columns Functions
     const mapColumns = fields => {
-        console.warn("MapColumns",fields)
         return fields.map((f) => {
             // Get field
             const name = f.field

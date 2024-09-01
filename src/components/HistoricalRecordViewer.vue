@@ -32,19 +32,54 @@
         }
     })
 
+    const activityFields = ref([
+        {
+            field: "history_user.first_name",
+            translated: "tables.user",
+            rules: {
+                type: String,
+                required: true
+            },
+            table: {
+                align: 'left'
+            }
+        },
+        {
+            field: "history_type",
+            translated: "tables.action",
+            rules: {
+                type: String,
+                required: true
+            },
+            table: {
+                align: 'left'
+            }
+        },
+        {
+            field: "history_date",
+            translated: "tables.date",
+            rules: {
+                type: String,
+                required: true
+            },
+            table: {
+                align: 'left'
+            }
+        }
+    ])
+
     /* new things here */
     const showModal = ref(false)
     const handleShowModal = async (row) => {
         showModal.value = true
         // api get from history
-        console.log("Gonna consult here", row)
         const { data } = await api.get(`historical-${props.endpoint}/${row.id}/`)
         historyRecords.value = data.results
-        console.log(data)
     }
     const closeModal = () => {
         showModal.value = false
     }
+    const localFields = computed(() => activityFields.value.concat(props.fields))
 
     const permission = computed(() => props.permissionModel ?? props.model)
     const objectFields = computed(() => props.fields.filter(f => !!f.table.text))
@@ -102,7 +137,6 @@
         try {
             isLoading.value = true
             loadingBar.start()
-            console.log(search.value)
             const { data } = await api.get(`/${props.endpoint}/`, {
                 params: {
                     limit: pagination.pageSize,
@@ -129,7 +163,8 @@
     }
 
     const mapColumns = withOptions => {
-        const cols = props.fields.map((f) => {
+        var cols = withOptions ? props.fields : localFields.value
+        cols = cols.map((f) => {
             // Get field
             const name = f.field
             const translated = f.translated
@@ -228,13 +263,13 @@
                     </NIcon>
                 </NButton>
             </template>
-            <!-- <NDataTable
+            <NDataTable
                 v-if="historyRecords.length"
                 :bordered="false"
                 :single-line="false"
                 single-column
                 :columns="computedHistoryColumns"
-                :data="computedHistoryRecords"></NDataTable> -->
+                :data="computedHistoryRecords"></NDataTable>
             </NCard>
     </NModal>
     <div class="w-full">

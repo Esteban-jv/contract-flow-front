@@ -25,7 +25,8 @@
         "change_password":"Cambiar contraseña",
         "sure_of_changin_password":"¿Está seguro de cambiar contraseña?",
         "login":"Iniciar sesión",
-        "logout":"Cerrar sesión"
+        "logout":"Cerrar sesión",
+        "invalid_token":"Token inválido."
     },
     "forms": {
         "enter_field":"Introduce {field}.",

@@ -25,7 +25,8 @@
         "change_password":"Change password",
         "sure_of_changin_password":"Are you sure of changing password",
         "login":"login",
-        "logout":"logout"
+        "logout":"logout",
+        "invalid_token":"Invalid token."
     },
     "forms": {
         "enter_field":"Enter {field} field.",

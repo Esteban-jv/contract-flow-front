@@ -7,7 +7,7 @@
     import domain from '@/utils/domain';
 
     const { $t } = useGlobalHelpers()
-    const { getToken, login } = useAuth()
+    const { getToken, login, flush } = useAuth()
     const router = useRouter()
     const nextView = ref('')
 
@@ -58,14 +58,20 @@
         try {
             loading.value = true
             const r = await login(formData)
+            console.log(r)
             if(r === true) {
                 router.push({
                     name: nextView.value
                 })
+            } else if (r.response && r.response.data) {
+                const { data } = r.response
+                if(data.detail === $t('auth.invalid_token')) {
+                    flush()
+                }
             }
             loading.value = false
         } catch(err) {
-            console.log(err)
+            console.warn(err)
             loading.value = false
         }
     }

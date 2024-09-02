@@ -6,17 +6,8 @@ export default {
     },
     auth() {
         return api.get('/auth/user/')
-    },/*
-    admin() {
-        return api.get('/auth/admin')
     },
-    forgotPassword(data) {
-        return api.post('/auth/forgot-password', data)
-    },
-    veirfyPasswordResetToken(token) {
-        return api.get(`/auth/forgot-password/${token}`)
-    },
-    updatePassword(token, data) {
-        return api.post(`/auth/forgot-password/${token}`, data)
-    }*/
+    logout() {
+        return api.post('/logout/')
+    }
 }

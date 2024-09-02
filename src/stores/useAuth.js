@@ -57,6 +57,11 @@ export const useAuth = defineStore('useAuth', () => {
         }
         
     }
+    function flush() {
+        localStorage.removeItem('AUTH_TOKEN')
+        localStorage.removeItem('USER')
+        localStorage.removeItem('P')
+    }
     function getUser() {
         return JSON.parse(localStorage.getItem('USER'))
     }
@@ -84,6 +89,7 @@ export const useAuth = defineStore('useAuth', () => {
         permissions,
         getToken,
         login,
+        flush,
         getPermissions
     }
 })

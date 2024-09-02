@@ -8,7 +8,7 @@
     import { useResource } from '@/composables/useResource';
     import api from '@/lib/axios';
 
-    const { $t, $toastError } = useGlobalHelpers()
+    const { $t, $toastError, $can } = useGlobalHelpers()
     const resources = useResource()
     const loadingBar = useLoadingBar()
     const router = useRouter()
@@ -257,28 +257,28 @@
         <NGrid x-gap="12" :cols="5" responsive>
             <NGi span="1">
                 <NFormItem :label="$t('tables.language')">
-                    <NSelect :disabled="isLoading" v-model:value="defaultData.language" :options="lanOptions" :placeholder="$t('forms.select_default_field', { field: $t('language') })" />
+                    <NSelect :disabled="isLoading || !$can('add','client')" v-model:value="defaultData.language" :options="lanOptions" :placeholder="$t('forms.select_default_field', { field: $t('language') })" />
                 </NFormItem>
             </NGi>
              <NGi>
                 <NFormItem :label="$t('tables.country')">
-                    <NInput :disabled="isLoading" v-model:value="defaultData.country" :placeholder="$t('forms.enter_default_field', { field: $t('tables.country') })" />
+                    <NInput :disabled="isLoading || !$can('add','client')" v-model:value="defaultData.country" :placeholder="$t('forms.enter_default_field', { field: $t('tables.country') })" />
                 </NFormItem>
              </NGi>
              <NGi>
                 <NFormItem :label="$t('tables.state')">
-                    <NInput :disabled="isLoading" v-model:value="defaultData.state" :placeholder="$t('forms.enter_default_field', { field: $t('tables.state') })" />
+                    <NInput :disabled="isLoading || !$can('add','client')" v-model:value="defaultData.state" :placeholder="$t('forms.enter_default_field', { field: $t('tables.state') })" />
                 </NFormItem>
              </NGi>
              <NGi span="2">
                 <NFlex justify="end">
-                    <NButton :disabled="isLoading" @click="addNewRow()" strong secondary round type="primary">
+                    <NButton :disabled="isLoading || !$can('add','client')" @click="addNewRow()" strong secondary round type="primary">
                         +1
                     </NButton>
-                    <NButton :disabled="isLoading" @click="addNewRow(5)" strong secondary round type="primary">
+                    <NButton :disabled="isLoading || !$can('add','client')" @click="addNewRow(5)" strong secondary round type="primary">
                         +5
                     </NButton>
-                    <NButton :disabled="isLoading" @click="addNewRow(10)" strong secondary round type="primary">
+                    <NButton :disabled="isLoading || !$can('add','client')" @click="addNewRow(10)" strong secondary round type="primary">
                         +10
                     </NButton>
                 </NFlex>
@@ -289,9 +289,9 @@
         <template #action>
             <NFlex justify="space-between" class="">
                 <NFormItem :label="$t('sale_room')" class="md:w-[50%] w-full">
-                    <NSelect :disabled="isLoading" v-model:value="selectedSaleRoom" :options="SalesRoomeOptions" :placeholder="$t('forms.select_field', { field: $t('sale_room') })" />
+                    <NSelect :disabled="isLoading  || !$can('add','client')" v-model:value="selectedSaleRoom" :options="SalesRoomeOptions" :placeholder="$t('forms.select_field', { field: $t('sale_room') })" />
                 </NFormItem>
-                <NButton :disabled="isLoading" @click="triggerSend()" type="primary" class="self-center">
+                <NButton :disabled="isLoading || !$can('add','client')" @click="triggerSend()" type="primary" class="self-center">
                     {{ $t('tables.add_new', { item: $t(model, 2)}) }}
                 </NButton>
             </NFlex>

@@ -55,6 +55,9 @@ import DeleteButton from './DeleteButton.vue';
     const prevPage = computed(() => props.prevPage ?? props.model)
     const disableEdit = computed(() => id.value && !$can('change',permission.value) )
     const disableDelete = computed(() => id.value && !$can('delete',permission.value) )
+    const can_add = computed(() => $can('add',permission.value))
+    const can_edit = computed(() =>  $can('change',permission.value))
+    const can_delete = computed (() => $can('delete',permission.value))
     const formRules = ref([])
 
     // Methods
@@ -141,12 +144,6 @@ import DeleteButton from './DeleteButton.vue';
         if(id) {
             await getResource(id)
         }
-        // getResource()
-
-        // Add actions column to a table
-        const can_edit = $can('change',permission.value)
-        const can_delete = $can('delete',permission.value)
-        // console.log(can_edit, can_delete)
         isLoading.value = false
     })
 
@@ -274,7 +271,7 @@ import DeleteButton from './DeleteButton.vue';
         <template #action>
             <NFlex justify="space-between">
                 <DeleteButton
-                    v-if="!disableEdit && props.fronendPermissions.includes('d')"
+                    v-if="!disableEdit && props.fronendPermissions.includes('d') && can_delete"
                     :disabled="props.fronendPermissions.includes('dd')"
                     :delete_msg="$t('actions.confirm_msg',{ verb: $t('tables.delete').toLowerCase(), obj: $t(props.model) })"
                     :deleted_msg="$t('messages.deleted_successfully',{ obj: $t(props.model) })"
@@ -284,7 +281,7 @@ import DeleteButton from './DeleteButton.vue';
                 <NFlex justify="end">
                     <NButton
                         v-if="!disableEdit"
-                        :disabled="isLoading || !props.fronendPermissions.includes('u')"
+                        :disabled="isLoading || !props.fronendPermissions.includes('u') || (!can_add && !id) || (!can_edit && id)"
                         type="primary"
                         @click="saveChanges()"
                     >{{ (form.id ? $t('tables.edit') : $t('tables.add')) }}</NButton>

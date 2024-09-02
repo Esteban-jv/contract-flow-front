@@ -5,7 +5,7 @@
         NPagination, useLoadingBar, NModal, NText,
         NCard, NInput, NSpace, 
         NSkeleton} from 'naive-ui';
-    import { CheckCircle, TimesCircle, Times, Edit, Info, Search } from '@vicons/fa';
+    import { CheckCircle, TimesCircle, Times, Info} from '@vicons/fa';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import api from "@/lib/axios";
 
@@ -192,7 +192,7 @@
         })
 
         // Add actions column to a table
-        if($can('change',permission.value) && withOptions) {
+        if(withOptions) {
             cols.push({
                 align: 'center',
                 title: $t('history'),
@@ -200,7 +200,7 @@
                     return h(
                         NButton,
                         {
-                            disabled: !$can('change',permission.value),
+                            disabled: false, // unless can disabled history
                             size: "small",
                             secondary: true,
                             type:"info",

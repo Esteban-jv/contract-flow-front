@@ -8,7 +8,7 @@
         NSelect
     } from 'naive-ui';
     import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserClock, UserFriends, UserTag, UserPlus, UsersCog, UserCheck,
-      MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell, Cog
+      MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell, Cog, UserTie, BlackTie
      } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
@@ -344,8 +344,8 @@
       buildModule({
         icon: Cog,
         permissions: [
-          { model: 'user', name:'user', icon: UserTag, path:'users', allow: false },
-          { model: 'group', name:'group', icon: UserTag, path:'groups', allow: false },
+          { model: 'user', name:'user', icon: UserTie, path:'users', allow: false },
+          { model: 'group', name:'group', icon: BlackTie, path:'groups', allow: false },
         ],
         singular: 'system',
         plural: 'users',
@@ -360,15 +360,6 @@
           }
         ]
       })
-      /* CLIENTS */
-      // buildModule({
-      //   icon: UserClock,
-      //   permissions: [
-      //     { model: 'historicaluser', name:'client', icon: UserTag, path:'system-activity', allow: false },
-      //   ],
-      //   singular: 'historical_record',
-      //   plural: 'historical-records',
-      // })
 
     }
 

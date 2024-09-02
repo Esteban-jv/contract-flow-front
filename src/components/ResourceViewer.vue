@@ -44,6 +44,9 @@
 
     const permission = computed(() => props.permissionModel ?? props.model)
     const objectFields = computed(() => props.fields.filter(f => !!f.table.text))
+    const can_add = computed(() => $can('add',permission.value))
+    const can_edit = computed(() =>  $can('change',permission.value))
+    const can_delete = computed (() => $can('delete',permission.value))
 
     // States and Composables
     const router = useRouter()
@@ -198,7 +201,7 @@
             </div>
         </NSpace>
     </NCard>
-    <NFlex v-if="props.forntendPermissions.includes('c')" justify="end" class="py-3">
+    <NFlex v-if="props.forntendPermissions.includes('c') && can_add" justify="end" class="py-3">
         <NButton @click="GoToDetails(true)">
             {{ $t('tables.add_new', { item: $t(props.model)}) }}
         </NButton>

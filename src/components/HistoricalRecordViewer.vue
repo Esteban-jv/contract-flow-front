@@ -369,7 +369,7 @@
         opacity: 0.5;
     }
     :deep(.change) {
-        color: rgba(255, 255, 0, 1) !important;
+        color: hsl(50, 100%, 50%) !important;
     }
     :deep(.plus) {
         color: rgba(0, 255, 0, 1) !important;

@@ -6,9 +6,9 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '',
       name: 'home',
-      component: HomeView
+      redirect: { name: 'master' }
     },
     {
       path: '/login',
@@ -46,7 +46,6 @@ router.beforeEach( async (to, from, next) => {
   if(requiresAuth) {
     try {
       const { data } = await AuthApi.auth()
-      // console.log(data)
       if(data.is_active && data.is_staff && data.is_superuser) {
         // superuser
         next()

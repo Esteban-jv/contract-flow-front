@@ -11,6 +11,7 @@
     "theme": "Tema",
     "history": "Históricos",
     "system": "Sistema",
+    "master": "Maestro",
     "pages": {
         "403_title": "403 Acción no autorizada.",
         "403_msg": "No tienes acceso para ver este recurso.",
@@ -65,6 +66,11 @@
     "historical_record":"Historia de registros | Historial de regirstros",
     "tables": {
         "id": "Id",
+        "schema": "Esquema",
+        "created_at": "Creado en",
+        "updated_at": "Actualizado en",
+        "deleted_at": "Eliminado en",
+        "domain": "Dominio",
         "folio": "Folio",
         "lead": "Lead",
         "name": "Nombre",

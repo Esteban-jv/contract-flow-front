@@ -11,6 +11,7 @@
     "theme": "Theme",
     "history": "History",
     "system": "System",
+    "master": "Master",
     "pages": {
         "403_title": "403 Unautorized action.",
         "403_msg": "You do not have permission to see this.",
@@ -65,6 +66,11 @@
     "historical_record":"Historical record | Historical records",
     "tables": {
         "id": "Id",
+        "schema": "Schema",
+        "created_at": "Created at",
+        "updated_at": "Updated at",
+        "deleted_at": "Deleted at",
+        "domain": "Domain",
         "folio": "Folio",
         "lead": "Lead",
         "name": "Name | Names",

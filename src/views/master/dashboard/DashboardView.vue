@@ -1,29 +1,50 @@
 <script setup>
-    import { ref, onMounted } from 'vue';
+    import { ref, computed, onMounted, h } from 'vue';
     import { useRouter } from 'vue-router';
+    import { NButton, NDataTable } from 'naive-ui';
+    import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import MasterApi from '@/api/master/MasterApi';
 
-    const clients = ref([])
     const router = useRouter()
+    const { $t } = useGlobalHelpers()
+
+    const clients = ref([])
+    const columns = computed( () => [
+        { title: $t('tables.id'), key: 'id' },
+        { title: $t('tables.name'), key: 'name' },
+        { title: $t('tables.schema'), key: 'schema_name' },
+        { title: $t('tables.created_at'), key: 'created_on' },
+        { title: $t('tables.domain'), key: 'domain', render(row) {
+            return h(
+            NButton,
+            {
+                text: true,
+                tag: "a",
+                href: row.url,
+                target: "_blank",
+                type: "info"
+            },
+            { default: () => row.domain }
+            );
+        }
+    }])
 
     onMounted(async () => {
         const response = await MasterApi.getClients()
+        // clients.value = response.data
+        // reder domain as a link using Naive UI
         clients.value = response.data
     })
-
-    const logout = async () => {
-        await MasterApi.logout()
-        localStorage.removeItem('AUTH_TOKEN')
-        router.push({ name: 'login' })
-    }
 </script>
 <template>
-    <h1>{{ $t('client', 2) }}</h1>
-    <p v-for="c in clients">
-        {{ c.name }}
-    </p>
-    <br>
-    <br>
-    <br>
-    <button @click="logout">{{ $t('auth.logout') }}</button>
+    <h1 class="text-2xl pb-4">{{ $t('client',2) }}</h1>
+    <div class="w-full">
+        <NDataTable
+            :bordered="false"
+            :single-line="false"
+            single-column
+            :columns="columns"
+            :data="clients"
+        />
+    </div>
 </template>

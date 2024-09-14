@@ -38,7 +38,8 @@
         "min_length":"The field {field} must have at least {length} characters.",
         "check_all_fields_msg": "It could not send. Please check out all the fields.",
         "something_went_wrong": "Oops! Something went wrong.",
-        "enter_valid_field":"Enter valid {field}."
+        "enter_valid_field":"Enter valid {field}.",
+        "upload_file": "Upload file"
     },
     "client": "Client | Clients",
     "add_client": "Add client | Add clients",
@@ -64,6 +65,7 @@
     "all":"All",
     "search_by":"Search by",
     "historical_record":"Historical record | Historical records",
+    "profile":"Profile",
     "tables": {
         "id": "Id",
         "schema": "Schema",
@@ -130,7 +132,8 @@
         "first_name": "First name",
         "roles": "Roles",
         "permissions": "Permissions",
-        "date": "Date"
+        "date": "Date",
+        "profile_picture": "Profile picture"
     },
     "marital_status": {
         "single":"Single",

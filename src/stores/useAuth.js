@@ -40,6 +40,7 @@ export const useAuth = defineStore('useAuth', () => {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 username: user.username,
+                image: user.image,
             }))
 
             groups.forEach(g => {

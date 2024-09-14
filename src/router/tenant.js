@@ -37,6 +37,11 @@ const router = createRouter({
       component: () => import('../views/client/MenuContainerLayout.vue'),
       children: [
         {
+          path: '/profile',
+          name: 'profile',
+          component: () => import('../views/client/ProfileView.vue')
+        },
+        {
           path: '/dashboard',
           name: 'dashboard',
           component: () => import('../views/client/DashboardView.vue')

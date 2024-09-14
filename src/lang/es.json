@@ -38,7 +38,8 @@
         "min_length":"El campo {field} debe tener al menos {length} caracteres.",
         "check_all_fields_msg": "No se pudo enviar. Por favor revisa todos los campos.",
         "something_went_wrong": "Ups! Algo salió mal.",
-        "enter_valid_field":"Introduce un {field} válido."
+        "enter_valid_field":"Introduce un {field} válido.",
+        "upload_file": "Subir archivo"
     },
     "client": "Cliente | Clientes",
     "add_client": "Agregar cliente | Agregar clientes",
@@ -64,6 +65,7 @@
     "all":"Todos",
     "search_by":"Buscar por",
     "historical_record":"Historia de registros | Historial de regirstros",
+    "profile": "Perfil",
     "tables": {
         "id": "Id",
         "schema": "Esquema",
@@ -130,7 +132,8 @@
         "first_name": "Nombre",
         "roles": "Roles",
         "permissions": "Permisos",
-        "date": "Fecha"
+        "date": "Fecha",
+        "profile_picture": "Foto de perfil"
     },
     "marital_status": {
         "single":"Soltero",

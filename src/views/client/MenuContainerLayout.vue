@@ -16,6 +16,7 @@
     import { useAuth } from '@/stores/useAuth';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import { i18n } from '@/plugins/i18n';
+    import api from '@/lib/axios';
 
     // DATA
     const { $can, $t } = useGlobalHelpers()
@@ -35,11 +36,12 @@
       return Array.from(user.value.first_name || '')[0] + Array.from(user.value.last_name || '')[0]
     })
     const avatar = computed(() => {
-      return user.profile_picture ? 
+      // console.log(user.value.image, `${api.getUri()}${user.value.image}`)
+      return user.value.image ? 
       h(NAvatar, {
         round: true,
         style: "margin-right: 12px;",
-        src: user.profile_picture,
+        src: `${api.getUri()}${user.value.image}`,
         fallbackSrc: "https://07akioni.oss-cn-beijing.aliyuncs.com/demo1.JPG"
       })
         :
@@ -87,15 +89,15 @@
           RouterLink,
           {
             to: {
-              name: "dashboard",
+              name: "profile",
               // params: {
                 // lang: "en-US"
               // }
             }
           },
-          { default: () => $t('dashboard') }
+          { default: () => $t('profile') }
         ),
-        key: "dashboard",
+        key: "profile",
       },
       {
         label: $t('theme'),

@@ -1,7 +1,7 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
-    import { NButton, NFlex, NCard, NForm, NGrid, NSelect, NDatePicker, NTransfer,
+    import { NButton, NFlex, NCard, NForm, NGrid, NSelect, NDatePicker, NTransfer, NUpload,
         NFormItemGi, NInput, NCheckbox, NSkeleton, NSpace, useLoadingBar } from 'naive-ui';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
     import api from "@/lib/axios";
@@ -47,11 +47,21 @@ import DeleteButton from './DeleteButton.vue';
         fields: {
             type: Array,
             required: true
+        },
+        title: {
+            type: String,
+            required: false
+        },
+        hideBackButton: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     })
 
     const id = computed(() => props.id ?? null )
     const permission = computed(() => props.permissionModel ?? props.model)
+    const modelOrTitle = computed(() => props.title ?? props.model)
     const prevPage = computed(() => props.prevPage ?? props.model)
     const disableEdit = computed(() => id.value && !$can('change',permission.value) )
     const disableDelete = computed(() => id.value && !$can('delete',permission.value) )
@@ -97,6 +107,12 @@ import DeleteButton from './DeleteButton.vue';
     }
     const goBack = form => {
         router.push({ name: prevPage.value })
+    }
+    const handleFileChange = (file) => {
+        console.log(file)
+        console.log(file[0])
+        console.log(file[0].file)
+        form.value.image = file[0].file
     }
 
     onMounted(async () => {
@@ -170,7 +186,13 @@ import DeleteButton from './DeleteButton.vue';
             isLoading.value = true
             loadingBar.start()
             if (form.value.id) {
-                const { data } = await api.put(`${props.endpoint}/${form.value.id}/`,form.value)
+                // form.value.image = null
+                console.warn("U P D A T E",form.value)
+                const { data } = await api.put(`${props.endpoint}/${form.value.id}/`,form.value, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
             } else {
                 const { data } = await api.post(`${props.endpoint}/`,form.value)
             }
@@ -187,7 +209,7 @@ import DeleteButton from './DeleteButton.vue';
 </script>
 <template>
     <NCard
-        :title="(form.id ? '' : ($t('tables.add')) + ' ') + $t(model)"
+        :title="(form.id ? '' : ($t('tables.add')) + ' ') + $t(modelOrTitle)"
         :bordered="false"
         role="dialog"
         aria-modal="true"
@@ -265,6 +287,20 @@ import DeleteButton from './DeleteButton.vue';
                         :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
                         class="w-full"
                     />
+                    <NUpload
+                        list-type="image-card"
+                        name="image"
+                        :multiple="field.rules.multiple === true ? true : false"
+                        accept="image/*"
+                        :default-upload="true"
+                        :max="1"
+                        v-if="field.rules.type === 'File'"
+                        v-model:value="form[field.field]"
+                        :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
+                        @update:file-list="handleFileChange"
+                    >
+                        {{ $t('forms.upload_file') }}
+                    </NUpload>
                 </NFormItemGi>
             </NGrid>
         </NForm>
@@ -285,7 +321,7 @@ import DeleteButton from './DeleteButton.vue';
                         type="primary"
                         @click="saveChanges()"
                     >{{ (form.id ? $t('tables.edit') : $t('tables.add')) }}</NButton>
-                    <NButton :disabled="isLoading" secondary @click="goBack()">{{ $t('actions.go_back') }}</NButton>
+                    <NButton v-if="!props.hideBackButton" :disabled="isLoading" secondary @click="goBack()">{{ $t('actions.go_back') }}</NButton>
                 </NFlex>
             </NFlex>
         </template>

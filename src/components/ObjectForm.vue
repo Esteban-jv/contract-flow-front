@@ -70,6 +70,9 @@ import DeleteButton from './DeleteButton.vue';
     const can_delete = computed (() => $can('delete',permission.value))
     const formRules = ref([])
 
+    // temporal
+    const computedImage = computed(() => form.value.image ? [{ status: 'finished', url: form.value['image'], id: 'image' }] : [])
+
     // Methods
     const onlyAllowNumber = (value) => !value || /^\d+$/.test(value)
     const calculatedSpan = span => {
@@ -109,10 +112,15 @@ import DeleteButton from './DeleteButton.vue';
         router.push({ name: prevPage.value })
     }
     const handleFileChange = (file) => {
-        console.log(file)
-        console.log(file[0])
-        console.log(file[0].file)
-        form.value.image = file[0].file
+        if(!file) return
+        if(file.length) {
+            console.log(file)
+            console.log(file[0])
+            console.log(file[0].file)
+            form.value.image = file[0].file
+        } else {
+            form.value.image = null
+        }
     }
 
     onMounted(async () => {
@@ -193,6 +201,9 @@ import DeleteButton from './DeleteButton.vue';
                         'Content-Type': 'multipart/form-data'
                     }
                 })
+                console.warn(data)
+                // form.value.image = data.image
+                form.value = data
             } else {
                 const { data } = await api.post(`${props.endpoint}/`,form.value)
             }
@@ -293,6 +304,7 @@ import DeleteButton from './DeleteButton.vue';
                         :multiple="field.rules.multiple === true ? true : false"
                         accept="image/*"
                         :default-upload="true"
+                        :default-file-list="computedImage"
                         :max="1"
                         v-if="field.rules.type === 'File'"
                         v-model:value="form[field.field]"

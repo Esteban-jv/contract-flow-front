@@ -40,7 +40,7 @@
                 span: 24,
                 rules: {
                     type: 'File',
-                    default: ''
+                    default: null
                 }
             },
         ])

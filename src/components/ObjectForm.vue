@@ -70,9 +70,6 @@ import DeleteButton from './DeleteButton.vue';
     const can_delete = computed (() => $can('delete',permission.value))
     const formRules = ref([])
 
-    // temporal
-    const computedImage = computed(() => form.value.image ? [{ status: 'finished', url: form.value['image'], id: 'image' }] : [])
-
     // Methods
     const onlyAllowNumber = (value) => !value || /^\d+$/.test(value)
     const calculatedSpan = span => {
@@ -111,15 +108,13 @@ import DeleteButton from './DeleteButton.vue';
     const goBack = form => {
         router.push({ name: prevPage.value })
     }
-    const handleFileChange = (file) => {
+    const getImage = name => form.value[name] ? [{ status: 'finished', url: form.value[name], id: name }] : []
+    const handleFileChange = (file, name) => {
         if(!file) return
         if(file.length) {
-            console.log(file)
-            console.log(file[0])
-            console.log(file[0].file)
-            form.value.image = file[0].file
+            form.value[name] = file[0].file
         } else {
-            form.value.image = null
+            form.value[name] = null
         }
     }
 
@@ -194,15 +189,11 @@ import DeleteButton from './DeleteButton.vue';
             isLoading.value = true
             loadingBar.start()
             if (form.value.id) {
-                // form.value.image = null
-                console.warn("U P D A T E",form.value)
                 const { data } = await api.put(`${props.endpoint}/${form.value.id}/`,form.value, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 })
-                console.warn(data)
-                // form.value.image = data.image
                 form.value = data
             } else {
                 const { data } = await api.post(`${props.endpoint}/`,form.value)
@@ -300,16 +291,16 @@ import DeleteButton from './DeleteButton.vue';
                     />
                     <NUpload
                         list-type="image-card"
-                        name="image"
+                        :name="field.rules.name"
                         :multiple="field.rules.multiple === true ? true : false"
-                        accept="image/*"
+                        :accept="field.rules.accept"
                         :default-upload="true"
-                        :default-file-list="computedImage"
-                        :max="1"
+                        :default-file-list="getImage(field.field)"
+                        :max="field.rules.max"
                         v-if="field.rules.type === 'File'"
                         v-model:value="form[field.field]"
                         :placeholder="$t('forms.select_field', { field: $t(field.translated)})"
-                        @update:file-list="handleFileChange"
+                        @update:file-list="(file) => handleFileChange(file, field.field)"
                     >
                         {{ $t('forms.upload_file') }}
                     </NUpload>

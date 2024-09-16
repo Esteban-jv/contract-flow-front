@@ -6,6 +6,7 @@
     import { UserLock } from '@vicons/fa';
     import ObjectForm from '@/components/ObjectForm.vue';
     import api from '@/lib/axios';
+import { max } from 'date-fns';
 
     const router = useRouter()
     const { $t } = useGlobalHelpers()
@@ -40,6 +41,9 @@
                 span: 24,
                 rules: {
                     type: 'File',
+                    name: 'image',
+                    accept: 'image/*',
+                    max: 1, // files number
                     default: null
                 }
             },

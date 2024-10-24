@@ -8,7 +8,7 @@
         NSelect
     } from 'naive-ui';
     import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserClock, UserFriends, UserTag, UserPlus, UsersCog, UserCheck,
-      MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell, Cog, UserTie, BlackTie
+      MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell, Cog, UserTie, BlackTie, List
      } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
@@ -297,7 +297,8 @@
         permissions: [
           { name: 'idtype', model: 'idtype', icon: Flag, path:'idtype', allow: false},
           { name: 'language', model: 'language', icon: GlobeAmericas, path:'language', allow: false},
-          { name: 'nationality', model: 'nationality', icon: IdCard, path:'nationality', allow: false}
+          { name: 'nationality', model: 'nationality', icon: IdCard, path:'nationality', allow: false},
+          // { name: 'categories', model: 'category', icon: List, path:'categories', allow: false}
         ],
         singular: 'catalog',
         plural: 'catalogs',

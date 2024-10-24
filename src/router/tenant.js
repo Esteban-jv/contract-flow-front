@@ -62,6 +62,11 @@ const router = createRouter({
           component: () => import('../views/client/catalogs/NationalitiesView.vue')
         },
         {
+          path: '/categories',
+          name: 'categories',
+          component: () => import('../views/client/catalogs/CategoriesView.vue')
+        },
+        {
           path: '/currency',
           name: 'currency',
           component: () => import('../views/client/currency/CurrencyView.vue')
@@ -135,6 +140,17 @@ const router = createRouter({
           path: '/system-activity',
           name: 'system-activity',
           component: () => import('../views/client/system/SystemActivityView.vue')
+        },
+        /* PRODUCT */
+        {
+          path: '/products',
+          name: 'products',
+          component: () => import('../views/client/product/ProductView.vue')
+        },
+        {
+          path: '/add-product',
+          name: 'add-product',
+          component: () => import('../views/client/product/SaveProductView.vue')
         }
       ]
     },

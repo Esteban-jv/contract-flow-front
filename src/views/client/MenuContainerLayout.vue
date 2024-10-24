@@ -4,8 +4,7 @@
     import {
         NFlex, NLayout, NLayoutSider, NMenu, NIcon, // Sidemenu
         NSplit, NAvatar, NDropdown, NLayoutHeader, NText, // Header
-        NScrollbar,
-        NSelect
+        NScrollbar
     } from 'naive-ui';
     import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserClock, UserFriends, UserTag, UserPlus, UsersCog, UserCheck,
       MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell, Cog, UserTie, BlackTie, List
@@ -36,7 +35,6 @@
       return Array.from(user.value.first_name || '')[0] + Array.from(user.value.last_name || '')[0]
     })
     const avatar = computed(() => {
-      // console.log(user.value.image, `${api.getUri()}${user.value.image}`)
       return user.value.image ? 
       h(NAvatar, {
         round: true,
@@ -57,9 +55,7 @@
     const menuOptions = ref([])
     const logout = async () => {
         await ClientAuthApi.logout()
-        localStorage.removeItem('AUTH_TOKEN')
-        localStorage.removeItem('USER')
-        localStorage.removeItem('P')
+        ClientAuthApi.removeToken()
         router.push({ name: 'login' })
     }
     function renderCustomHeader() {
@@ -147,7 +143,7 @@
       },
     ])
 
-    // Handle User Options
+    // Handle AvatarUser Options
     const handleSelect = async key => {
       const { availableLocales } = i18n.global
       // console.warn(key, availableLocales)
@@ -176,21 +172,24 @@
     function renderIcon(icon) {
       return () => h(NIcon, null, { default: () => h(icon) });
     }
-    // Deprecated
-    const deprecatedBuildModule = module => {
-      // substract vars
-      const { icon, singular, plural, permissions } = module
 
-     // Check all permissions array
+    // Render Menu module
+    const buildModule = (module, parentChildren = null) => {
+      // extraer variables
+      const { icon, singular, plural, permissions, children } = module
+
+      // Verificar todos los permisos del array
       permissions.forEach(cp => {
-        cp.allow = $can('view',cp.model)
+        cp.allow = $can('view', cp.model)
       });
-      // Check if at least one permission in granted
-      if(permissions.some( cp => cp.allow === true)) {
+
+      // Verificar si al menos un permiso está concedido
+      if (permissions.some(cp => cp.allow === true)) {
         let cat_children = []
-        // Add just RouterLink granted
-        permissions.forEach( cp => {
-          if(cp.allow) {
+
+        // Agregar solo RouterLink concedidos
+        permissions.forEach(cp => {
+          if (cp.allow) {
             cat_children.push({
               label: () => h(
                 RouterLink,
@@ -203,74 +202,33 @@
               ),
               key: cp.path,
               icon: renderIcon(cp.icon),
-              children: null // if children map and recursive buldModule else, null
+              children: null
             })
           }
         })
-        // Reder all RouterLinks in the actual Menu Object
-        menuOptions.value.push({
-          label: $t(singular,2),
+
+        // Procesar hijos recursivamente si existen
+        if (children && Array.isArray(children)) {
+          children.forEach(childModule => {
+            buildModule(childModule, cat_children)
+          })
+        }
+
+        // Renderizar todos los RouterLinks en el objeto de menú actual
+        const menuItem = {
+          label: $t(singular, 2),
           key: plural,
           icon: renderIcon(icon),
           children: cat_children
-        })
-      }
-    }
-    const buildModule = (module, parentChildren = null) => {
-    // extraer variables
-    const { icon, singular, plural, permissions, children } = module
-
-    // Verificar todos los permisos del array
-    permissions.forEach(cp => {
-      cp.allow = $can('view', cp.model)
-    });
-
-    // Verificar si al menos un permiso está concedido
-    if (permissions.some(cp => cp.allow === true)) {
-      let cat_children = []
-
-      // Agregar solo RouterLink concedidos
-      permissions.forEach(cp => {
-        if (cp.allow) {
-          cat_children.push({
-            label: () => h(
-              RouterLink,
-              {
-                to: {
-                  name: cp.path
-                }
-              },
-              { default: () => $t(cp.name, 2) }
-            ),
-            key: cp.path,
-            icon: renderIcon(cp.icon),
-            children: null
-          })
         }
-      })
 
-      // Procesar hijos recursivamente si existen
-      if (children && Array.isArray(children)) {
-        children.forEach(childModule => {
-          buildModule(childModule, cat_children)
-        })
-      }
-
-      // Renderizar todos los RouterLinks en el objeto de menú actual
-      const menuItem = {
-        label: $t(singular, 2),
-        key: plural,
-        icon: renderIcon(icon),
-        children: cat_children
-      }
-
-      if (parentChildren) {
-        parentChildren.push(menuItem)
-      } else {
-        menuOptions.value.push(menuItem)
+        if (parentChildren) {
+          parentChildren.push(menuItem)
+        } else {
+          menuOptions.value.push(menuItem)
+        }
       }
     }
-  }
     function buildMenu() {
       menuOptions.value = []
       menuOptions.value.push({

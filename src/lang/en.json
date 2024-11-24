@@ -1,5 +1,7 @@
 {
     "intro_msg":"This is gonna become into a really exciting website",
+    "en": "English",
+    "es": "Spanish",
     " ": "",
     "null": "Null",
     "none": "None",
@@ -67,6 +69,7 @@
     "historical_record":"Historical record | Historical records",
     "profile":"Profile",
     "product":"Product | Products",
+    "service":"Service | Services",
     "price":"Price | Prices",
     "tables": {
         "id": "Id",
@@ -78,7 +81,7 @@
         "folio": "Folio",
         "lead": "Lead",
         "name": "Name | Names",
-        "description": "Decription",
+        "description": "Description",
         "status": "Status",
         "currently_available": "Currently available",
         "actions": "Actions",
@@ -136,7 +139,12 @@
         "permissions": "Permissions",
         "date": "Date",
         "profile_picture": "Profile picture",
-        "price": "Price"
+        "price": "Price",
+        "type": "Type",
+        "quantity": "Quantity",
+        "total": "Total",
+        "giftable": "Giftable",
+        "digital": "Digital"
     },
     "marital_status": {
         "single":"Single",

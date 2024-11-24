@@ -18,7 +18,7 @@
     const fields = ref([
         {
             field: "name",
-            translated: "name",
+            translated: "tables.name",
             rules: {
                 type: String,
                 required: true
@@ -28,10 +28,10 @@
             }
         },
         {
-            field: "description",
-            translated: "description",
+            field: "current_price",
+            translated: "tables.price",
             rules: {
-                type: String,
+                type: Number,
                 required: true
             },
             table: {
@@ -40,7 +40,7 @@
         },
         {
             field: "category",
-            translated: "category",
+            translated: "tables.category",
             rules: {
                 type: String,
                 required: true
@@ -52,7 +52,7 @@
         },
         {
             field: "type",
-            translated: "type",
+            translated: "tables.type",
             rules: {
                 type: String,
                 required: true
@@ -63,7 +63,7 @@
         },
         {
             field: "digital",
-            translated: "digital",
+            translated: "tables.digital",
             rules: {
                 type: Boolean,
                 required: true
@@ -74,7 +74,7 @@
         },
         {
             field: "giftable",
-            translated: "giftable",
+            translated: "tables.giftable",
             rules: {
                 type: Boolean,
                 required: true

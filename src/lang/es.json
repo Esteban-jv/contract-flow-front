@@ -1,5 +1,7 @@
 {
     "intro_msg":"Esto se convertirá en un muy emocionante sitio web",
+    "en": "Inglés",
+    "es": "Español",
     " ": "",
     "null": "Nulo",
     "none": "Ninguno",
@@ -67,6 +69,7 @@
     "historical_record":"Historia de registros | Historial de regirstros",
     "profile": "Perfil",
     "product": "Producto | Productos",
+    "service": "Servicio | Servicios",
     "price": "Precio | Precios",
     "tables": {
         "id": "Id",
@@ -137,6 +140,12 @@
         "date": "Fecha",
         "profile_picture": "Foto de perfil",
         "price": "Precio",
+        "type": "Tipo",
+        "quantity": "Cantidad",
+        "total": "Total",
+        "giftable": "Regalable",
+        "digital": "Digital",
+        "category": "Categoría"
     },
     "marital_status": {
         "single":"Soltero",

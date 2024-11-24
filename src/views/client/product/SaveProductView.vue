@@ -26,7 +26,7 @@
         },
         {
             field: "description",
-            translated: "description",
+            translated: "tables.description",
             span: 16,
             rules: {
                 type: String,
@@ -39,7 +39,7 @@
         },
         {
             field: "category",
-            translated: "category",
+            translated: "tables.category",
             span: 8,
             rules: {
                 type: 'Select',
@@ -56,7 +56,7 @@
         },
         {
             field: "type",
-            translated: "type",
+            translated: "tables.type",
             span: 8,
             rules: {
                 type: String,
@@ -73,7 +73,7 @@
         },
         /*{
             field: "price",
-            translated: "price",
+            translated: "tables.price",
             span: 8,
             rules: {
                 type: Number,
@@ -86,7 +86,7 @@
         },*/
         {
             field: "digital",
-            translated: "digital",
+            translated: "tables.digital",
             span: 4,
             rules: {
                 type: Boolean,
@@ -99,7 +99,7 @@
         },
         {
             field: "giftable",
-            translated: "giftable",
+            translated: "tables.giftable",
             span: 4,
             rules: {
                 type: Boolean,

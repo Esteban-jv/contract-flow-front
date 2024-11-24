@@ -66,6 +66,8 @@
     "search_by":"Search by",
     "historical_record":"Historical record | Historical records",
     "profile":"Profile",
+    "product":"Product | Products",
+    "price":"Price | Prices",
     "tables": {
         "id": "Id",
         "schema": "Schema",
@@ -133,7 +135,8 @@
         "roles": "Roles",
         "permissions": "Permissions",
         "date": "Date",
-        "profile_picture": "Profile picture"
+        "profile_picture": "Profile picture",
+        "price": "Price"
     },
     "marital_status": {
         "single":"Single",

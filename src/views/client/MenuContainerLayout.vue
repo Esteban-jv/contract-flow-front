@@ -7,7 +7,7 @@
         NScrollbar
     } from 'naive-ui';
     import { Home, ListAltRegular, IdCard, Flag, GlobeAmericas, UserClock, UserFriends, UserTag, UserPlus, UsersCog, UserCheck,
-      MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell, Cog, UserTie, BlackTie, List
+      MoneyBill, MoneyBillWave, ExchangeAlt, ConciergeBell, Cog, UserTie, BlackTie, Gem
      } from '@vicons/fa';
     import { usePreferences } from '@/stores/usePreferences';
     import ClientAuthApi from '@/api/client/ClientAuthApi';
@@ -245,6 +245,8 @@
         icon: MoneyBillWave,
         permissions: [
           { name: 'sale_room', model: 'salesroom', icon: ConciergeBell, path:'sales-room', allow: false},
+          // Carefull with the next line
+          { name: 'product', model: 'product', icon: Gem, path:'products', allow: false},
         ],
         singular: 'sale',
         plural: 'sales',
@@ -277,9 +279,9 @@
         icon: UsersCog,
         permissions: [
           { model: 'client', name:'client', icon: UserTag, path:'clients', allow: false },
-          { model: 'client', name:'add_client', icon: UserPlus, path:'add-client', allow: false},
+          { model: 'client', name:'client', icon: UserPlus, path:'client', allow: false},
           { model: 'client', name:'add_massive_client', icon: UserFriends, path:'clients-massive', allow: false},
-          { model: 'partner', name:'partner', icon: UserCheck, path:'partner', allow: false }
+          { model: 'partner', name:'partner', icon: UserCheck, path:'partners', allow: false }
         ],
         singular: 'client',
         plural: 'clients',

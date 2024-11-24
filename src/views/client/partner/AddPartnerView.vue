@@ -793,7 +793,7 @@
                 :model="clientModel"
                 :id="clientId"
                 :fields="clientFields"
-                prev-page="partner"
+                prev-page="partners"
                 fronend-permissions="cru"
             />
         </NTabPane>

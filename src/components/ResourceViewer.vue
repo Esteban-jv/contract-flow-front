@@ -82,10 +82,12 @@
     })
 
     const edit = async row => {
-        router.push({ name: `edit-${props.model}`, params: { id: props.idEdit ? row[props.idEdit].id : row.id }})
+        // router.push({ name: `edit-${props.model}`, params: { id: props.idEdit ? row[props.idEdit].id : row.id }})
+        router.push({ name: props.model, params: { id: props.idEdit ? row[props.idEdit].id : row.id }})
     }
     const GoToDetails = async () => {
-        router.push({ name: `add-${props.model}`})
+        // router.push({ name: `add-${props.model}`})
+        router.push({ name: props.model })
     }
     const itemData = (current, fields) => {
         fields.forEach(f => {

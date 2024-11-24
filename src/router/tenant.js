@@ -83,15 +83,15 @@ const router = createRouter({
           component: () => import('../views/client/client/ClientsView.vue')
         },
         {
-          path: '/add-client',
-          name: 'add-client',
+          path: '/client/:id?',
+          name: 'client',
           component: () => import('../views/client/client/AddClientView.vue')
         },
-        {
+        /*{ //deprecated
           path: '/edit-client/:id',
           name: 'edit-client',
           component: () => import('../views/client/client/AddClientView.vue')
-        },
+        },*/
         {
           path: '/clients-massive',
           name: 'clients-massive',
@@ -100,12 +100,12 @@ const router = createRouter({
         // PARTNER
         {
           path: '/partners',
-          name: 'partner',
+          name: 'partners',
           component: () => import('../views/client/partner/PartnerView.vue')
         },
         {
-          path: '/partner/:id',
-          name: 'edit-partner',
+          path: '/partner/:id?',
+          name: 'partner',
           component: () => import('../views/client/partner/AddPartnerView.vue')
         },
         /* USERS */
@@ -116,8 +116,8 @@ const router = createRouter({
         },
         {
           // optional id
-          path: '/add-user/:id?',
-          name: 'add-user',
+          path: '/user/:id?',
+          name: 'user',
           component: () => import('../views/client/system/AddUserView.vue')
         },
         { // Role
@@ -125,11 +125,11 @@ const router = createRouter({
           name: 'groups',
           component: () => import('../views/client/system/GroupsView.vue')
         },
-        {
+        /*{ //deprecated
           path: '/edit-user/:id',
           name: 'edit-user',
           component: () => import('../views/client/system/AddUserView.vue')
-        },
+        },*/
         /* SALES ROOM */
         {
           path: '/sales-room',
@@ -148,8 +148,8 @@ const router = createRouter({
           component: () => import('../views/client/product/ProductView.vue')
         },
         {
-          path: '/add-product',
-          name: 'add-product',
+          path: '/product/:id?',
+          name: 'product',
           component: () => import('../views/client/product/SaveProductView.vue')
         }
       ]

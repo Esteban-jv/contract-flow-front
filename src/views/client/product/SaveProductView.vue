@@ -1,15 +1,11 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue';
-    import { NFlex, NPopconfirm, NButton, NIcon, NForm, NGrid, NFormItemGi, NSelect, NInput } from 'naive-ui';
     import { useRouter, useRoute } from 'vue-router';
     import { useGlobalHelpers } from '@/composables/useGlobalHelpers';
-    import { UserCheck } from '@vicons/fa';
     import ObjectForm from '@/components/ObjectForm.vue';
     import { useResource } from '@/composables/useResource';
 
     const { $t, $toast } = useGlobalHelpers()
-    const resource = useResource()
-    const router = useRouter()
     const route = useRoute()
     const model = ref('product')
 
@@ -75,6 +71,19 @@
                 align: 'left'
             }
         },
+        /*{
+            field: "price",
+            translated: "price",
+            span: 8,
+            rules: {
+                type: Number,
+                required: true,
+                default: 0
+            },
+            table: {
+                align: 'right'
+            }
+        },*/
         {
             field: "digital",
             translated: "digital",
@@ -104,57 +113,11 @@
     ])
 </script>
 <template>
-    <NFlex justify="end" class="mb-4" v-if="id">
-        <NButton
-            v-if="!willAddToPartner"
-            type="warning"
-            ghost
-            size="large"
-            @click="willAddToPartner = true"
-        >
-            <template #icon>
-            <NIcon><UserCheck /></NIcon>
-            </template>
-            {{ $t('partners.make_partner') }}
-        </NButton>
-        <div class="flex" v-else>
-            <NButton
-                type="tertiary"
-                class="mx-2"
-                secondary
-                size="large"
-                @click="willAddToPartner = false"
-            >
-                {{ $t('actions.cancel') }}
-            </NButton>
-            <NPopconfirm
-            title="{{ $t('partners.make_partner') }}"
-            :positive-text="$t('actions.confirm')"
-            :negative-text="$t('actions.cancel')"
-            @positive-click="goToAddPartner"
-            >
-                <template #trigger>
-                    <NButton
-                        type="warning"
-                        ghost
-                        size="large"
-                        icon="arrow-back"
-                    >
-                    <template #icon>
-                    <NIcon><UserCheck /></NIcon>
-                    </template>
-                        {{ $t('partners.make_partner') }}
-                    </NButton>
-                </template>
-                {{ $t('partners.sure_of_making_partner') }}
-            </NPopconfirm>
-        </div>
-    </NFlex>
     <ObjectForm
         :endpoint="`/${model}`"
         :model="model"
         :fields="fields"
-        prev-page="clients"
+        prev-page="products"
         :id="id"
     />
 </template>

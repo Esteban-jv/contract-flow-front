@@ -66,6 +66,8 @@
     "search_by":"Buscar por",
     "historical_record":"Historia de registros | Historial de regirstros",
     "profile": "Perfil",
+    "product": "Producto | Productos",
+    "price": "Precio | Precios",
     "tables": {
         "id": "Id",
         "schema": "Esquema",
@@ -133,7 +135,8 @@
         "roles": "Roles",
         "permissions": "Permisos",
         "date": "Fecha",
-        "profile_picture": "Foto de perfil"
+        "profile_picture": "Foto de perfil",
+        "price": "Precio",
     },
     "marital_status": {
         "single":"Soltero",
